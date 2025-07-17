@@ -2,13 +2,14 @@ import streamlit as st
 
 # --- Page Configuration ---
 st.set_page_config(
-    page_title="BASF Brand Architecture Tool",
-    page_icon="🔵",
+    page_title="BASF Brand Compass",
+    page_icon="🧭",
     layout="centered"
 )
 
-# --- Data for Guided Demo Mode (v4) ---
+# --- Data for Guided Demo Mode ---
 DEMO_DATA = {
+    # This data structure remains the same
     "chemicals": {
         'stage1': {'index': 0, 'rationale': "The Chemicals division sells products to external customers."},
         'stage2': {'index': 0, 'rationale': "There are no specific legal or contractual requirements that override the standard process for this core business."},
@@ -127,6 +128,8 @@ def reset_app():
     st.rerun()
 
 def display_recommendation(recommendation, rationale, examples):
+    st.subheader("Phase 3: Activation - The 'How'")
+    st.markdown("This recommendation links directly to a specific **Implementation Guide** which provides the rules and tools needed to bring the brand to life consistently.")
     st.success(f"**Recommendation: {recommendation}**")
     st.markdown("---")
     st.markdown(f"**Rationale:** {rationale}")
@@ -140,8 +143,9 @@ def display_recommendation(recommendation, rationale, examples):
 
 # STAGE 0: Welcome Screen
 if st.session_state.stage == 0:
-    st.title("BASF Brand Architecture Decision Tool")
-    st.markdown("This interactive tool helps determine the appropriate branding and endorsement level for any entity within the BASF ecosystem.")
+    st.title("🧭 The BASF Brand Compass")
+    st.markdown("An interactive tool to provide clear, strategic direction for the BASF brand architecture.")
+    st.markdown("The process is broken down into three phases: **Qualification**, **Classification**, and **Activation**.")
     
     st.subheader("Evaluate a New Entity")
     entity_name_input = st.text_input("Enter the name of a brand or entity to evaluate:", key="entity_name_input", label_visibility="collapsed")
@@ -173,11 +177,11 @@ elif st.session_state.stage > 0:
     
     # Define all possible stages and their configurations
     stage_config = {
-        1: {"header": "Stage 1: Gatekeeper", "question": "What is its fundamental nature?", "options": ["A commercial offering", "An internal-facing tool", "A temporary communication initiative"], "next_stages": [2, 100, 99]},
-        2: {"header": "Stage 2: Mandatory Directives", "question": "Is branding dictated by a pre-existing legal or contractual requirement?", "options": ["No", "Yes"], "next_stages": [3, 98]},
-        3: {"header": "Stage 3: Risk Assessment", "question": "Does it carry a significant, above-average reputational risk?", "options": ["No", "Yes"], "next_stages": [4, 97]},
-        4: {"header": "Stage 4: Structural Sorter", "question": "What is its ownership structure?", "options": ["A wholly-owned BASF business", "A Joint Venture", "A newly acquired company"], "next_stages": [5, 96, 4.1]},
-        4.1: {"header": "Stage 4.1: Acquisition Evaluation", "question": "Does the acquired brand have significant negative equity?", "options": ["No", "Yes"], "next_stages": [95, 94]}
+        1: {"phase_name": "Phase 1: Qualification - The 'What'", "header": "Stage 1: Gatekeeper", "question": "What is its fundamental nature?", "options": ["A commercial offering", "An internal-facing tool", "A temporary communication initiative"], "next_stages": [2, 101, 102]},
+        2: {"phase_name": "Phase 1: Qualification - The 'What'", "header": "Stage 2: Mandatory Directives", "question": "Is branding dictated by a pre-existing legal or contractual requirement?", "options": ["No", "Yes"], "next_stages": [3, 103]},
+        3: {"phase_name": "Phase 1: Qualification - The 'What'", "header": "Stage 3: Risk Assessment", "question": "Does it carry a significant, above-average reputational risk?", "options": ["No", "Yes"], "next_stages": [4, 104]},
+        4: {"phase_name": "Phase 1: Qualification - The 'What'", "header": "Stage 4: Structural Sorter", "question": "What is its ownership structure?", "options": ["A wholly-owned BASF business", "A Joint Venture", "A newly acquired company"], "next_stages": [5, 105, 4.1]},
+        4.1: {"phase_name": "Phase 1: Qualification - The 'What'", "header": "Stage 4.1: Acquisition Evaluation", "question": "Does the acquired brand have significant negative equity?", "options": ["No", "Yes"], "next_stages": [106, 107]}
     }
 
     st.header(f"Evaluating: *{st.session_state.entity_name}*")
@@ -185,7 +189,8 @@ elif st.session_state.stage > 0:
     # If the stage is a standard filter question
     if st.session_state.stage in stage_config:
         current_config = stage_config[st.session_state.stage]
-        st.subheader(current_config["header"])
+        st.subheader(current_config["phase_name"])
+        st.write(f"**{current_config['header']}**")
         
         demo_path_data = DEMO_DATA.get(st.session_state.demo_key, {})
         stage_key = f"stage{st.session_state.stage}"
@@ -197,7 +202,7 @@ elif st.session_state.stage > 0:
             formatted[index] = f"**{formatted[index]}**"
             return formatted
 
-        s_choice = st.radio(current_config["question"], format_options(current_config["options"], recommended_index), index=recommended_index, key=f"s{st.session_state.stage}_radio")
+        s_choice = st.radio(current_config["question"], format_options(current_config["options"], recommended_index), index=recommended_index, key=f"s{st.session_state.stage}_radio", label_visibility="collapsed")
         
         if recommended_index is not None:
             st.info(f"**Demo Guidance:** {demo_path_data[stage_key]['rationale']}")
@@ -208,7 +213,8 @@ elif st.session_state.stage > 0:
 
     # If the stage is the scoring engine
     elif st.session_state.stage == 5:
-        st.subheader("Stage 5: The Decision Engine")
+        st.subheader("Phase 2: Classification - The 'Where'")
+        st.write("**Stage 5: The Strategic Core**")
         
         demo_path_data = DEMO_DATA.get(st.session_state.demo_key, {})
         stage5_data = demo_path_data.get('stage5', {})
@@ -258,10 +264,10 @@ elif st.session_state.stage > 0:
                 else: display_recommendation("Flag for Strategic Review", "The entity is not core to strategy and does not need its own brand to compete.", "A low-performing, undifferentiated legacy product.")
         
         # Display recommendations from filter stages
-        elif st.session_state.stage == 100: display_recommendation("Descriptor / Internal Naming", "This is an internal-facing tool, not a public brand.", "Insight 360")
-        elif st.session_state.stage == 99: display_recommendation("Descriptor / Internal Naming", "This is a temporary communication initiative, not a permanent brand.", "Anniversaries")
-        elif st.session_state.stage == 98: display_recommendation("Follow Legal Directive", "The branding for this entity is pre-determined by a binding legal or contractual agreement which must be followed.", "BASF SONATRACH PropanChem")
-        elif st.session_state.stage == 97: display_recommendation("Distanced Brand Strategy", "The entity carries significant reputational risk and must be strategically distanced from the masterbrand.", "A high-risk product in a controversial market.")
-        elif st.session_state.stage == 96: display_recommendation("Strategically Aligned (Phased Approach)", "As a Joint Venture, the branding is subject to legal agreements and a unique co-branding strategy.", None)
-        elif st.session_state.stage == 95: display_recommendation("Strategically Aligned (Phased Approach)", "As a valuable acquisition with existing equity, the brand integration must be managed with a market-by-market plan to retain value.", "Stoneville, NewCo")
-        elif st.session_state.stage == 94: display_recommendation("Retire Brand / Rebrand", "The acquired brand's baggage is a liability. This triggers a process to sunset the name and transition customers.", "A competitor with a poor environmental or safety record.")
+        elif st.session_state.stage == 101: display_recommendation("Descriptor / Internal Naming", "This is an internal-facing tool, not a public brand. The tool's work is complete.", "Insight 360")
+        elif st.session_state.stage == 102: display_recommendation("Descriptor / Internal Naming", "This is a temporary communication initiative, not a permanent brand. The tool's work is complete.", "Anniversaries")
+        elif st.session_state.stage == 103: display_recommendation("Follow Legal Directive", "The branding for this entity is pre-determined by a binding legal or contractual agreement which must be followed. The tool's work is complete.", "BASF SONATRACH PropanChem")
+        elif st.session_state.stage == 104: display_recommendation("Distanced Brand Strategy", "The entity carries significant reputational risk and must be strategically distanced from the masterbrand. The tool's work is complete.", "A high-risk product in a controversial market.")
+        elif st.session_state.stage == 105: display_recommendation("Strategically Aligned (Phased Approach)", "As a Joint Venture, the branding is subject to legal agreements and a unique co-branding strategy. The tool's work is complete.", None)
+        elif st.session_state.stage == 106: display_recommendation("Strategically Aligned (Phased Approach)", "As a valuable acquisition with existing equity, the brand integration must be managed with a market-by-market plan to retain value. The tool's work is complete.", "Stoneville, NewCo")
+        elif st.session_state.stage == 107: display_recommendation("Retire Brand / Rebrand", "The acquired brand's baggage is a liability. This triggers a process to sunset the name and transition customers. The tool's work is complete.", "A competitor with a poor environmental or safety record.")
