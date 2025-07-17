@@ -121,7 +121,6 @@ def set_stage(stage_num):
     st.rerun()
 
 def reset_app():
-    # Keep entity name for the final screen, but reset the rest
     st.session_state.stage = 0
     st.session_state.scores = {'A': 0, 'B': 0}
     st.session_state.demo_key = None
@@ -174,11 +173,11 @@ elif st.session_state.stage > 0:
     
     # Define all possible stages and their configurations
     stage_config = {
-        1: {"header": "Stage 1: Gatekeeper", "question": "What is its fundamental nature?", "options": ["A commercial offering", "An internal-facing tool", "A temporary communication initiative"], "next_stages":},
-        2: {"header": "Stage 2: Mandatory Directives", "question": "Is branding dictated by a pre-existing legal or contractual requirement?", "options": ["No", "Yes"], "next_stages":},
-        3: {"header": "Stage 3: Risk Assessment", "question": "Does it carry a significant, above-average reputational risk?", "options": ["No", "Yes"], "next_stages":},
-        4: {"header": "Stage 4: Structural Sorter", "question": "What is its ownership structure?", "options": ["A wholly-owned BASF business", "A Joint Venture", "A newly acquired company"], "next_stages": [5, 105, 4.1]},
-        4.1: {"header": "Stage 4.1: Acquisition Evaluation", "question": "Does the acquired brand have significant negative equity?", "options": ["No", "Yes"], "next_stages":}
+        1: {"header": "Stage 1: Gatekeeper", "question": "What is its fundamental nature?", "options": ["A commercial offering", "An internal-facing tool", "A temporary communication initiative"], "next_stages": [2, 100, 99]},
+        2: {"header": "Stage 2: Mandatory Directives", "question": "Is branding dictated by a pre-existing legal or contractual requirement?", "options": ["No", "Yes"], "next_stages": [3, 98]},
+        3: {"header": "Stage 3: Risk Assessment", "question": "Does it carry a significant, above-average reputational risk?", "options": ["No", "Yes"], "next_stages": [4, 97]},
+        4: {"header": "Stage 4: Structural Sorter", "question": "What is its ownership structure?", "options": ["A wholly-owned BASF business", "A Joint Venture", "A newly acquired company"], "next_stages": [5, 96, 4.1]},
+        4.1: {"header": "Stage 4.1: Acquisition Evaluation", "question": "Does the acquired brand have significant negative equity?", "options": ["No", "Yes"], "next_stages": [95, 94]}
     }
 
     st.header(f"Evaluating: *{st.session_state.entity_name}*")
@@ -220,20 +219,20 @@ elif st.session_state.stage > 0:
         col1, col2 = st.columns(2)
         with col1:
             st.info("**Part A: Strategic Contribution Score**")
-            a1 = st.checkbox('Is it part of a designated "Core" business segment?', value=rec_checks_A)
-            a2 = st.checkbox('Is it a cornerstone brand for the "Winning Ways" strategy?', value=rec_checks_A)
-            a3 = st.checkbox('Is it part of a designated "Standalone" growth pillar?', value=rec_checks_A)
-            a4 = st.checkbox('Does it directly deliver on a key corporate initiative?', value=rec_checks_A)
-            a5 = st.checkbox('Does it strongly support the corporate purpose?', value=rec_checks_A)
+            a1 = st.checkbox('Is it part of a designated "Core" business segment?', value=rec_checks_A[0])
+            a2 = st.checkbox('Is it a cornerstone brand for the "Winning Ways" strategy?', value=rec_checks_A[1])
+            a3 = st.checkbox('Is it part of a designated "Standalone" growth pillar?', value=rec_checks_A[2])
+            a4 = st.checkbox('Does it directly deliver on a key corporate initiative?', value=rec_checks_A[3])
+            a5 = st.checkbox('Does it strongly support the corporate purpose?', value=rec_checks_A[4])
             st.session_state.scores['A'] = sum([a1, a2, a3, a4, a5])
             st.write(f"**Score A: {st.session_state.scores['A']} / 5**")
         with col2:
             st.info("**Part B: Market Distinction Score**")
-            b1 = st.checkbox('Does this brand need to appeal directly to an end-consumer (B2C / B2B2C)?', value=rec_checks_B)
-            b2 = st.checkbox('Does it compete primarily with focused "pure players"?', value=rec_checks_B)
-            b3 = st.checkbox('Is there a known negative perception of the BASF brand for this audience?', value=rec_checks_B)
-            b4 = st.checkbox('Does it need clear differentiation from other BASF offerings?', value=rec_checks_B)
-            b5 = st.checkbox('Does the business require a distinct, agile culture to succeed?', value=rec_checks_B)
+            b1 = st.checkbox('Does this brand need to appeal directly to an end-consumer (B2C / B2B2C)?', value=rec_checks_B[0])
+            b2 = st.checkbox('Does it compete primarily with focused "pure players"?', value=rec_checks_B[1])
+            b3 = st.checkbox('Is there a known negative perception of the BASF brand for this audience?', value=rec_checks_B[2])
+            b4 = st.checkbox('Does it need clear differentiation from other BASF offerings?', value=rec_checks_B[3])
+            b5 = st.checkbox('Does the business require a distinct, agile culture to succeed?', value=rec_checks_B[4])
             st.session_state.scores['B'] = sum([b1, b2, b3, b4, b5])
             st.write(f"**Score B: {st.session_state.scores['B']} / 5**")
             
@@ -259,10 +258,10 @@ elif st.session_state.stage > 0:
                 else: display_recommendation("Flag for Strategic Review", "The entity is not core to strategy and does not need its own brand to compete.", "A low-performing, undifferentiated legacy product.")
         
         # Display recommendations from filter stages
-        elif st.session_state.stage == 101: display_recommendation("Descriptor / Internal Naming", "This is an internal-facing tool, not a public brand.", "Insight 360")
-        elif st.session_state.stage == 102: display_recommendation("Descriptor / Internal Naming", "This is a temporary communication initiative, not a permanent brand.", "Anniversaries")
-        elif st.session_state.stage == 103: display_recommendation("Follow Legal Directive", "The branding for this entity is pre-determined by a binding legal or contractual agreement which must be followed.", "BASF SONATRACH PropanChem")
-        elif st.session_state.stage == 104: display_recommendation("Distanced Brand Strategy", "The entity carries significant reputational risk and must be strategically distanced from the masterbrand.", "A high-risk product in a controversial market.")
-        elif st.session_state.stage == 105: display_recommendation("Strategically Aligned (Phased Approach)", "As a Joint Venture, the branding is subject to legal agreements and a unique co-branding strategy.", "This is the default for JVs that are not otherwise legally constrained.")
-        elif st.session_state.stage == 106: display_recommendation("Strategically Aligned (Phased Approach)", "As a valuable acquisition with existing equity, the brand integration must be managed with a market-by-market plan to retain value.", "Stoneville, NewCo")
-        elif st.session_state.stage == 107: display_recommendation("Retire Brand / Rebrand", "The acquired brand's baggage is a liability. This triggers a process to sunset the name and transition customers.", "A competitor with a poor environmental or safety record.")
+        elif st.session_state.stage == 100: display_recommendation("Descriptor / Internal Naming", "This is an internal-facing tool, not a public brand.", "Insight 360")
+        elif st.session_state.stage == 99: display_recommendation("Descriptor / Internal Naming", "This is a temporary communication initiative, not a permanent brand.", "Anniversaries")
+        elif st.session_state.stage == 98: display_recommendation("Follow Legal Directive", "The branding for this entity is pre-determined by a binding legal or contractual agreement which must be followed.", "BASF SONATRACH PropanChem")
+        elif st.session_state.stage == 97: display_recommendation("Distanced Brand Strategy", "The entity carries significant reputational risk and must be strategically distanced from the masterbrand.", "A high-risk product in a controversial market.")
+        elif st.session_state.stage == 96: display_recommendation("Strategically Aligned (Phased Approach)", "As a Joint Venture, the branding is subject to legal agreements and a unique co-branding strategy.", None)
+        elif st.session_state.stage == 95: display_recommendation("Strategically Aligned (Phased Approach)", "As a valuable acquisition with existing equity, the brand integration must be managed with a market-by-market plan to retain value.", "Stoneville, NewCo")
+        elif st.session_state.stage == 94: display_recommendation("Retire Brand / Rebrand", "The acquired brand's baggage is a liability. This triggers a process to sunset the name and transition customers.", "A competitor with a poor environmental or safety record.")
