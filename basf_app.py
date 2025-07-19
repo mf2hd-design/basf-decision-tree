@@ -27,7 +27,7 @@ def check_password():
         st.error("😕 Password incorrect")
     return False
 
-# --- Data Libraries (Fully Populated for all 14 brands) ---
+# --- Data Libraries (Fully Populated and Corrected) ---
 DEMO_DATA = {
     "chemicals": {'stage1': {'index': 0, 'rationale': "The Chemicals division sells products to external customers."}, 'stage2': {'index': 0, 'rationale': "There are no specific legal or contractual requirements..."}, 'stage3': {'index': 0, 'rationale': "This is the core business and carries a standard risk profile."}, 'stage4': {'index': 0, 'rationale': "The division is a wholly-owned and created part of BASF."}, 'stage5': {'rationale': "As the core of BASF's strategy, it scores high on contribution. As the masterbrand itself, it has no need for market distinction.", 'score_A_checks': [True, True, False, True, True], 'score_B_checks': [False, False, False, False, False]}},
     "agriculture": {'stage1': {'index': 0, 'rationale': "The Agriculture division sells products to external customers."}, 'stage2': {'index': 0, 'rationale': "Its branding is not dictated by a specific legal requirement."}, 'stage3': {'index': 0, 'rationale': "Its risks are standard for the industry."}, 'stage4': {'index': 0, 'rationale': "This is a wholly-owned BASF business."}, 'stage5': {'rationale': "As a key growth pillar competing with pure-players, it is strategically vital but needs its own brand to win.", 'score_A_checks': [False, True, True, True, False], 'score_B_checks': [True, True, False, True, False]}},
@@ -97,6 +97,7 @@ def run_app():
         if st.button("Evaluate Another Entity"): reset_app()
     
     # --- App Logic ---
+    st.title("🧭 The BASF Brand Compass")
     if st.session_state.stage == 0:
         st.markdown("An interactive tool to provide clear, strategic direction for the BASF brand architecture.")
         st.markdown("""
@@ -125,7 +126,7 @@ def run_app():
         for i, brand_key in enumerate(stress_demos):
             with cols[i]:
                 if st.button(brand_key, key=brand_key.lower().replace(' ', ''), use_container_width=True): start_evaluation(brand_key)
-
+    
     else:
         stage_config = {
             1: {"phase_name": "Phase 1: Qualification - The 'What'", "header": "Gatekeeper", "explanation": "This first step determines if the entity is a commercial brand requiring a strategic decision.", "question": "What is its fundamental nature?", "options": ["A commercial offering", "An internal-facing tool", "A temporary communication initiative"], "next_stages": [2, 101, 102]},
@@ -210,5 +211,4 @@ def run_app():
 
 # --- App Execution with Password Check ---
 if check_password():
-    st.title("🧭 The BASF Brand Compass")
     run_app()
