@@ -19,11 +19,10 @@ def check_password():
     if st.session_state.get("password_correct", False):
         return True
 
-    # Show input for password.
     st.text_input(
         "Password", type="password", on_change=password_entered, key="password"
     )
-    if "password" in st.session_state and not st.session_state.get("password_correct", False):
+    if "password_correct" in st.session_state and not st.session_state.get("password_correct", False):
         st.error("😕 Password incorrect")
     return False
 
@@ -133,16 +132,13 @@ RESULT_DATA = {
 
 # --- Main App Function ---
 def run_app():
-    # Initialize Session State
     if 'stage' not in st.session_state: st.session_state.stage = 0
     if 'entity_name' not in st.session_state: st.session_state.entity_name = ""
     if 'scores' not in st.session_state: st.session_state.scores = {'A': 0, 'B': 0}
     if 'demo_key' not in st.session_state: st.session_state.demo_key = None
 
-    # Functions
     def start_evaluation(entity_name):
         st.session_state.entity_name = entity_name
-        # Normalize the key for matching
         demo_key_check = entity_name.lower().strip().replace('°', '').replace(' ', '')
         if demo_key_check in DEMO_DATA: st.session_state.demo_key = demo_key_check
         set_stage(1)
@@ -152,25 +148,9 @@ def run_app():
         st.rerun()
 
     def reset_app():
-        # Clear all session state keys to ensure a clean start
         for key in list(st.session_state.keys()):
             if key != 'password_correct': del st.session_state[key]
         st.rerun()
-
-    def display_result(result_key):
-        result = RESULT_DATA[result_key]
-        st.header("Result")
-        st.write(f"**Entity Evaluated:** *{st.session_state.entity_name}*")
-        st.markdown("---")
-        st.subheader("Phase 3: Activation - The 'How'")
-        st.caption("This final phase provides the actionable guide for execution. The recommendation below links to a specific Implementation Guide.")
-        st.success(f"**Recommendation: {result['recommendation']}**")
-        st.markdown(f"**Rationale:** {result['rationale']}")
-        st.markdown("---")
-        st.markdown(result['activation_text'])
-        st.markdown(f"**Similar Examples:** *{result['examples']}*")
-        st.markdown("---")
-        if st.button("Evaluate Another Entity"): reset_app()
     
     # --- App Logic ---
     st.title("🧭 The BASF Brand Compass")
@@ -196,7 +176,6 @@ def run_app():
             with cols[i % 4]:
                 if st.button(display_name, key=brand_key, use_container_width=True): start_evaluation(display_name)
     
-    # Logic for all subsequent stages
     else:
         stage_config = {
             1: {"phase_name": "Phase 1: Qualification - The 'What'", "header": "Gatekeeper", "explanation": "This first step determines if the entity is a commercial brand requiring a strategic decision.", "question": "What is its fundamental nature?", "options": ["A commercial offering", "An internal-facing tool", "A temporary communication initiative"], "next_stages": [2, 101, 102]},
@@ -263,6 +242,21 @@ def run_app():
         
         # If it's any of the final recommendation pages
         else:
+            def display_result(result_key):
+                result = RESULT_DATA[result_key]
+                st.header("Result")
+                st.write(f"**Entity Evaluated:** *{st.session_state.entity_name}*")
+                st.markdown("---")
+                st.subheader("Phase 3: Activation - The 'How'")
+                st.caption("This final phase provides the actionable guide for execution. The recommendation below links to a specific Implementation Guide.")
+                st.success(f"**Recommendation: {result['recommendation']}**")
+                st.markdown(f"**Rationale:** {result['rationale']}")
+                st.markdown("---")
+                st.markdown(result['activation_text'])
+                st.markdown(f"**Similar Examples:** *{result['examples']}*")
+                st.markdown("---")
+                if st.button("Evaluate Another Entity"): reset_app()
+            
             result_key_map = {
                 101: 'internal_naming', 102: 'comms_initiative', 103: 'legal_directive',
                 104: 'independent_risk', 105: 'strategically_aligned', 106: 'strategically_aligned',
@@ -280,9 +274,9 @@ def run_app():
                 outcome_key = result_key_map.get(st.session_state.stage)
             
             if outcome_key:
-                result = RESULT_DATA[outcome_key]
-                display_result(result)
+                display_result(outcome_key)
 
 # --- App Execution with Password Check ---
+st.title("🧭 The BASF Brand Compass")
 if check_password():
     run_app()
