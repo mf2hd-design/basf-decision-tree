@@ -20,7 +20,8 @@ def check_password():
         if st.session_state.get("password") == "FFxBASF2025":
             st.session_state["password_correct"] = True
             # Clear the password from state for security
-            del st.session_state["password"]
+            if "password" in st.session_state:
+                del st.session_state["password"]
         else:
             st.session_state["password_correct"] = False
 
@@ -166,7 +167,6 @@ def run_app():
             stage_key = f"stage{st.session_state.stage}"
             recommended_index = demo_path_data.get(stage_key, {}).get('index')
             
-            # FIX: Ensure index for st.radio is never None to prevent crashes.
             radio_index = recommended_index if recommended_index is not None else 0
 
             def format_options(options, index):
@@ -174,9 +174,18 @@ def run_app():
                 formatted = options.copy()
                 formatted[index] = f"**{formatted[index]}**"
                 return formatted
-                
-            s_choice = st.radio(current_config["question"], format_options(current_config["options"], recommended_index), index=radio_index, key=f"s{st.session_state.stage}_radio", label_visibility="collapsed")
-            if recommended_index is not None: st.info(f"**Demo Guidance:** {demo_path_data[stage_key]['rationale']}")
+            
+            # FIX: Removed `label_visibility="collapsed"` to make the question visible
+            s_choice = st.radio(
+                current_config["question"], 
+                format_options(current_config["options"], recommended_index), 
+                index=radio_index, 
+                key=f"s{st.session_state.stage}_radio"
+            )
+
+            if recommended_index is not None:
+                st.info(f"**Demo Guidance:** {demo_path_data[stage_key]['rationale']}")
+            
             if st.button("Proceed", type="primary"):
                 selected_index = current_config["options"].index(s_choice.strip('*'))
                 set_stage(current_config["next_stages"][selected_index])
@@ -211,8 +220,10 @@ def run_app():
                 st.session_state.scores['B'] = sum([b1, b2, b3, b4, b5])
                 st.write(f"**Score B: {st.session_state.scores['B']} / 5**")
             st.markdown("---")
-            if st.session_state.demo_key and 'rationale' in stage5_data: st.info(f"**Demo Guidance:** {stage5_data['rationale']}")
-            if st.button("Calculate Recommendation", type="primary"): set_stage(6)
+            if st.session_state.demo_key and 'rationale' in stage5_data:
+                st.info(f"**Demo Guidance:** {stage5_data['rationale']}")
+            if st.button("Calculate Recommendation", type="primary"):
+                set_stage(6)
 
         else: # This block handles ALL final recommendation pages
             result_key_map = {
