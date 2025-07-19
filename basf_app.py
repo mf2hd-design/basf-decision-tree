@@ -19,6 +19,7 @@ def check_password():
     if st.session_state.get("password_correct", False):
         return True
 
+    st.title("🧭 The BASF Brand Compass")
     st.text_input(
         "Password", type="password", on_change=password_entered, key="password"
     )
@@ -90,11 +91,12 @@ def run_app():
         st.markdown(f"**Rationale:** {result['rationale']}")
         st.markdown("---")
         st.markdown(result['activation_text'])
-        st.markdown(f"**Similar Examples:** *{result['examples']}*")
+        if result['examples']:
+            st.markdown(f"**Similar Examples:** *{result['examples']}*")
         st.markdown("---")
         if st.button("Evaluate Another Entity"): reset_app()
     
-    st.title("🧭 The BASF Brand Compass")
+    # --- App Logic ---
     if st.session_state.stage == 0:
         st.markdown("An interactive tool to provide clear, strategic direction for the BASF brand architecture.")
         st.markdown("""
