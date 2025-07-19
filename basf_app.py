@@ -78,7 +78,6 @@ def run_app():
 
     def start_evaluation(entity_name):
         st.session_state.entity_name = entity_name
-        # Use the normalization function to ensure a match with DEMO_DATA keys
         demo_key_check = normalize_key(entity_name)
         if demo_key_check in DEMO_DATA:
             st.session_state.demo_key = demo_key_check
@@ -98,16 +97,26 @@ def run_app():
         result = RESULT_DATA[result_key]
         st.header("Result")
         st.write(f"**Entity Evaluated:** *{st.session_state.entity_name}*")
-        st.markdown("---")
-        st.subheader("Phase 3: Activation - The 'How'")
-        st.caption("This final phase provides the actionable guide for execution. The recommendation below links to a specific Implementation Guide.")
+        
+        # Display Recommendation and Rationale first
         st.success(f"**Recommendation: {result['recommendation']}**")
         st.markdown(f"**Rationale:** {result['rationale']}")
+        
         st.markdown("---")
+        
+        # Display Activation section
+        st.subheader("Phase 3: Activation - The 'How'")
         st.markdown(result['activation_text'])
+        
+        st.markdown("---")
+        
+        # Display Similar Examples if they exist
         if result['examples']:
             st.markdown(f"**Similar Examples:** *{result['examples']}*")
-        st.markdown("---")
+        
+        # No final horizontal rule, as requested
+        
+        st.write("") # Add a bit of space before the button
         if st.button("Evaluate Another Entity"):
             reset_app()
 
@@ -134,7 +143,6 @@ def run_app():
         cols = st.columns(4)
         for i, brand_key in enumerate(standard_demos):
             with cols[i % 4]:
-                # Use the normalization function for consistent keying
                 if st.button(brand_key, key=normalize_key(brand_key), use_container_width=True):
                     start_evaluation(brand_key)
 
@@ -144,7 +152,6 @@ def run_app():
         cols = st.columns(3)
         for i, brand_key in enumerate(stress_demos):
             with cols[i]:
-                # Use the normalization function for consistent keying
                 if st.button(brand_key, key=normalize_key(brand_key), use_container_width=True):
                     start_evaluation(brand_key)
 
@@ -175,10 +182,8 @@ def run_app():
                 formatted[index] = f"**{formatted[index]}**"
                 return formatted
             
-            # FIX: Manually display the question with st.markdown for consistent font size.
             st.markdown(f"**{current_config['question']}**")
 
-            # Then, display the radio buttons with the label hidden.
             s_choice = st.radio(
                 current_config["question"], 
                 format_options(current_config["options"], recommended_index), 
