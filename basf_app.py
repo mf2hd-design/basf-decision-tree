@@ -12,9 +12,9 @@ def check_password():
     """Returns `True` if the user has the correct password."""
     def password_entered():
         """Checks whether a password entered by the user is correct."""
-        if st.session_state["password"] == "FFxBASF2025": # Direct password check
+        if st.session_state["password"] == "FFxBASF2025":
             st.session_state["password_correct"] = True
-            del st.session_state["password"]  # Don't store password in session state
+            del st.session_state["password"]  # Don't store password.
         else:
             st.session_state["password_correct"] = False
 
@@ -25,14 +25,13 @@ def check_password():
         st.text_input(
             "Password", type="password", on_change=password_entered, key="password"
         )
-        # Only show the error message after the first incorrect attempt
         if "password" in st.session_state and not st.session_state["password_correct"]:
-            st.error("😕 Password incorrect")
+             st.error("😕 Password incorrect")
         return False
     else:
         return True
 
-# --- Data for Guided Demo Mode ---
+# --- Data for Guided Demo Mode (Fully Aligned) ---
 DEMO_DATA = {
     "chemicals": {
         'stage1': {'index': 0, 'rationale': "The Chemicals division sells products to external customers."},
@@ -138,6 +137,7 @@ def run_app():
     # Functions
     def start_evaluation(entity_name):
         st.session_state.entity_name = entity_name
+        # Normalize the key for matching
         demo_key_check = entity_name.lower().strip().replace('°', '').replace(' ', '')
         if demo_key_check in DEMO_DATA:
             st.session_state.demo_key = demo_key_check
@@ -167,7 +167,7 @@ def run_app():
 
     # --- App Logic ---
     if st.session_state.stage == 0:
-        st.title("🧭 The BASF Brand Compass")
+        # NOTE: Title is now outside this function to prevent duplication
         st.markdown("An interactive tool to provide clear, strategic direction for the BASF brand architecture.")
         st.markdown("""
         The Brand Compass guides you through three clear phases:
@@ -279,6 +279,7 @@ def run_app():
             st.write(f"**Entity Evaluated:** *{st.session_state.entity_name}*")
             st.markdown("---")
             
+            # This is the single, clean place for all final recommendations
             if st.session_state.stage == 6:
                 score_a = st.session_state.scores['A']
                 score_b = st.session_state.scores['B']
@@ -298,7 +299,7 @@ def run_app():
             elif st.session_state.stage == 107: display_recommendation("Independent (Retire & Rebrand)", "The acquired brand's baggage is a liability. The recommendation is to make it independent by retiring the name and transitioning customers to a BASF brand.", "A competitor with a poor environmental or safety record.")
 
 # --- Password Check and App Execution ---
-# This part goes at the end of the script.
+# This part goes at the very end of the script.
 st.title("🧭 The BASF Brand Compass")
 if check_password():
     run_app()
