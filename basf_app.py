@@ -98,25 +98,20 @@ def run_app():
         st.header("Result")
         st.write(f"**Entity Evaluated:** *{st.session_state.entity_name}*")
         
-        # Display Recommendation and Rationale first
         st.success(f"**Recommendation: {result['recommendation']}**")
         st.markdown(f"**Rationale:** {result['rationale']}")
         
         st.markdown("---")
         
-        # Display Activation section
         st.subheader("Phase 3: Activation - The 'How'")
         st.markdown(result['activation_text'])
         
         st.markdown("---")
         
-        # Display Similar Examples if they exist
         if result['examples']:
             st.markdown(f"**Similar Examples:** *{result['examples']}*")
         
-        # No final horizontal rule, as requested
-        
-        st.write("") # Add a bit of space before the button
+        st.write("") 
         if st.button("Evaluate Another Entity"):
             reset_app()
 
@@ -148,12 +143,19 @@ def run_app():
 
         st.markdown("---")
         st.subheader("Stress-Test Scenarios")
+        
+        stress_test_descriptions = {
+            "PolyWeld 800": "This represents a low-margin, legacy adhesive product in a declining market. This scenario tests how the Compass identifies brands that are no longer strategically relevant and should be reviewed.",
+            "ExtractMax": "This is an innovative, high-performance chemical designed for a controversial industry. This scenario tests how the Compass protects the main BASF brand by recommending strategic distance for high-risk products.",
+            "OldChem Inc.": "This is a company acquired for its valuable assets, but its brand has a poor historical reputation. This scenario tests how the Compass recommends retiring a toxic brand while retaining the valuable parts of the business."
+        }
         stress_demos = ["PolyWeld 800", "ExtractMax", "OldChem Inc."]
         cols = st.columns(3)
         for i, brand_key in enumerate(stress_demos):
             with cols[i]:
                 if st.button(brand_key, key=normalize_key(brand_key), use_container_width=True):
                     start_evaluation(brand_key)
+                st.caption(stress_test_descriptions[brand_key])
 
     else:
         stage_config = {
