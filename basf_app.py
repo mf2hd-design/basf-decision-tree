@@ -7,29 +7,26 @@ st.set_page_config(
     layout="centered"
 )
 
-# --- Password Protection Logic (Corrected for Local & Deployed Use) ---
+# --- Password Protection Logic (Robust Version) ---
 def check_password():
     """Returns `True` if the user has the correct password."""
     def password_entered():
         """Checks whether a password entered by the user is correct."""
         if st.session_state["password"] == "FFxBASF2025":
             st.session_state["password_correct"] = True
-            del st.session_state["password"]  # Don't store password.
+            del st.session_state["password"]
         else:
             st.session_state["password_correct"] = False
 
-    if "password_correct" not in st.session_state:
-        st.session_state["password_correct"] = False
-
-    if not st.session_state["password_correct"]:
-        st.text_input(
-            "Password", type="password", on_change=password_entered, key="password"
-        )
-        if "password" in st.session_state and not st.session_state["password_correct"]:
-             st.error("😕 Password incorrect")
-        return False
-    else:
+    if st.session_state.get("password_correct", False):
         return True
+
+    st.text_input(
+        "Password", type="password", on_change=password_entered, key="password"
+    )
+    if "password_correct" in st.session_state and not st.session_state["password_correct"]:
+        st.error("😕 Password incorrect")
+    return False
 
 # --- Data for Guided Demo Mode (Fully Aligned) ---
 DEMO_DATA = {
@@ -83,7 +80,7 @@ DEMO_DATA = {
             'score_A_checks': [False, False, True, True, True], 'score_B_checks': [True, True, True, True, True]
         }
     },
-    "care 360": {
+    "care360": {
         'stage1': {'index': 0, 'rationale': "This is a platform of solutions offered to external customers."},
         'stage2': {'index': 0, 'rationale': "There are no overriding legal requirements."},
         'stage3': {'index': 0, 'rationale': "Its risk profile is standard."},
@@ -110,11 +107,11 @@ DEMO_DATA = {
         'stage4': {'index': 2, 'rationale': "As a 'newly acquired company,' its existing brand equity must be handled carefully."},
         'stage4.1': {'index': 0, 'rationale': "We are assuming 'NewCo' is a valuable asset with positive brand equity."}
     },
-    "basf sonatrach propanchem": {
+    "basfsonatrachpropanchem": {
         'stage1': {'index': 0, 'rationale': "This is a commercial business that sells products externally."},
         'stage2': {'index': 1, 'rationale': "As a Joint Venture, the branding is explicitly defined in the legal agreement that formed the company. This agreement must be followed."}
     },
-    "insight 360": {
+    "insight360": {
         'stage1': {'index': 1, 'rationale': "This is a tool for internal employees, so it's not a public-facing brand."}
     },
     "anniversaries": {
@@ -154,6 +151,9 @@ def run_app():
         st.rerun()
 
     def display_recommendation(recommendation, rationale, examples):
+        st.header("Result")
+        st.write(f"**Entity Evaluated:** *{st.session_state.entity_name}*")
+        st.markdown("---")
         st.subheader("Phase 3: Activation - The 'How'")
         st.caption("This final phase provides the actionable guide for execution. The recommendation below links to a specific Implementation Guide.")
         st.success(f"**Recommendation: {recommendation}**")
@@ -167,7 +167,7 @@ def run_app():
 
     # --- App Logic ---
     if st.session_state.stage == 0:
-        # NOTE: Title is now outside this function to prevent duplication
+        st.title("🧭 The BASF Brand Compass")
         st.markdown("An interactive tool to provide clear, strategic direction for the BASF brand architecture.")
         st.markdown("""
         The Brand Compass guides you through three clear phases:
@@ -200,7 +200,7 @@ def run_app():
                 if st.button(display_name, key=brand_key, use_container_width=True):
                     start_evaluation(display_name)
     
-    elif st.session_state.stage > 0:
+    elif st.session_state.stage > 0 and st.session_state.stage < 100:
         stage_config = {
             1: {"phase_name": "Phase 1: Qualification - The 'What'", "header": "Gatekeeper", "explanation": "This first step determines if the entity is a commercial brand requiring a strategic decision.", "question": "What is its fundamental nature?", "options": ["A commercial offering", "An internal-facing tool", "A temporary communication initiative"], "next_stages": [2, 101, 102]},
             2: {"phase_name": "Phase 1: Qualification - The 'What'", "header": "Mandatory Directives", "explanation": "This step checks for any non-negotiable legal or contractual obligations that pre-determine the branding approach.", "question": "Is branding dictated by a pre-existing legal or contractual requirement?", "options": ["No", "Yes"], "next_stages": [3, 103]},
@@ -273,30 +273,26 @@ def run_app():
                 
             if st.button("Calculate Recommendation", type="primary"):
                 set_stage(6)
-
-        elif st.session_state.stage >= 6:
-            st.header("Result")
-            st.write(f"**Entity Evaluated:** *{st.session_state.entity_name}*")
-            st.markdown("---")
-            
-            # This is the single, clean place for all final recommendations
-            if st.session_state.stage == 6:
-                score_a = st.session_state.scores['A']
-                score_b = st.session_state.scores['B']
-                if score_a >= 3:
-                    if score_b <= 1: display_recommendation("BASF-Led", "The entity is a core expression of the BASF brand and benefits most from a direct connection.", "Chemicals, Care 360°")
-                    else: display_recommendation("BASF-Endorsed", "The entity is strategically vital but requires its own distinct brand to win in its specific market.", "Agriculture, Coatings, Xarvio")
-                else:
-                    if score_b >= 2: display_recommendation("BASF-Associated", "The entity is exploring a new space and needs brand independence. A lighter, strategic association provides credibility without high commitment.", "NewBiz")
-                    else: display_recommendation("Flag for Strategic Review", "The entity is not core to strategy and does not need its own brand to compete.", "A low-performing, undifferentiated legacy product.")
-            
-            elif st.session_state.stage == 101: display_recommendation("Descriptor / Internal Naming", "This is an internal-facing tool, not a public brand. The Compass's work is complete.", "Insight 360")
-            elif st.session_state.stage == 102: display_recommendation("Descriptor / Internal Naming", "This is a temporary communication initiative, not a permanent brand. The Compass's work is complete.", "Anniversaries")
-            elif st.session_state.stage == 103: display_recommendation("Follow Legal Directive", "The branding for this entity is pre-determined by a binding legal or contractual agreement which must be followed. The Compass's work is complete.", "BASF SONATRACH PropanChem")
-            elif st.session_state.stage == 104: display_recommendation("Independent (for risk insulation)", "The entity carries significant reputational risk and must be strategically independent and distanced from the masterbrand.", "A high-risk product in a controversial market.")
-            elif st.session_state.stage == 105: display_recommendation("Strategically Aligned (Phased Approach)", "As a Joint Venture, the branding is subject to legal agreements and a unique co-branding strategy. The Compass's work is complete.", None)
-            elif st.session_state.stage == 106: display_recommendation("Strategically Aligned (Phased Approach)", "As a valuable acquisition with existing equity, the brand integration must be managed with a market-by-market plan to retain value. The Compass's work is complete.", "Stoneville, NewCo")
-            elif st.session_state.stage == 107: display_recommendation("Independent (Retire & Rebrand)", "The acquired brand's baggage is a liability. The recommendation is to make it independent by retiring the name and transitioning customers to a BASF brand.", "A competitor with a poor environmental or safety record.")
+    
+    # All final recommendation pages are handled here
+    else:
+        if st.session_state.stage == 6:
+            score_a = st.session_state.scores['A']
+            score_b = st.session_state.scores['B']
+            if score_a >= 3:
+                if score_b <= 1: display_recommendation("BASF-Led", "The entity is a core expression of the BASF brand and benefits most from a direct connection.", "Chemicals, Care 360°")
+                else: display_recommendation("BASF-Endorsed", "The entity is strategically vital but requires its own distinct brand to win in its specific market.", "Agriculture, Coatings, Xarvio")
+            else:
+                if score_b >= 2: display_recommendation("BASF-Associated", "The entity is exploring a new space and needs brand independence. A lighter, strategic association provides credibility without high commitment.", "NewBiz")
+                else: display_recommendation("Flag for Strategic Review", "The entity is not core to strategy and does not need its own brand to compete.", "A low-performing, undifferentiated legacy product.")
+        
+        elif st.session_state.stage == 101: display_recommendation("Descriptor / Internal Naming", "This is an internal-facing tool, not a public brand. The Compass's work is complete.", "Insight 360")
+        elif st.session_state.stage == 102: display_recommendation("Descriptor / Internal Naming", "This is a temporary communication initiative, not a permanent brand. The Compass's work is complete.", "Anniversaries")
+        elif st.session_state.stage == 103: display_recommendation("Follow Legal Directive", "The branding for this entity is pre-determined by a binding legal or contractual agreement which must be followed. The Compass's work is complete.", "BASF SONATRACH PropanChem")
+        elif st.session_state.stage == 104: display_recommendation("Independent (for risk insulation)", "The entity carries significant reputational risk and must be strategically independent and distanced from the masterbrand.", "A high-risk product in a controversial market.")
+        elif st.session_state.stage == 105: display_recommendation("Strategically Aligned (Phased Approach)", "As a Joint Venture, the branding is subject to legal agreements and a unique co-branding strategy. The Compass's work is complete.", None)
+        elif st.session_state.stage == 106: display_recommendation("Strategically Aligned (Phased Approach)", "As a valuable acquisition with existing equity, the brand integration must be managed with a market-by-market plan to retain value. The Compass's work is complete.", "Stoneville, NewCo")
+        elif st.session_state.stage == 107: display_recommendation("Independent (Retire & Rebrand)", "The acquired brand's baggage is a liability. The recommendation is to make it independent by retiring the name and transitioning customers to a BASF brand.", "A competitor with a poor environmental or safety record.")
 
 # --- Password Check and App Execution ---
 # This part goes at the very end of the script.
