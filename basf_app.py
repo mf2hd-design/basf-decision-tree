@@ -175,12 +175,16 @@ def run_app():
                 formatted[index] = f"**{formatted[index]}**"
                 return formatted
             
-            # FIX: Removed `label_visibility="collapsed"` to make the question visible
+            # FIX: Manually display the question with st.markdown for consistent font size.
+            st.markdown(f"**{current_config['question']}**")
+
+            # Then, display the radio buttons with the label hidden.
             s_choice = st.radio(
                 current_config["question"], 
                 format_options(current_config["options"], recommended_index), 
                 index=radio_index, 
-                key=f"s{st.session_state.stage}_radio"
+                key=f"s{st.session_state.stage}_radio",
+                label_visibility="collapsed"
             )
 
             if recommended_index is not None:
