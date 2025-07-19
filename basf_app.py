@@ -7,31 +7,29 @@ st.set_page_config(
     layout="centered"
 )
 
-# --- Password Protection Logic ---
+# --- Password Protection Logic (Corrected for Local & Deployed Use) ---
 def check_password():
     """Returns `True` if the user has the correct password."""
     def password_entered():
         """Checks whether a password entered by the user is correct."""
-        if st.session_state["password"] == st.secrets["password"]:
+        if st.session_state["password"] == "FFxBASF2025": # Direct password check
             st.session_state["password_correct"] = True
-            del st.session_state["password"]  # Don't store password.
+            del st.session_state["password"]  # Don't store password in session state
         else:
             st.session_state["password_correct"] = False
 
-    # This will be run on the first execution.
     if "password_correct" not in st.session_state:
         st.session_state["password_correct"] = False
 
     if not st.session_state["password_correct"]:
-        # Show input for password.
         st.text_input(
             "Password", type="password", on_change=password_entered, key="password"
         )
+        # Only show the error message after the first incorrect attempt
         if "password" in st.session_state and not st.session_state["password_correct"]:
-             st.error("😕 Password incorrect")
+            st.error("😕 Password incorrect")
         return False
     else:
-        # Password correct.
         return True
 
 # --- Data for Guided Demo Mode ---
@@ -168,8 +166,6 @@ def run_app():
             reset_app()
 
     # --- App Logic ---
-
-    # STAGE 0: Welcome Screen
     if st.session_state.stage == 0:
         st.title("🧭 The BASF Brand Compass")
         st.markdown("An interactive tool to provide clear, strategic direction for the BASF brand architecture.")
@@ -204,7 +200,6 @@ def run_app():
                 if st.button(display_name, key=brand_key, use_container_width=True):
                     start_evaluation(display_name)
     
-    # All subsequent stages
     elif st.session_state.stage > 0:
         stage_config = {
             1: {"phase_name": "Phase 1: Qualification - The 'What'", "header": "Gatekeeper", "explanation": "This first step determines if the entity is a commercial brand requiring a strategic decision.", "question": "What is its fundamental nature?", "options": ["A commercial offering", "An internal-facing tool", "A temporary communication initiative"], "next_stages": [2, 101, 102]},
@@ -303,6 +298,7 @@ def run_app():
             elif st.session_state.stage == 107: display_recommendation("Independent (Retire & Rebrand)", "The acquired brand's baggage is a liability. The recommendation is to make it independent by retiring the name and transitioning customers to a BASF brand.", "A competitor with a poor environmental or safety record.")
 
 # --- Password Check and App Execution ---
+# This part goes at the end of the script.
 st.title("🧭 The BASF Brand Compass")
 if check_password():
     run_app()
