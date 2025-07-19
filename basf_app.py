@@ -7,115 +7,39 @@ st.set_page_config(
     layout="centered"
 )
 
-# --- Password Protection Logic (Robust Version) ---
+# --- Password Protection Logic ---
 def check_password():
-    """Returns `True` if the user has the correct password."""
+    if st.session_state.get("password_correct", False):
+        return True
+
     def password_entered():
         if st.session_state.get("password") == "FFxBASF2025":
             st.session_state["password_correct"] = True
         else:
             st.session_state["password_correct"] = False
 
-    if st.session_state.get("password_correct", False):
-        return True
-
-    # Show input for password.
     st.text_input(
         "Password", type="password", on_change=password_entered, key="password"
     )
-    if "password_correct" in st.session_state and not st.session_state["password_correct"]:
+
+    if "password" in st.session_state and not st.session_state.get("password_correct", False):
         st.error("😕 Password incorrect")
+    
     return False
 
 # --- Data Libraries ---
 DEMO_DATA = {
-    "chemicals": {
-        'stage1': {'index': 0, 'rationale': "The Chemicals division sells products to external customers."},
-        'stage2': {'index': 0, 'rationale': "There are no specific legal or contractual requirements that override the standard process for this core business."},
-        'stage3': {'index': 0, 'rationale': "This is the core business and carries a standard risk profile."},
-        'stage4': {'index': 0, 'rationale': "The division is a wholly-owned and created part of BASF."},
-        'stage5': {
-            'rationale': "As the core of BASF's strategy, it scores high on contribution. As the masterbrand itself, it has no need for market distinction.",
-            'score_A_checks': [True, True, False, True, True], 'score_B_checks': [False, False, False, False, False]
-        }
-    },
-    "agriculture": {
-        'stage1': {'index': 0, 'rationale': "The Agriculture division sells products to external customers."},
-        'stage2': {'index': 0, 'rationale': "Its branding is not dictated by a specific legal requirement."},
-        'stage3': {'index': 0, 'rationale': "Its risks are standard for the industry."},
-        'stage4': {'index': 0, 'rationale': "This is a wholly-owned BASF business."},
-        'stage5': {
-            'rationale': "As a key growth pillar competing with pure-players, it is strategically vital but needs its own brand to win.",
-            'score_A_checks': [False, True, True, True, False], 'score_B_checks': [True, True, False, True, False]
-        }
-    },
-    "coatings": {
-        'stage1': {'index': 0, 'rationale': "The Coatings division sells products to external customers."},
-        'stage2': {'index': 0, 'rationale': "Its branding is not dictated by a specific legal requirement."},
-        'stage3': {'index': 0, 'rationale': "Its risks are standard for the industry."},
-        'stage4': {'index': 0, 'rationale': "This is a wholly-owned BASF business."},
-        'stage5': {
-            'rationale': "As a key growth pillar competing with pure-players, it is strategically vital but needs its own brand to win.",
-            'score_A_checks': [False, True, True, True, False], 'score_B_checks': [True, True, False, True, False]
-        }
-    },
-    "ecms": {
-        'stage1': {'index': 0, 'rationale': "ECMS sells products to external customers."},
-        'stage2': {'index': 0, 'rationale': "Its branding is not dictated by a specific legal requirement."},
-        'stage3': {'index': 0, 'rationale': "Its risks are standard for the industry."},
-        'stage4': {'index': 0, 'rationale': "This is a wholly-owned BASF business."},
-        'stage5': {
-            'rationale': "As a sustainability-focused growth pillar, it's highly strategic but needs a distinct identity for its specialized market.",
-            'score_A_checks': [False, True, True, True, True], 'score_B_checks': [False, True, False, True, True]
-        }
-    },
-    "xarvio": {
-        'stage1': {'index': 0, 'rationale': "Xarvio is a commercial digital solution sold to farmers."},
-        'stage2': {'index': 0, 'rationale': "There are no overriding legal requirements for this internally developed brand."},
-        'stage3': {'index': 0, 'rationale': "As a digital product, it does not carry an above-average reputational risk."},
-        'stage4': {'index': 0, 'rationale': "Xarvio was developed internally, making it a wholly-owned BASF brand."},
-        'stage5': {
-            'rationale': "Xarvio is a strategic growth driver needing its own brand to compete with agile tech players and overcome a 'big corporate' headwind.",
-            'score_A_checks': [False, False, True, True, True], 'score_B_checks': [True, True, True, True, True]
-        }
-    },
-    "care360": {
-        'stage1': {'index': 0, 'rationale': "This is a platform of solutions offered to external customers."},
-        'stage2': {'index': 0, 'rationale': "There are no overriding legal requirements."},
-        'stage3': {'index': 0, 'rationale': "Its risk profile is standard."},
-        'stage4': {'index': 0, 'rationale': "It is a wholly-owned strategic initiative developed by BASF."},
-        'stage5': {
-            'rationale': "As a solutions platform, its entire purpose is to showcase the power of the masterbrand. It needs to be the embodiment of BASF, not distinct from it.",
-            'score_A_checks': [False, True, False, True, True], 'score_B_checks': [False, False, False, False, False]
-        }
-    },
-    "newbiz": {
-        'stage1': {'index': 0, 'rationale': "This is a commercial business that sells products externally."},
-        'stage2': {'index': 0, 'rationale': "Its branding is not dictated by a specific legal requirement."},
-        'stage3': {'index': 0, 'rationale': "Risk is standard for a new venture."},
-        'stage4': {'index': 0, 'rationale': "This is a new, wholly-owned venture created by BASF."},
-        'stage5': {
-            'rationale': "This new venture is not yet core to strategy but needs high market distinction to succeed in a new field.",
-            'score_A_checks': [False, False, False, True, False], 'score_B_checks': [True, True, True, True, True]
-        }
-    },
-    "newco": {
-        'stage1': {'index': 0, 'rationale': "This is a commercial business that sells products externally."},
-        'stage2': {'index': 0, 'rationale': "We assume the M&A deal has no unusual branding constraints."},
-        'stage3': {'index': 0, 'rationale': "Assuming this is a standard acquisition, the risk profile is not above-average."},
-        'stage4': {'index': 2, 'rationale': "As a 'newly acquired company,' its existing brand equity must be handled carefully."},
-        'stage4.1': {'index': 0, 'rationale': "We are assuming 'NewCo' is a valuable asset with positive brand equity."}
-    },
-    "basfsonatrachpropanchem": {
-        'stage1': {'index': 0, 'rationale': "This is a commercial business that sells products externally."},
-        'stage2': {'index': 1, 'rationale': "As a Joint Venture, the branding is explicitly defined in the legal agreement that formed the company. This agreement must be followed."}
-    },
-    "insight360": {
-        'stage1': {'index': 1, 'rationale': "This is a tool for internal employees, so it's not a public-facing brand."}
-    },
-    "anniversaries": {
-        'stage1': {'index': 2, 'rationale': "This is a temporary campaign led by BASF, not a permanent brand in the portfolio."}
-    },
+    "chemicals": {'stage1': {'index': 0, 'rationale': "The Chemicals division sells products to external customers."}, 'stage2': {'index': 0, 'rationale': "There are no specific legal or contractual requirements..."}, 'stage3': {'index': 0, 'rationale': "This is the core business and carries a standard risk profile."}, 'stage4': {'index': 0, 'rationale': "The division is a wholly-owned and created part of BASF."}, 'stage5': {'rationale': "As the core of BASF's strategy, it scores high on contribution. As the masterbrand itself, it has no need for market distinction.", 'score_A_checks': [True, True, False, True, True], 'score_B_checks': [False, False, False, False, False]}},
+    "agriculture": {'stage1': {'index': 0, 'rationale': "The Agriculture division sells products to external customers."}, 'stage2': {'index': 0, 'rationale': "Its branding is not dictated by a specific legal requirement."}, 'stage3': {'index': 0, 'rationale': "Its risks are standard for the industry."}, 'stage4': {'index': 0, 'rationale': "This is a wholly-owned BASF business."}, 'stage5': {'rationale': "As a key growth pillar competing with pure-players, it is strategically vital but needs its own brand to win.", 'score_A_checks': [False, True, True, True, False], 'score_B_checks': [True, True, False, True, False]}},
+    "coatings": {'stage1': {'index': 0, 'rationale': "The Coatings division sells products to external customers."}, 'stage2': {'index': 0, 'rationale': "Its branding is not dictated by a specific legal requirement."}, 'stage3': {'index': 0, 'rationale': "Its risks are standard for the industry."}, 'stage4': {'index': 0, 'rationale': "This is a wholly-owned BASF business."}, 'stage5': {'rationale': "As a key growth pillar competing with pure-players, it is strategically vital but needs its own brand to win.", 'score_A_checks': [False, True, True, True, False], 'score_B_checks': [True, True, False, True, False]}},
+    "ecms": {'stage1': {'index': 0, 'rationale': "ECMS sells products to external customers."}, 'stage2': {'index': 0, 'rationale': "Its branding is not dictated by a specific legal requirement."}, 'stage3': {'index': 0, 'rationale': "Its risks are standard for the industry."}, 'stage4': {'index': 0, 'rationale': "This is a wholly-owned BASF business."}, 'stage5': {'rationale': "As a sustainability-focused growth pillar, it's highly strategic but needs a distinct identity for its specialized market.", 'score_A_checks': [False, True, True, True, True], 'score_B_checks': [False, True, False, True, True]}},
+    "xarvio": {'stage1': {'index': 0, 'rationale': "Xarvio is a commercial digital solution sold to farmers."}, 'stage2': {'index': 0, 'rationale': "There are no overriding legal requirements for this internally developed brand."}, 'stage3': {'index': 0, 'rationale': "As a digital product, it does not carry an above-average reputational risk."}, 'stage4': {'index': 0, 'rationale': "Xarvio was developed internally, making it a wholly-owned BASF brand."}, 'stage5': {'rationale': "Xarvio is a strategic growth driver needing its own brand to compete with agile tech players and overcome a 'big corporate' headwind.", 'score_A_checks': [False, False, True, True, True], 'score_B_checks': [True, True, True, True, True]}},
+    "care360": {'stage1': {'index': 0, 'rationale': "This is a platform of solutions offered to external customers."}, 'stage2': {'index': 0, 'rationale': "There are no overriding legal requirements."}, 'stage3': {'index': 0, 'rationale': "Its risk profile is standard."}, 'stage4': {'index': 0, 'rationale': "It is a wholly-owned strategic initiative developed by BASF."}, 'stage5': {'rationale': "As a solutions platform, its entire purpose is to showcase the power of the masterbrand. It needs to be the embodiment of BASF, not distinct from it.", 'score_A_checks': [False, True, False, True, True], 'score_B_checks': [False, False, False, False, False]}},
+    "newbiz": {'stage1': {'index': 0, 'rationale': "This is a commercial business that sells products externally."}, 'stage2': {'index': 0, 'rationale': "Its branding is not dictated by a specific legal requirement."}, 'stage3': {'index': 0, 'rationale': "Risk is standard for a new venture."}, 'stage4': {'index': 0, 'rationale': "This is a new, wholly-owned venture created by BASF."}, 'stage5': {'rationale': "This new venture is not yet core to strategy but needs high market distinction to succeed in a new field.", 'score_A_checks': [False, False, False, True, False], 'score_B_checks': [True, True, True, True, True]}},
+    "newco": {'stage1': {'index': 0, 'rationale': "This is a commercial business that sells products externally."}, 'stage2': {'index': 0, 'rationale': "We assume the M&A deal has no unusual branding constraints."}, 'stage3': {'index': 0, 'rationale': "Assuming this is a standard acquisition, the risk profile is not above-average."}, 'stage4': {'index': 2, 'rationale': "As a 'newly acquired company,' its existing brand equity must be handled carefully."}, 'stage4.1': {'index': 0, 'rationale': "We are assuming 'NewCo' is a valuable asset with positive brand equity."}},
+    "basfsonatrachpropanchem": {'stage1': {'index': 0, 'rationale': "This is a commercial business that sells products externally."}, 'stage2': {'index': 1, 'rationale': "As a Joint Venture, the branding is explicitly defined in the legal agreement that formed the company. This agreement must be followed."}},
+    "insight360": {'stage1': {'index': 1, 'rationale': "This is a tool for internal employees, so it's not a public-facing brand."}},
+    "anniversaries": {'stage1': {'index': 2, 'rationale': "This is a temporary campaign led by BASF, not a permanent brand in the portfolio."}},
 }
 
 RESULT_DATA = {
@@ -133,11 +57,13 @@ RESULT_DATA = {
 
 # --- Main App Function ---
 def run_app():
+    # Initialize Session State
     if 'stage' not in st.session_state: st.session_state.stage = 0
     if 'entity_name' not in st.session_state: st.session_state.entity_name = ""
     if 'scores' not in st.session_state: st.session_state.scores = {'A': 0, 'B': 0}
     if 'demo_key' not in st.session_state: st.session_state.demo_key = None
 
+    # Functions
     def start_evaluation(entity_name):
         st.session_state.entity_name = entity_name
         demo_key_check = entity_name.lower().strip().replace('°', '').replace(' ', '')
@@ -152,22 +78,8 @@ def run_app():
         for key in list(st.session_state.keys()):
             if key != 'password_correct': del st.session_state[key]
         st.rerun()
-
-    def display_result(result_key):
-        result = RESULT_DATA[result_key]
-        st.header("Result")
-        st.write(f"**Entity Evaluated:** *{st.session_state.entity_name}*")
-        st.markdown("---")
-        st.subheader("Phase 3: Activation - The 'How'")
-        st.caption("This final phase provides the actionable guide for execution. The recommendation below links to a specific Implementation Guide.")
-        st.success(f"**Recommendation: {result['recommendation']}**")
-        st.markdown(f"**Rationale:** {result['rationale']}")
-        st.markdown("---")
-        st.markdown(result['activation_text'])
-        st.markdown(f"**Similar Examples:** *{result['examples']}*")
-        st.markdown("---")
-        if st.button("Evaluate Another Entity"): reset_app()
     
+    # --- App Logic ---
     if st.session_state.stage == 0:
         st.title("🧭 The BASF Brand Compass")
         st.markdown("An interactive tool to provide clear, strategic direction for the BASF brand architecture.")
@@ -191,7 +103,8 @@ def run_app():
             with cols[i % 4]:
                 if st.button(display_name, key=brand_key, use_container_width=True): start_evaluation(display_name)
     
-    elif st.session_state.stage > 0 and st.session_state.stage < 100:
+    # Logic for all subsequent stages
+    else:
         stage_config = {
             1: {"phase_name": "Phase 1: Qualification - The 'What'", "header": "Gatekeeper", "explanation": "This first step determines if the entity is a commercial brand requiring a strategic decision.", "question": "What is its fundamental nature?", "options": ["A commercial offering", "An internal-facing tool", "A temporary communication initiative"], "next_stages": [2, 101, 102]},
             2: {"phase_name": "Phase 1: Qualification - The 'What'", "header": "Mandatory Directives", "explanation": "This step checks for any non-negotiable legal or contractual obligations that pre-determine the branding approach.", "question": "Is branding dictated by a pre-existing legal or contractual requirement?", "options": ["No", "Yes"], "next_stages": [3, 103]},
@@ -200,6 +113,7 @@ def run_app():
             4.1: {"phase_name": "Phase 1: Qualification - The 'What'", "header": "Acquisition Evaluation", "explanation": "For acquired brands, we must assess their existing reputation to decide whether to leverage their brand equity or retire it.", "question": "Does the acquired brand have significant negative equity?", "options": ["No", "Yes"], "next_stages": [106, 107]}
         }
 
+        # If it's a filter stage
         if st.session_state.stage in stage_config:
             st.header(f"Evaluating: *{st.session_state.entity_name}*")
             current_config = stage_config[st.session_state.stage]
@@ -220,6 +134,7 @@ def run_app():
                 selected_index = current_config["options"].index(s_choice.strip('*'))
                 set_stage(current_config["next_stages"][selected_index])
 
+        # If it's the scoring engine
         elif st.session_state.stage == 5:
             st.header(f"Evaluating: *{st.session_state.entity_name}*")
             st.subheader("Phase 2: Classification - The 'Where'")
@@ -252,33 +167,29 @@ def run_app():
             st.markdown("---")
             if st.session_state.demo_key and 'rationale' in stage5_data: st.info(f"**Demo Guidance:** {stage5_data['rationale']}")
             if st.button("Calculate Recommendation", type="primary"): set_stage(6)
-    
-    else: # This block handles ALL final recommendation pages
-        result_key_map = {
-            101: 'internal_naming',
-            102: 'comms_initiative',
-            103: 'legal_directive',
-            104: 'independent_risk',
-            105: 'strategically_aligned', # JV default
-            106: 'strategically_aligned', # Acquisition default
-            107: 'retire_rebrand'
-        }
         
-        outcome_key = None
-        if st.session_state.stage == 6:
-            score_a = st.session_state.scores['A']
-            score_b = st.session_state.scores['B']
-            if score_a >= 3:
-                outcome_key = 'basf_led' if score_b <= 1 else 'basf_endorsed'
-            else:
-                outcome_key = 'basf_associated' if score_b >= 2 else 'flag_review'
+        # If it's any of the final recommendation pages
         else:
-            outcome_key = result_key_map.get(st.session_state.stage)
-
-        if outcome_key:
-            display_result(outcome_key)
+            result_key_map = {
+                101: 'internal_naming', 102: 'comms_initiative', 103: 'legal_directive',
+                104: 'independent_risk', 105: 'strategically_aligned', 106: 'strategically_aligned',
+                107: 'retire_rebrand'
+            }
+            outcome_key = None
+            if st.session_state.stage == 6:
+                score_a = st.session_state.scores['A']
+                score_b = st.session_state.scores['B']
+                if score_a >= 3: outcome_key = 'basf_led' if score_b <= 1 else 'basf_endorsed'
+                else: outcome_key = 'basf_associated' if score_b >= 2 else 'flag_review'
+            else:
+                outcome_key = result_key_map.get(st.session_state.stage)
+            
+            if outcome_key:
+                result = RESULT_DATA[outcome_key]
+                display_recommendation(result['recommendation'], result['rationale'], result['examples'])
 
 # --- App Execution with Password Check ---
+# The title is placed here so it appears on the login screen, but not again.
 st.title("🧭 The BASF Brand Compass")
 if check_password():
     run_app()
