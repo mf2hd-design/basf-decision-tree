@@ -7,12 +7,20 @@ st.set_page_config(
     layout="centered"
 )
 
+# --- Helper Function for Normalizing Keys ---
+def normalize_key(text):
+    """Normalizes a string to be used as a dictionary key or widget key."""
+    return text.lower().strip().replace('°', '').replace(' ', '').replace('.', '').replace("'", "")
+
 # --- Password Protection Logic (Robust Version) ---
 def check_password():
     """Returns `True` if the user is logged in."""
     def password_entered():
+        """Callback function to check the entered password."""
         if st.session_state.get("password") == "FFxBASF2025":
             st.session_state["password_correct"] = True
+            # Clear the password from state for security
+            del st.session_state["password"]
         else:
             st.session_state["password_correct"] = False
 
@@ -23,8 +31,10 @@ def check_password():
     st.text_input(
         "Password", type="password", on_change=password_entered, key="password"
     )
-    if "password" in st.session_state and not st.session_state.get("password_correct", False):
+    # Only show the error message if the password has been checked and is incorrect.
+    if "password_correct" in st.session_state and not st.session_state.password_correct:
         st.error("😕 Password incorrect")
+        
     return False
 
 # --- Data Libraries (Fully Populated and Corrected) ---
@@ -67,8 +77,10 @@ def run_app():
 
     def start_evaluation(entity_name):
         st.session_state.entity_name = entity_name
-        demo_key_check = entity_name.lower().strip().replace('°', '').replace(' ', '')
-        if demo_key_check in DEMO_DATA: st.session_state.demo_key = demo_key_check
+        # Use the normalization function to ensure a match with DEMO_DATA keys
+        demo_key_check = normalize_key(entity_name)
+        if demo_key_check in DEMO_DATA:
+            st.session_state.demo_key = demo_key_check
         set_stage(1)
 
     def set_stage(stage_num):
@@ -77,9 +89,10 @@ def run_app():
 
     def reset_app():
         for key in list(st.session_state.keys()):
-            if key != 'password_correct': del st.session_state[key]
+            if key != 'password_correct':
+                del st.session_state[key]
         st.rerun()
-    
+
     def display_result(result_key):
         result = RESULT_DATA[result_key]
         st.header("Result")
@@ -94,8 +107,9 @@ def run_app():
         if result['examples']:
             st.markdown(f"**Similar Examples:** *{result['examples']}*")
         st.markdown("---")
-        if st.button("Evaluate Another Entity"): reset_app()
-    
+        if st.button("Evaluate Another Entity"):
+            reset_app()
+
     # --- App Logic ---
     st.title("🧭 The BASF Brand Compass")
     if st.session_state.stage == 0:
@@ -108,16 +122,20 @@ def run_app():
         st.subheader("Evaluate a New Entity")
         entity_name_input = st.text_input("Enter name:", key="entity_name_input", label_visibility="collapsed")
         if st.button("Start Manual Evaluation"):
-            if entity_name_input: start_evaluation(entity_name_input)
-            else: st.warning("Please enter an entity name to begin.")
+            if entity_name_input:
+                start_evaluation(entity_name_input)
+            else:
+                st.warning("Please enter an entity name to begin.")
         st.markdown("---")
         st.subheader("Or, start a guided demo for a known brand:")
-        
+
         standard_demos = ["Chemicals", "Xarvio", "NewBiz", "BASF Sonatrach PropanChem", "NewCo", "Anniversaries", "Coatings", "ECMS", "Care 360°", "Insight 360", "Agriculture"]
         cols = st.columns(4)
         for i, brand_key in enumerate(standard_demos):
             with cols[i % 4]:
-                if st.button(brand_key, key=brand_key.lower().replace(' ', ''), use_container_width=True): start_evaluation(brand_key)
+                # Use the normalization function for consistent keying
+                if st.button(brand_key, key=normalize_key(brand_key), use_container_width=True):
+                    start_evaluation(brand_key)
 
         st.markdown("---")
         st.subheader("Stress-Test Scenarios")
@@ -125,8 +143,10 @@ def run_app():
         cols = st.columns(3)
         for i, brand_key in enumerate(stress_demos):
             with cols[i]:
-                if st.button(brand_key, key=brand_key.lower().replace(' ', ''), use_container_width=True): start_evaluation(brand_key)
-    
+                # Use the normalization function for consistent keying
+                if st.button(brand_key, key=normalize_key(brand_key), use_container_width=True):
+                    start_evaluation(brand_key)
+
     else:
         stage_config = {
             1: {"phase_name": "Phase 1: Qualification - The 'What'", "header": "Gatekeeper", "explanation": "This first step determines if the entity is a commercial brand requiring a strategic decision.", "question": "What is its fundamental nature?", "options": ["A commercial offering", "An internal-facing tool", "A temporary communication initiative"], "next_stages": [2, 101, 102]},
@@ -145,12 +165,17 @@ def run_app():
             demo_path_data = DEMO_DATA.get(st.session_state.demo_key, {})
             stage_key = f"stage{st.session_state.stage}"
             recommended_index = demo_path_data.get(stage_key, {}).get('index')
+            
+            # FIX: Ensure index for st.radio is never None to prevent crashes.
+            radio_index = recommended_index if recommended_index is not None else 0
+
             def format_options(options, index):
                 if index is None: return options
                 formatted = options.copy()
                 formatted[index] = f"**{formatted[index]}**"
                 return formatted
-            s_choice = st.radio(current_config["question"], format_options(current_config["options"], recommended_index), index=recommended_index, key=f"s{st.session_state.stage}_radio", label_visibility="collapsed")
+                
+            s_choice = st.radio(current_config["question"], format_options(current_config["options"], recommended_index), index=radio_index, key=f"s{st.session_state.stage}_radio", label_visibility="collapsed")
             if recommended_index is not None: st.info(f"**Demo Guidance:** {demo_path_data[stage_key]['rationale']}")
             if st.button("Proceed", type="primary"):
                 selected_index = current_config["options"].index(s_choice.strip('*'))
@@ -188,7 +213,7 @@ def run_app():
             st.markdown("---")
             if st.session_state.demo_key and 'rationale' in stage5_data: st.info(f"**Demo Guidance:** {stage5_data['rationale']}")
             if st.button("Calculate Recommendation", type="primary"): set_stage(6)
-        
+
         else: # This block handles ALL final recommendation pages
             result_key_map = {
                 101: 'internal_naming', 102: 'comms_initiative', 103: 'legal_directive',
@@ -205,7 +230,7 @@ def run_app():
                     outcome_key = 'basf_associated' if score_b >= 2 else 'flag_review'
             else:
                 outcome_key = result_key_map.get(st.session_state.stage)
-            
+
             if outcome_key:
                 display_result(outcome_key)
 
