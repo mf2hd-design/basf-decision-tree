@@ -7,21 +7,12 @@ st.set_page_config(
     layout="centered"
 )
 
-# --- Helper Function for Normalizing Keys ---
-def normalize_key(text):
-    """Normalizes a string to be used as a dictionary key or widget key."""
-    return text.lower().strip().replace('°', '').replace(' ', '').replace('.', '').replace("'", "")
-
 # --- Password Protection Logic (Robust Version) ---
 def check_password():
     """Returns `True` if the user is logged in."""
     def password_entered():
-        """Callback function to check the entered password."""
         if st.session_state.get("password") == "FFxBASF2025":
             st.session_state["password_correct"] = True
-            # Clear the password from state for security
-            if "password" in st.session_state:
-                del st.session_state["password"]
         else:
             st.session_state["password_correct"] = False
 
@@ -32,10 +23,8 @@ def check_password():
     st.text_input(
         "Password", type="password", on_change=password_entered, key="password"
     )
-    # Only show the error message if the password has been checked and is incorrect.
-    if "password_correct" in st.session_state and not st.session_state.password_correct:
+    if "password" in st.session_state and not st.session_state.get("password_correct", False):
         st.error("😕 Password incorrect")
-        
     return False
 
 # --- Data Libraries (Fully Populated and Corrected) ---
@@ -69,6 +58,76 @@ RESULT_DATA = {
     'retire_rebrand': {'recommendation': "Independent (Retire & Rebrand)", 'rationale': "The acquired brand's baggage is a liability. The recommendation is to make it independent by retiring the name and transitioning customers to a BASF brand.", 'activation_text': "This means the acquired brand identity will be retired. A formal plan must be created to migrate customers and assets to a new or existing BASF brand, thereby making the business independent of the problematic legacy name.", 'examples': "OldChem Inc."}
 }
 
+# --- Flowchart Definition ---
+flowchart_dot_string = """
+digraph "Brand Compass" {
+    graph [rankdir=TB, splines=ortho, bgcolor="transparent", fontname="sans-serif", label=""];
+    node [shape=box, style="rounded,filled", fontname="sans-serif", fontsize=10];
+    edge [fontname="sans-serif", fontsize=9];
+
+    # --- Node Styles ---
+    subgraph cluster_phase1 {
+        label = "Phase 1: Qualification - The 'What'";
+        bgcolor = "#E6F2FF"; fontcolor = "#002B55"; fontsize = 12; style = "filled,rounded";
+        
+        q1 [label="Gatekeeper:\nWhat is the entity's nature?", shape=diamond, color="#002B55", fillcolor="#FFFFFF"];
+        q2 [label="Mandatory Directives:\nAny legal requirements?", shape=diamond, color="#002B55", fillcolor="#FFFFFF"];
+        q3 [label="Risk Assessment:\nSignificant reputational risk?", shape=diamond, color="#002B55", fillcolor="#FFFFFF"];
+        q4 [label="Structural Sorter:\nWhat is the ownership?", shape=diamond, color="#002B55", fillcolor="#FFFFFF"];
+        q4_1 [label="Acquisition Evaluation:\nNegative brand equity?", shape=diamond, color="#002B55", fillcolor="#FFFFFF"];
+    }
+
+    subgraph cluster_phase2 {
+        label = "Phase 2: Classification - The 'Where'";
+        bgcolor = "#FFE6CC"; fontcolor = "#663300"; fontsize = 12; style = "filled,rounded";
+        
+        engine [label="The Strategic Core:\nScorecard Evaluation", shape=box, color="#994D00", fillcolor="#FFFFFF", width=3];
+    }
+
+    subgraph cluster_phase3 {
+        label = "Phase 3: Activation - The 'How'";
+        bgcolor = "#D6F5D6"; fontcolor = "#003300"; fontsize = 12; style = "filled,rounded";
+
+        res_led [label="BASF-Led", fillcolor="#FFFFFF", color="#004D00"];
+        res_endorsed [label="BASF-Endorsed", fillcolor="#FFFFFF", color="#004D00"];
+        res_associated [label="BASF-Associated", fillcolor="#FFFFFF", color="#004D00"];
+        res_flag [label="Flag for Review", fillcolor="#FFFFFF", color="#004D00"];
+    }
+
+    # --- Result Nodes (outside phases) ---
+    res_internal [label="Result:\nDescriptor / Internal Naming", shape=box, color="#666666", fillcolor="#F0F0F0"];
+    res_legal [label="Result:\nFollow Legal Directive", shape=box, color="#666666", fillcolor="#F0F0F0"];
+    res_risk [label="Result:\nIndependent (for risk)", shape=box, color="#666666", fillcolor="#F0F0F0"];
+    res_aligned [label="Result:\nStrategically Aligned", shape=box, color="#666666", fillcolor="#F0F0F0"];
+    res_retire [label="Result:\nIndependent (Retire & Rebrand)", shape=box, color="#666666", fillcolor="#F0F0F0"];
+    
+    # --- Connections ---
+    start [label="Start:\nEntity Evaluation", shape=box, fillcolor="#FFFFFF", color="#333333"];
+    
+    start -> q1;
+    q1 -> q2 [label="Commercial Offering"];
+    q1 -> res_internal [label="Internal / Comms"];
+    
+    q2 -> q3 [label="No"];
+    q2 -> res_legal [label="Yes"];
+    
+    q3 -> q4 [label="No"];
+    q3 -> res_risk [label="Yes"];
+    
+    q4 -> engine [label="Wholly-Owned"];
+    q4 -> res_aligned [label="Joint Venture"];
+    q4 -> q4_1 [label="Acquisition"];
+
+    q4_1 -> res_aligned [label="No"];
+    q4_1 -> res_retire [label="Yes"];
+
+    engine -> res_led [label="Score leads here", style=dashed, fontcolor="#555555"];
+    engine -> res_endorsed [label="Score leads here", style=dashed, fontcolor="#555555"];
+    engine -> res_associated [label="Score leads here", style=dashed, fontcolor="#555555"];
+    engine -> res_flag [label="Score leads here", style=dashed, fontcolor="#555555"];
+}
+"""
+
 # --- Main App Function ---
 def run_app():
     if 'stage' not in st.session_state: st.session_state.stage = 0
@@ -78,9 +137,8 @@ def run_app():
 
     def start_evaluation(entity_name):
         st.session_state.entity_name = entity_name
-        demo_key_check = normalize_key(entity_name)
-        if demo_key_check in DEMO_DATA:
-            st.session_state.demo_key = demo_key_check
+        demo_key_check = entity_name.lower().strip().replace('°', '').replace(' ', '')
+        if demo_key_check in DEMO_DATA: st.session_state.demo_key = demo_key_check
         set_stage(1)
 
     def set_stage(stage_num):
@@ -89,33 +147,25 @@ def run_app():
 
     def reset_app():
         for key in list(st.session_state.keys()):
-            if key != 'password_correct':
-                del st.session_state[key]
+            if key != 'password_correct': del st.session_state[key]
         st.rerun()
-
+    
     def display_result(result_key):
         result = RESULT_DATA[result_key]
         st.header("Result")
         st.write(f"**Entity Evaluated:** *{st.session_state.entity_name}*")
-        
+        st.markdown("---")
+        st.subheader("Phase 3: Activation - The 'How'")
+        st.caption("This final phase provides the actionable guide for execution. The recommendation below links to a specific Implementation Guide.")
         st.success(f"**Recommendation: {result['recommendation']}**")
         st.markdown(f"**Rationale:** {result['rationale']}")
-        
         st.markdown("---")
-        
-        st.subheader("Phase 3: Activation - The 'How'")
         st.markdown(result['activation_text'])
-        
-        st.markdown("---")
-        
         if result['examples']:
             st.markdown(f"**Similar Examples:** *{result['examples']}*")
-        
-        st.write("") 
-        if st.button("Evaluate Another Entity"):
-            reset_app()
-
-    # --- App Logic ---
+        st.markdown("---")
+        if st.button("Evaluate Another Entity"): reset_app()
+    
     st.title("🧭 The BASF Brand Compass")
     if st.session_state.stage == 0:
         st.markdown("An interactive tool to provide clear, strategic direction for the BASF brand architecture.")
@@ -127,36 +177,28 @@ def run_app():
         st.subheader("Evaluate a New Entity")
         entity_name_input = st.text_input("Enter name:", key="entity_name_input", label_visibility="collapsed")
         if st.button("Start Manual Evaluation"):
-            if entity_name_input:
-                start_evaluation(entity_name_input)
-            else:
-                st.warning("Please enter an entity name to begin.")
+            if entity_name_input: start_evaluation(entity_name_input)
+            else: st.warning("Please enter an entity name to begin.")
         st.markdown("---")
         st.subheader("Or, start a guided demo for a known brand:")
-
+        
         standard_demos = ["Chemicals", "Xarvio", "NewBiz", "BASF Sonatrach PropanChem", "NewCo", "Anniversaries", "Coatings", "ECMS", "Care 360°", "Insight 360", "Agriculture"]
         cols = st.columns(4)
         for i, brand_key in enumerate(standard_demos):
             with cols[i % 4]:
-                if st.button(brand_key, key=normalize_key(brand_key), use_container_width=True):
-                    start_evaluation(brand_key)
+                if st.button(brand_key, key=brand_key.lower().replace(' ', ''), use_container_width=True): start_evaluation(brand_key)
 
         st.markdown("---")
         st.subheader("Stress-Test Scenarios")
-        
-        stress_test_descriptions = {
-            "PolyWeld 800": "This represents a low-margin, legacy adhesive product in a declining market. This scenario tests how the Compass identifies brands that are no longer strategically relevant and should be reviewed.",
-            "ExtractMax": "This is an innovative, high-performance chemical designed for a controversial industry. This scenario tests how the Compass protects the main BASF brand by recommending strategic distance for high-risk products.",
-            "OldChem Inc.": "This is a company acquired for its valuable assets, but its brand has a poor historical reputation. This scenario tests how the Compass recommends retiring a toxic brand while retaining the valuable parts of the business."
-        }
         stress_demos = ["PolyWeld 800", "ExtractMax", "OldChem Inc."]
         cols = st.columns(3)
         for i, brand_key in enumerate(stress_demos):
             with cols[i]:
-                if st.button(brand_key, key=normalize_key(brand_key), use_container_width=True):
-                    start_evaluation(brand_key)
-                st.caption(stress_test_descriptions[brand_key])
+                if st.button(brand_key, key=brand_key.lower().replace(' ', ''), use_container_width=True): start_evaluation(brand_key)
 
+        with st.expander("View the Brand Compass Flowchart"):
+            st.graphviz_chart(flowchart_dot_string)
+    
     else:
         stage_config = {
             1: {"phase_name": "Phase 1: Qualification - The 'What'", "header": "Gatekeeper", "explanation": "This first step determines if the entity is a commercial brand requiring a strategic decision.", "question": "What is its fundamental nature?", "options": ["A commercial offering", "An internal-facing tool", "A temporary communication initiative"], "next_stages": [2, 101, 102]},
@@ -175,28 +217,13 @@ def run_app():
             demo_path_data = DEMO_DATA.get(st.session_state.demo_key, {})
             stage_key = f"stage{st.session_state.stage}"
             recommended_index = demo_path_data.get(stage_key, {}).get('index')
-            
-            radio_index = recommended_index if recommended_index is not None else 0
-
             def format_options(options, index):
                 if index is None: return options
                 formatted = options.copy()
                 formatted[index] = f"**{formatted[index]}**"
                 return formatted
-            
-            st.markdown(f"**{current_config['question']}**")
-
-            s_choice = st.radio(
-                current_config["question"], 
-                format_options(current_config["options"], recommended_index), 
-                index=radio_index, 
-                key=f"s{st.session_state.stage}_radio",
-                label_visibility="collapsed"
-            )
-
-            if recommended_index is not None:
-                st.info(f"**Demo Guidance:** {demo_path_data[stage_key]['rationale']}")
-            
+            s_choice = st.radio(current_config["question"], format_options(current_config["options"], recommended_index), index=recommended_index, key=f"s{st.session_state.stage}_radio", label_visibility="collapsed")
+            if recommended_index is not None: st.info(f"**Demo Guidance:** {demo_path_data[stage_key]['rationale']}")
             if st.button("Proceed", type="primary"):
                 selected_index = current_config["options"].index(s_choice.strip('*'))
                 set_stage(current_config["next_stages"][selected_index])
@@ -231,11 +258,9 @@ def run_app():
                 st.session_state.scores['B'] = sum([b1, b2, b3, b4, b5])
                 st.write(f"**Score B: {st.session_state.scores['B']} / 5**")
             st.markdown("---")
-            if st.session_state.demo_key and 'rationale' in stage5_data:
-                st.info(f"**Demo Guidance:** {stage5_data['rationale']}")
-            if st.button("Calculate Recommendation", type="primary"):
-                set_stage(6)
-
+            if st.session_state.demo_key and 'rationale' in stage5_data: st.info(f"**Demo Guidance:** {stage5_data['rationale']}")
+            if st.button("Calculate Recommendation", type="primary"): set_stage(6)
+        
         else: # This block handles ALL final recommendation pages
             result_key_map = {
                 101: 'internal_naming', 102: 'comms_initiative', 103: 'legal_directive',
@@ -252,7 +277,7 @@ def run_app():
                     outcome_key = 'basf_associated' if score_b >= 2 else 'flag_review'
             else:
                 outcome_key = result_key_map.get(st.session_state.stage)
-
+            
             if outcome_key:
                 display_result(outcome_key)
 
