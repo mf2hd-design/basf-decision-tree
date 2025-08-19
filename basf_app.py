@@ -192,12 +192,6 @@ def run_app():
             st.write(f"**{current_config['header']}**")
             st.caption(current_config['explanation'])
 
-            # --- CIRCUIT BREAKER ---
-            st.markdown("---")
-            data_provided = st.checkbox("I have provided the necessary data to make an informed decision at this stage.")
-            st.text_area("Link to supporting data (market research, risk register, VOC, legal docs, etc.)", key=f"data_link_{st.session_state.stage}", height=100)
-            st.markdown("---")
-
             demo_path_data = DEMO_DATA.get(st.session_state.demo_key, {})
             stage_key = f"stage{st.session_state.stage}"
             recommended_index = demo_path_data.get(stage_key, {}).get('index')
@@ -206,8 +200,17 @@ def run_app():
                 formatted = options.copy()
                 formatted[index] = f"**{formatted[index]}**"
                 return formatted
+            
+            # --- The actual question and options ---
             s_choice = st.radio(current_config["question"], format_options(current_config["options"], recommended_index), index=recommended_index, key=f"s{st.session_state.stage}_radio")
+            
             if recommended_index is not None: st.info(f"**Demo Guidance:** {demo_path_data[stage_key]['rationale']}")
+            
+            # --- CIRCUIT BREAKER (Now placed below the question) ---
+            st.markdown("---")
+            data_provided = st.checkbox("I have provided the necessary data to make an informed decision at this stage.")
+            st.text_area("Link to supporting documents (e.g., business case, project charter, communications brief)", key=f"data_link_{st.session_state.stage}", height=100)
+            st.markdown("---")
             
             if st.button("Proceed", type="primary", disabled=not data_provided):
                 selected_index = current_config["options"].index(s_choice.strip('*'))
