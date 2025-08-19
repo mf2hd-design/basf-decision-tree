@@ -53,80 +53,17 @@ RESULT_DATA = {
     'internal_naming': {'recommendation': "Descriptor / Internal Naming", 'rationale': "This is an internal-facing tool, not a public brand. The Compass's work is complete.", 'activation_text': "This entity does not require a public-facing brand. It should be named according to BASF's internal naming conventions for projects, tools, or initiatives.", 'examples': "Insight 360"},
     'comms_initiative': {'recommendation': "Descriptor / Internal Naming", 'rationale': "This is a temporary communication initiative, not a permanent brand. The Compass's work is complete.", 'activation_text': "This entity does not require a public-facing brand. It should be named according to BASF's internal naming conventions for projects, tools, or initiatives.", 'examples': "Anniversaries"},
     'legal_directive': {'recommendation': "Follow Legal Directive", 'rationale': "The branding for this entity is pre-determined by a binding legal or contractual agreement which must be followed. The Compass's work is complete.", 'activation_text': "The branding for this entity is dictated by a binding legal or contractual agreement. The primary action is to consult the specific legal documents (e.g., the Joint Venture agreement) and implement the branding exactly as specified.", 'examples': "BASF SONATRACH PropanChem"},
-    'independent_risk': {'recommendation': "Independent (for risk insulation)", 'rationale': "The entity carries significant reputational risk and must be strategically independent and distanced from the masterbrand.", 'activation_text': "This means the entity must operate as a fully independent brand with no visible connection to BASF. This is a strategic decision to insulate the BASF masterbrand from any potential reputational risk associated with the entity.", 'examples': "ExtractMax"},
+    'independent_risk': {'recommendation': "Independent", 'rationale': "The entity carries significant reputational risk and must be strategically independent and distanced from the masterbrand.", 'activation_text': "This means the entity must operate as a fully independent brand with no visible connection to BASF. This is a strategic decision to insulate the BASF masterbrand from any potential reputational risk associated with the entity.", 'examples': "ExtractMax"},
     'strategically_aligned': {'recommendation': "Strategically Aligned (Phased Approach)", 'rationale': "As a valuable acquisition or JV with existing equity, the brand integration must be managed with a market-by-market plan to retain value. The Compass's work is complete.", 'activation_text': "This triggers a market-by-market integration plan. The brand's relationship to BASF will vary by region, from 'Maintain & Reassure' (e.g., 'Stoneville, from BASF') where its equity is high, to 'Lead with BASF' where its equity is low. The goal is to maximize value in every market.", 'examples': "NewCo"},
-    'retire_rebrand': {'recommendation': "Independent (Retire & Rebrand)", 'rationale': "The acquired brand's baggage is a liability. The recommendation is to make it independent by retiring the name and transitioning customers to a BASF brand.", 'activation_text': "This means the acquired brand identity will be retired. A formal plan must be created to migrate customers and assets to a new or existing BASF brand, thereby making the business independent of the problematic legacy name.", 'examples': "OldChem Inc."}
+    'retire_rebrand': {'recommendation': "Independent", 'rationale': "The acquired brand's baggage is a liability. The recommendation is to make it independent by retiring the name and transitioning customers to a BASF brand.", 'activation_text': "This means the acquired brand identity will be retired. A formal plan must be created to migrate customers and assets to a new or existing BASF brand, thereby making the business independent of the problematic legacy name.", 'examples': "OldChem Inc."}
 }
 
-# --- Flowchart Definition ---
-flowchart_dot_string = """
-digraph "Brand Compass" {
-    graph [rankdir=TB, splines=ortho, bgcolor="transparent", fontname="sans-serif", label=""];
-    node [shape=box, style="rounded,filled", fontname="sans-serif", fontsize=10];
-    edge [fontname="sans-serif", fontsize=9];
-
-    # --- Node Styles ---
-    subgraph cluster_phase1 {
-        label = "Phase 1: Qualification - The 'What'";
-        bgcolor = "#E6F2FF"; fontcolor = "#002B55"; fontsize = 12; style = "filled,rounded";
-        
-        q1 [label="Gatekeeper:\nWhat is the entity's nature?", shape=diamond, color="#002B55", fillcolor="#FFFFFF"];
-        q2 [label="Mandatory Directives:\nAny legal requirements?", shape=diamond, color="#002B55", fillcolor="#FFFFFF"];
-        q3 [label="Risk Assessment:\nSignificant reputational risk?", shape=diamond, color="#002B55", fillcolor="#FFFFFF"];
-        q4 [label="Structural Sorter:\nWhat is the ownership?", shape=diamond, color="#002B55", fillcolor="#FFFFFF"];
-        q4_1 [label="Acquisition Evaluation:\nNegative brand equity?", shape=diamond, color="#002B55", fillcolor="#FFFFFF"];
-    }
-
-    subgraph cluster_phase2 {
-        label = "Phase 2: Classification - The 'Where'";
-        bgcolor = "#FFE6CC"; fontcolor = "#663300"; fontsize = 12; style = "filled,rounded";
-        
-        engine [label="The Strategic Core:\nScorecard Evaluation", shape=box, color="#994D00", fillcolor="#FFFFFF", width=3];
-    }
-
-    subgraph cluster_phase3 {
-        label = "Phase 3: Activation - The 'How'";
-        bgcolor = "#D6F5D6"; fontcolor = "#003300"; fontsize = 12; style = "filled,rounded";
-
-        res_led [label="BASF-Led", fillcolor="#FFFFFF", color="#004D00"];
-        res_endorsed [label="BASF-Endorsed", fillcolor="#FFFFFF", color="#004D00"];
-        res_associated [label="BASF-Associated", fillcolor="#FFFFFF", color="#004D00"];
-        res_flag [label="Flag for Review", fillcolor="#FFFFFF", color="#004D00"];
-    }
-
-    # --- Result Nodes (outside phases) ---
-    res_internal [label="Result:\nDescriptor / Internal Naming", shape=box, color="#666666", fillcolor="#F0F0F0"];
-    res_legal [label="Result:\nFollow Legal Directive", shape=box, color="#666666", fillcolor="#F0F0F0"];
-    res_risk [label="Result:\nIndependent (for risk)", shape=box, color="#666666", fillcolor="#F0F0F0"];
-    res_aligned [label="Result:\nStrategically Aligned", shape=box, color="#666666", fillcolor="#F0F0F0"];
-    res_retire [label="Result:\nIndependent (Retire & Rebrand)", shape=box, color="#666666", fillcolor="#F0F0F0"];
-    
-    # --- Connections ---
-    start [label="Start:\nEntity Evaluation", shape=box, fillcolor="#FFFFFF", color="#333333"];
-    
-    start -> q1;
-    q1 -> q2 [label="Commercial Offering"];
-    q1 -> res_internal [label="Internal / Comms"];
-    
-    q2 -> q3 [label="No"];
-    q2 -> res_legal [label="Yes"];
-    
-    q3 -> q4 [label="No"];
-    q3 -> res_risk [label="Yes"];
-    
-    q4 -> engine [label="Wholly-Owned"];
-    q4 -> res_aligned [label="Joint Venture"];
-    q4 -> q4_1 [label="Acquisition"];
-
-    q4_1 -> res_aligned [label="No"];
-    q4_1 -> res_retire [label="Yes"];
-
-    engine -> res_led [label="Score leads here", style=dashed, fontcolor="#555555"];
-    engine -> res_endorsed [label="Score leads here", style=dashed, fontcolor="#555555"];
-    engine -> res_associated [label="Score leads here", style=dashed, fontcolor="#555555"];
-    engine -> res_flag [label="Score leads here", style=dashed, fontcolor="#555555"];
+SPECTRUM_DATA = {
+    'basf_led': {"title": "BASF-Led", "bullets": ["→ Use BASF identity", "→ Build strong equity to BASF"]},
+    'basf_endorsed': {"title": "BASF-Endorsed", "bullets": ["→ May have their own identity", "→ Verbal or visual endorsement", "→ Consistently visible"]},
+    'basf_associated': {"title": "BASF-Associated", "bullets": ["→ Independent identity", "→ Endorsement is strategic (i.e. communications, detached)"]},
+    'independent': {"title": "Independent", "bullets": ["→ Independent identity", "→ No endorsement or connection to BASF"]}
 }
-"""
 
 # --- Main App Function ---
 def run_app():
@@ -155,14 +92,41 @@ def run_app():
         st.header("Result")
         st.write(f"**Entity Evaluated:** *{st.session_state.entity_name}*")
         st.markdown("---")
+        
+        st.subheader("Phase 2: Classification - The 'Where'")
+        st.caption("This spectrum shows the result of the Classification. The recommended placement is highlighted below.")
+        
+        # Map complex results to the four main spectrum categories for highlighting
+        spectrum_map = {
+            'basf_led': 'basf_led', 'basf_endorsed': 'basf_endorsed', 'basf_associated': 'basf_associated',
+            'independent_risk': 'independent', 'retire_rebrand': 'independent'
+        }
+        highlight_key = spectrum_map.get(result_key)
+        
+        cols = st.columns(4)
+        for i, (key, data) in enumerate(SPECTRUM_DATA.items()):
+            with cols[i]:
+                if key == highlight_key:
+                    with st.container(border=True):
+                        st.markdown(f"**🏅 Your Recommendation**")
+                        st.subheader(data['title'])
+                        for bullet in data['bullets']:
+                            st.write(bullet)
+                else:
+                    st.subheader(data['title'])
+                    for bullet in data['bullets']:
+                        st.write(bullet)
+
+        st.markdown("---")
         st.subheader("Phase 3: Activation - The 'How'")
-        st.caption("This final phase provides the actionable guide for execution. The recommendation below links to a specific Implementation Guide.")
+        st.caption("This final phase provides the actionable guide for execution, based on the specific recommendation.")
         st.success(f"**Recommendation: {result['recommendation']}**")
         st.markdown(f"**Rationale:** {result['rationale']}")
         st.markdown("---")
         st.markdown(result['activation_text'])
         if result['examples']:
             st.markdown(f"**Similar Examples:** *{result['examples']}*")
+        
         st.markdown("---")
         if st.button("Evaluate Another Entity"): reset_app()
     
