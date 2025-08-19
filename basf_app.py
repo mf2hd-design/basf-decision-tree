@@ -60,46 +60,78 @@ RESULT_DATA = {
     'independent_minority': {'recommendation': "Independent (Minority-owned JV)", 'rationale': "As a minority stakeholder, BASF cannot enforce its brand identity. The JV must operate with its own distinct brand to ensure legal and market clarity.", 'activation_text': "This entity requires its own independent brand identity. BASF's involvement should be communicated strategically as an endorsement or partnership, guided by the terms of the Joint Venture agreement, rather than through direct branding.", 'examples': "Minority-stake Joint Ventures"}
 }
 
+# --- REVISED FLOWCHART DOT STRING ---
 flowchart_dot_string = """
 digraph "Brand Compass" {
-    graph [rankdir=TB, splines=ortho, bgcolor="transparent", fontname="sans-serif", label=""];
-    node [shape=box, style="rounded,filled", fontname="sans-serif", fontsize=10];
+    graph [rankdir=TB, splines=ortho, bgcolor="transparent", fontname="sans-serif"];
+    node [shape=box, style="rounded,filled", fontname="sans-serif", fontsize=10, width=2.5];
     edge [fontname="sans-serif", fontsize=9];
 
+    // --- CLUSTERS FOR PHASES ---
     subgraph cluster_phase1 {
-        label = "Phase 1: Qualification - The 'What'"; bgcolor = "#E6F2FF"; fontcolor = "#002B55"; fontsize = 12; style = "filled,rounded";
+        label = "Phase 1: Qualification - The 'What'";
+        bgcolor = "#E6F2FF"; fontcolor = "#002B55"; fontsize = 12; style = "filled,rounded";
         q1 [label="Audience & Value Gate:\nWho is it for?", shape=diamond, color="#002B55", fillcolor="#FFFFFF"];
         q2 [label="Mandatory Directives:\nAny legal requirements?", shape=diamond, color="#002B55", fillcolor="#FFFFFF"];
         q3 [label="Risk/Opportunity Profile:\nReputational impact?", shape=diamond, color="#002B55", fillcolor="#FFFFFF"];
-        q4 [label="Structural Sorter:\nWhat is the ownership?", shape=diamond, color="#002B55", fillcolor="#FFFFFF"];
+        q4 [label="Structural Sorter:\nWhat is the ownership structure?", shape=diamond, color="#002B55", fillcolor="#FFFFFF"];
         q4_1 [label="Acquisition Evaluation:\nNegative brand equity?", shape=diamond, color="#002B55", fillcolor="#FFFFFF"];
+        q4_2 [label="JV Equity Check:\nWhat is BASF's equity share?", shape=diamond, color="#002B55", fillcolor="#FFFFFF"];
     }
     subgraph cluster_phase2 {
-        label = "Phase 2: Classification - The 'Where'"; bgcolor = "#FFE6CC"; fontcolor = "#663300"; fontsize = 12; style = "filled,rounded";
+        label = "Phase 2: Classification - The 'Where'";
+        bgcolor = "#FFE6CC"; fontcolor = "#663300"; fontsize = 12; style = "filled,rounded";
         engine [label="The Strategic Core:\nScorecard Evaluation", shape=box, color="#994D00", fillcolor="#FFFFFF", width=3];
     }
     subgraph cluster_phase3 {
-        label = "Phase 3: Activation - The 'How'"; bgcolor = "#D6F5D6"; fontcolor = "#003300"; fontsize = 12; style = "filled,rounded";
-        res_led [label="BASF-Led", fillcolor="#FFFFFF", color="#004D00"];
-        res_endorsed [label="BASF-Endorsed", fillcolor="#FFFFFF", color="#004D00"];
-        res_associated [label="BASF-Associated", fillcolor="#FFFFFF", color="#004D00"];
-        res_flag [label="Flag for Review", fillcolor="#FFFFFF", color="#004D00"];
+        label = "Phase 3: Activation - The 'How'";
+        bgcolor = "#D6F5D6"; fontcolor = "#003300"; fontsize = 12; style = "filled,rounded";
+        res_led [label="BASF-Led\n\l- Use BASF identity\l- Build strong equity to BASF\l", fillcolor="#FFFFFF", color="#004D00", align=left];
+        res_endorsed [label="BASF-Endorsed\n\l- May have their own identity\l- Verbal or visual endorsement\l- Consistently visible\l", fillcolor="#FFFFFF", color="#004D00", align=left];
+        res_associated [label="BASF-Associated\n\l- Independent identity\l- Endorsement is strategic\l  (i.e. communications, detached)\l", fillcolor="#FFFFFF", color="#004D00", align=left];
+        res_flag [label="Flag for Review", fillcolor="#FFFFFF", color="#004D00", align=left];
     }
-    res_internal [label="Result:\nInternal Naming", shape=box, color="#666666", fillcolor="#F0F0F0"];
+
+    // --- RESULT NODES (TERMINAL) ---
+    res_internal [label="Result:\nDescriptor / Internal Naming", shape=box, color="#666666", fillcolor="#F0F0F0"];
     res_legal [label="Result:\nFollow Legal Directive", shape=box, color="#666666", fillcolor="#F0F0F0"];
-    res_risk [label="Result:\nIndependent (for risk)", shape=box, color="#666666", fillcolor="#F0F0F0"];
-    res_aligned [label="Result:\nStrategically Aligned", shape=box, color="#666666", fillcolor="#F0F0F0"];
+    res_risk [label="Result:\nIndependent (for risk insulation)", shape=box, color="#666666", fillcolor="#F0F0F0"];
     res_retire [label="Result:\nIndependent (Retire & Rebrand)", shape=box, color="#666666", fillcolor="#F0F0F0"];
+    res_partner [label="Result:\nFollow Partner Guidelines", shape=box, color="#666666", fillcolor="#F0F0F0"];
+    res_aligned [label="Result:\nStrategically Aligned", shape=box, color="#666666", fillcolor="#F0F0F0"];
+    
+    // --- START NODE ---
     start [label="Start:\nEntity Evaluation", shape=box, fillcolor="#FFFFFF", color="#333333"];
     
-    start -> q1; q1 -> q2 [label="External Customers"]; q1 -> res_internal [label="Internal / Comms"];
-    q2 -> q3 [label="No"]; q2 -> res_legal [label="Yes"]; q3 -> q4 [label="Standard / High Opportunity"]; q3 -> res_risk [label="High Risk"];
-    q4 -> engine [label="Wholly-Owned"]; q4 -> res_aligned [label="Joint Venture"]; q4 -> q4_1 [label="Acquisition"];
-    q4_1 -> res_aligned [label="No"]; q4_1 -> res_retire [label="Yes"];
-    engine -> res_led [label="Score leads here", style=dashed, fontcolor="#555555"];
-    engine -> res_endorsed [label="Score leads here", style=dashed, fontcolor="#555555"];
-    engine -> res_associated [label="Score leads here", style=dashed, fontcolor="#555555"];
-    engine -> res_flag [label="Score leads here", style=dashed, fontcolor="#555555"];
+    // --- LOGICAL FLOW ---
+    start -> q1;
+    q1 -> q2 [xlabel="External Customers"];
+    q1 -> res_internal [xlabel="  Internal / Comms"];
+    q2 -> q3 [xlabel="No"];
+    q2 -> res_legal [xlabel="Yes"];
+    q3 -> q4 [xlabel="Standard / High Opportunity "];
+    q3 -> res_risk [xlabel="High Risk"];
+    
+    q4 -> engine [xlabel="Wholly-Owned"];
+    q4 -> q4_1 [xlabel="Acquisition"];
+    q4 -> q4_2 [xlabel="Joint Venture "];
+    q4 -> res_partner [xlabel=" Partner/Distributor"];
+    
+    q4_1 -> res_aligned [xlabel="No"];
+    q4_1 -> res_retire [xlabel="Yes"];
+    
+    q4_2 -> res_aligned [xlabel="Majority (>=50%)"];
+    q4_2 -> res_aligned [xlabel="Minority (<50%)"];
+
+
+    // --- ENGINE TO ACTIVATION ---
+    engine -> res_led [style=dashed, fontcolor="#555555"];
+    engine -> res_endorsed [style=dashed, fontcolor="#555555"];
+    engine -> res_associated [style=dashed, fontcolor="#555555"];
+    engine -> res_flag [style=dashed, fontcolor="#555555"];
+
+    // --- LAYOUT HELPERS ---
+    { rank=same; res_led; res_endorsed; res_associated; res_flag; }
 }
 """
 
@@ -191,7 +223,7 @@ def run_app():
             st.subheader(current_config["phase_name"])
             st.write(f"**{current_config['header']}**")
             st.caption(current_config['explanation'])
-
+            
             demo_path_data = DEMO_DATA.get(st.session_state.demo_key, {})
             stage_key = f"stage{st.session_state.stage}"
             recommended_index = demo_path_data.get(stage_key, {}).get('index')
@@ -201,12 +233,11 @@ def run_app():
                 formatted[index] = f"**{formatted[index]}**"
                 return formatted
             
-            # --- The actual question and options ---
             s_choice = st.radio(current_config["question"], format_options(current_config["options"], recommended_index), index=recommended_index, key=f"s{st.session_state.stage}_radio")
             
             if recommended_index is not None: st.info(f"**Demo Guidance:** {demo_path_data[stage_key]['rationale']}")
-            
-            # --- CIRCUIT BREAKER (Now placed below the question) ---
+
+            # --- CIRCUIT BREAKER ---
             st.markdown("---")
             data_provided = st.checkbox("I have provided the necessary data to make an informed decision at this stage.")
             st.text_area("Link to supporting documents (e.g., business case, project charter, communications brief)", key=f"data_link_{st.session_state.stage}", height=100)
