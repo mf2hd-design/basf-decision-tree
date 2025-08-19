@@ -36,13 +36,13 @@ DEMO_DATA = {
     "xarvio": {'stage1': {'index': 0, 'rationale': "Xarvio is a commercial digital solution sold to farmers."}, 'stage2': {'index': 0, 'rationale': "There are no overriding legal requirements for this internally developed brand."}, 'stage3': {'index': 0, 'rationale': "As a digital product, it does not carry an above-average reputational risk."}, 'stage4': {'index': 0, 'rationale': "Xarvio was developed internally, making it a wholly-owned BASF brand."}, 'stage5': {'rationale': "Xarvio is a strategic growth driver needing its own brand to compete with agile tech players and overcome a 'big corporate' headwind.", 'score_A_checks': [False, False, True, True, True], 'score_B_checks': [True, True, True, True, True]}},
     "care360": {'stage1': {'index': 0, 'rationale': "This is a platform of solutions offered to external customers."}, 'stage2': {'index': 0, 'rationale': "There are no overriding legal requirements."}, 'stage3': {'index': 0, 'rationale': "Its risk profile is standard."}, 'stage4': {'index': 0, 'rationale': "It is a wholly-owned strategic initiative developed by BASF."}, 'stage5': {'rationale': "As a solutions platform, its entire purpose is to showcase the power of the masterbrand. It needs to be the embodiment of BASF, not distinct from it.", 'score_A_checks': [False, True, False, True, True], 'score_B_checks': [False, False, False, False, False]}},
     "newbiz": {'stage1': {'index': 0, 'rationale': "This is a commercial business that sells products externally."}, 'stage2': {'index': 0, 'rationale': "Its branding is not dictated by a specific legal requirement."}, 'stage3': {'index': 0, 'rationale': "Risk is standard for a new venture."}, 'stage4': {'index': 0, 'rationale': "This is a new, wholly-owned venture created by BASF."}, 'stage5': {'rationale': "This new venture is not yet core to strategy but needs high market distinction to succeed in a new field.", 'score_A_checks': [False, False, False, True, False], 'score_B_checks': [True, True, True, True, True]}},
-    "newco": {'stage1': {'index': 0, 'rationale': "This is a commercial business that sells products externally."}, 'stage2': {'index': 0, 'rationale': "We assume the M&A deal has no unusual branding constraints."}, 'stage3': {'index': 0, 'rationale': "Assuming this is a standard acquisition, the risk profile is not above-average."}, 'stage4': {'index': 2, 'rationale': "As a 'newly acquired company,' its existing brand equity must be handled carefully."}, 'stage4.1': {'index': 0, 'rationale': "We are assuming 'NewCo' is a valuable asset with positive brand equity."}},
+    "newco": {'stage1': {'index': 0, 'rationale': "This is a commercial business that sells products externally."}, 'stage2': {'index': 0, 'rationale': "We assume the M&A deal has no unusual branding constraints."}, 'stage3': {'index': 0, 'rationale': "Assuming this is a standard acquisition, the risk profile is not above-average."}, 'stage4': {'index': 3, 'rationale': "As a 'newly acquired company,' its existing brand equity must be handled carefully."}, 'stage4.1': {'index': 0, 'rationale': "We are assuming 'NewCo' is a valuable asset with positive brand equity."}},
     "basfsonatrachpropanchem": {'stage1': {'index': 0, 'rationale': "This is a commercial business that sells products externally."}, 'stage2': {'index': 1, 'rationale': "As a Joint Venture, the branding is explicitly defined in the legal agreement that formed the company. This agreement must be followed."}},
     "insight360": {'stage1': {'index': 1, 'rationale': "This is a tool for internal employees, so it's not a public-facing brand."}},
     "anniversaries": {'stage1': {'index': 2, 'rationale': "This is a temporary campaign led by BASF, not a permanent brand in the portfolio."}},
     "polyweld800": {'stage1': {'index': 0, 'rationale': "This is a commercial product sold externally."}, 'stage2': {'index': 0, 'rationale': "There are no special legal requirements for this product."}, 'stage3': {'index': 0, 'rationale': "As a standard industrial adhesive, it carries no unusual reputational risk."}, 'stage4': {'index': 0, 'rationale': "It is a legacy, wholly-owned BASF product line."}, 'stage5': {'rationale': "This legacy product is no longer aligned with key strategies and does not need its own brand to compete on price, triggering a business review.", 'score_A_checks': [False, False, False, False, False], 'score_B_checks': [False, False, False, False, False]}},
-    "extractmax": {'stage1': {'index': 0, 'rationale': "This is a commercial product sold externally."}, 'stage2': {'index': 0, 'rationale': "There are no special legal requirements for this product."}, 'stage3': {'index': 1, 'rationale': "Yes. Due to its use in a controversial industry, this product carries a significant reputational risk that could harm the masterbrand."}},
-    "oldcheminc": {'stage1': {'index': 0, 'rationale': "This is a commercial business we have acquired."}, 'stage2': {'index': 0, 'rationale': "We assume the M&A deal has no unusual branding constraints."}, 'stage3': {'index': 0, 'rationale': "The business itself is not high-risk."}, 'stage4': {'index': 2, 'rationale': "This is a newly acquired company."}, 'stage4.1': {'index': 1, 'rationale': "Yes. The acquired brand has a known negative reputation that would be a liability for BASF to inherit."}}
+    "extractmax": {'stage1': {'index': 0, 'rationale': "This is a commercial product sold externally."}, 'stage2': {'index': 0, 'rationale': "There are no special legal requirements for this product."}, 'stage3': {'index': 2, 'rationale': "Yes. Due to its use in a controversial industry, this product carries a significant reputational risk that could harm the masterbrand."}},
+    "oldcheminc": {'stage1': {'index': 0, 'rationale': "This is a commercial business we have acquired."}, 'stage2': {'index': 0, 'rationale': "We assume the M&A deal has no unusual branding constraints."}, 'stage3': {'index': 0, 'rationale': "The business itself is not high-risk."}, 'stage4': {'index': 3, 'rationale': "This is a newly acquired company."}, 'stage4.1': {'index': 1, 'rationale': "Yes. The acquired brand has a known negative reputation that would be a liability for BASF to inherit."}}
 }
 
 RESULT_DATA = {
@@ -50,12 +50,14 @@ RESULT_DATA = {
     'basf_endorsed': {'recommendation': "BASF-Endorsed", 'rationale': "The entity is strategically vital but requires its own distinct brand to win in its specific market.", 'activation_text': "This means the entity has its own distinct brand and identity. The endorsement, such as 'powered by BASF science,' is used strategically to provide the ultimate reason to believe—giving the brand both the unique story it needs and the scientific credibility customers trust.", 'examples': "Agriculture, Coatings, Xarvio"},
     'basf_associated': {'recommendation': "BASF-Associated", 'rationale': "The entity is exploring a new space and needs brand independence. A lighter, strategic association provides credibility without high commitment.", 'activation_text': "This means the entity has its own independent brand. The connection to BASF is lighter and more strategic, often used in communications rather than on packaging. This provides credibility without tying the venture too closely to the masterbrand's core identity.", 'examples': "NewBiz"},
     'flag_review': {'recommendation': "Flag for Strategic Review", 'rationale': "The entity is not core to strategy and does not need its own brand to compete.", 'activation_text': "This is not a branding recommendation but a business flag. The next step is a formal business review to determine its future in the portfolio.", 'examples': "PolyWeld 800"},
-    'internal_naming': {'recommendation': "Descriptor / Internal Naming", 'rationale': "This is an internal-facing tool, not a public brand. The Compass's work is complete.", 'activation_text': "This entity does not require a public-facing brand. It should be named according to BASF's internal naming conventions for projects, tools, or initiatives.", 'examples': "Insight 360"},
+    'internal_naming': {'recommendation': "Descriptor / Internal Naming", 'rationale': "This is an internal-facing tool, not a public brand. The Compass's work is complete.", 'activation_text': "This entity does not require a public-facing brand. It should be named and governed according to BASF's existing guidelines for internal logos. Please consult the 'Checklist for Brand Champions' and the 'Decision Tree for the use of internal logos' to proceed.", 'examples': "Insight 360"},
     'comms_initiative': {'recommendation': "Descriptor / Internal Naming", 'rationale': "This is a temporary communication initiative, not a permanent brand. The Compass's work is complete.", 'activation_text': "This entity does not require a public-facing brand. It should be named according to BASF's internal naming conventions for projects, tools, or initiatives.", 'examples': "Anniversaries"},
     'legal_directive': {'recommendation': "Follow Legal Directive", 'rationale': "The branding for this entity is pre-determined by a binding legal or contractual agreement which must be followed. The Compass's work is complete.", 'activation_text': "The branding for this entity is dictated by a binding legal or contractual agreement. The primary action is to consult the specific legal documents (e.g., the Joint Venture agreement) and implement the branding exactly as specified.", 'examples': "BASF SONATRACH PropanChem"},
-    'independent_risk': {'recommendation': "Independent (for risk insulation)", 'rationale': "The entity carries significant reputational risk and must be strategically independent and distanced from the masterbrand.", 'activation_text': "This means the entity must operate as a fully independent brand with no visible connection to BASF. This is a strategic decision to insulate the BASF masterbrand from any potential reputational risk associated with the entity.", 'examples': "ExtractMax"},
-    'strategically_aligned': {'recommendation': "Strategically Aligned (Phased Approach)", 'rationale': "As a valuable acquisition or JV with existing equity, the brand integration must be managed with a market-by-market plan to retain value. The Compass's work is complete.", 'activation_text': "This triggers a market-by-market integration plan. The brand's relationship to BASF will vary by region, from 'Maintain & Reassure' (e.g., 'Stoneville, from BASF') where its equity is high, to 'Lead with BASF' where its equity is low. The goal is to maximize value in every market.", 'examples': "NewCo"},
-    'retire_rebrand': {'recommendation': "Independent (Retire & Rebrand)", 'rationale': "The acquired brand's baggage is a liability. The recommendation is to make it independent by retiring the name and transitioning customers to a BASF brand.", 'activation_text': "This means the acquired brand identity will be retired. A formal plan must be created to migrate customers and assets to a new or existing BASF brand, thereby making the business independent of the problematic legacy name.", 'examples': "OldChem Inc."}
+    'independent_risk': {'recommendation': "Independent (for risk insulation)", 'rationale': "The entity carries significant reputational risk and must be strategically independent and distanced from the masterbrand.", 'activation_text': "This means the entity must operate as a fully independent brand with no visible connection to BASF. This is a strategic decision to insulate the BASF masterbrand from any potential reputational risk associated with the entity.\n\n**Maintaining the BASF Connection:** While this entity operates independently, it must adhere to BASF's non-negotiable core principles, including Safety & Compliance Standards, Code of Conduct, and Legal Transparency of Ownership.", 'examples': "ExtractMax"},
+    'strategically_aligned': {'recommendation': "Strategically Aligned (Phased Approach)", 'rationale': "As a valuable acquisition or majority-owned JV with existing equity, the brand integration must be managed with a market-by-market plan to retain value. The Compass's work is complete.", 'activation_text': "This triggers a market-by-market integration plan. The brand's relationship to BASF will vary by region, from 'Maintain & Reassure' (e.g., 'Stoneville, from BASF') where its equity is high, to 'Lead with BASF' where its equity is low. The goal is to maximize value in every market.", 'examples': "NewCo"},
+    'retire_rebrand': {'recommendation': "Independent (Retire & Rebrand)", 'rationale': "The acquired brand's baggage is a liability. The recommendation is to make it independent by retiring the name and transitioning customers to a BASF brand.", 'activation_text': "This means the acquired brand identity will be retired. A formal plan must be created to migrate customers and assets to a new or existing BASF brand, thereby making the business independent of the problematic legacy name.\n\n**Maintaining the BASF Connection:** While this entity operates independently, it must adhere to BASF's non-negotiable core principles, including Safety & Compliance Standards, Code of Conduct, and Legal Transparency of Ownership.", 'examples': "OldChem Inc."},
+    'follow_partner_guidelines': {'recommendation': "Follow Partner/Distributor Guidelines", 'rationale': "Branding for third-party partners without a BASF equity stake is governed by specific legal and brand guidelines.", 'activation_text': "The primary action is to consult the official 'Distributor Branding Guidelines' and engage with the Brand Consultancy team to ensure full compliance before using any BASF branding. This ensures consistency and protects both brands.", 'examples': "Third-Party Distributors"},
+    'independent_minority': {'recommendation': "Independent (Minority-owned JV)", 'rationale': "As a minority stakeholder, BASF cannot enforce its brand identity. The JV must operate with its own distinct brand to ensure legal and market clarity.", 'activation_text': "This entity requires its own independent brand identity. BASF's involvement should be communicated strategically as an endorsement or partnership, guided by the terms of the Joint Venture agreement, rather than through direct branding.", 'examples': "Minority-stake Joint Ventures"}
 }
 
 flowchart_dot_string = """
@@ -66,9 +68,9 @@ digraph "Brand Compass" {
 
     subgraph cluster_phase1 {
         label = "Phase 1: Qualification - The 'What'"; bgcolor = "#E6F2FF"; fontcolor = "#002B55"; fontsize = 12; style = "filled,rounded";
-        q1 [label="Gatekeeper:\nWhat is the entity's nature?", shape=diamond, color="#002B55", fillcolor="#FFFFFF"];
+        q1 [label="Audience & Value Gate:\nWho is it for?", shape=diamond, color="#002B55", fillcolor="#FFFFFF"];
         q2 [label="Mandatory Directives:\nAny legal requirements?", shape=diamond, color="#002B55", fillcolor="#FFFFFF"];
-        q3 [label="Risk Assessment:\nSignificant reputational risk?", shape=diamond, color="#002B55", fillcolor="#FFFFFF"];
+        q3 [label="Risk/Opportunity Profile:\nReputational impact?", shape=diamond, color="#002B55", fillcolor="#FFFFFF"];
         q4 [label="Structural Sorter:\nWhat is the ownership?", shape=diamond, color="#002B55", fillcolor="#FFFFFF"];
         q4_1 [label="Acquisition Evaluation:\nNegative brand equity?", shape=diamond, color="#002B55", fillcolor="#FFFFFF"];
     }
@@ -83,15 +85,15 @@ digraph "Brand Compass" {
         res_associated [label="BASF-Associated", fillcolor="#FFFFFF", color="#004D00"];
         res_flag [label="Flag for Review", fillcolor="#FFFFFF", color="#004D00"];
     }
-    res_internal [label="Result:\nDescriptor / Internal Naming", shape=box, color="#666666", fillcolor="#F0F0F0"];
+    res_internal [label="Result:\nInternal Naming", shape=box, color="#666666", fillcolor="#F0F0F0"];
     res_legal [label="Result:\nFollow Legal Directive", shape=box, color="#666666", fillcolor="#F0F0F0"];
     res_risk [label="Result:\nIndependent (for risk)", shape=box, color="#666666", fillcolor="#F0F0F0"];
     res_aligned [label="Result:\nStrategically Aligned", shape=box, color="#666666", fillcolor="#F0F0F0"];
     res_retire [label="Result:\nIndependent (Retire & Rebrand)", shape=box, color="#666666", fillcolor="#F0F0F0"];
     start [label="Start:\nEntity Evaluation", shape=box, fillcolor="#FFFFFF", color="#333333"];
     
-    start -> q1; q1 -> q2 [label="Commercial Offering"]; q1 -> res_internal [label="Internal / Comms"];
-    q2 -> q3 [label="No"]; q2 -> res_legal [label="Yes"]; q3 -> q4 [label="No"]; q3 -> res_risk [label="Yes"];
+    start -> q1; q1 -> q2 [label="External Customers"]; q1 -> res_internal [label="Internal / Comms"];
+    q2 -> q3 [label="No"]; q2 -> res_legal [label="Yes"]; q3 -> q4 [label="Standard / High Opportunity"]; q3 -> res_risk [label="High Risk"];
     q4 -> engine [label="Wholly-Owned"]; q4 -> res_aligned [label="Joint Venture"]; q4 -> q4_1 [label="Acquisition"];
     q4_1 -> res_aligned [label="No"]; q4_1 -> res_retire [label="Yes"];
     engine -> res_led [label="Score leads here", style=dashed, fontcolor="#555555"];
@@ -174,11 +176,13 @@ def run_app():
     
     else:
         stage_config = {
-            1: {"phase_name": "Phase 1: Qualification - The 'What'", "header": "Gatekeeper", "explanation": "This first step determines if the entity is a commercial brand requiring a strategic decision.", "question": "What is its fundamental nature?", "options": ["A commercial offering", "An internal-facing tool", "A temporary communication initiative"], "next_stages": [2, 101, 102]},
+            1: {"phase_name": "Phase 1: Qualification - The 'What'", "header": "Audience & Value Gate", "explanation": "This first step determines if the entity is a commercial brand requiring a strategic decision based on its audience.", "question": "Who is the primary audience, and what is its core value proposition?", "options": ["External customers/partners (product, service, or solution)", "Internal employees (tool, platform, or resource)", "External stakeholders (temporary campaign or initiative)"], "next_stages": [2, 101, 102]},
             2: {"phase_name": "Phase 1: Qualification - The 'What'", "header": "Mandatory Directives", "explanation": "This step checks for any non-negotiable legal or contractual obligations that pre-determine the branding approach.", "question": "Is branding dictated by a pre-existing legal or contractual requirement?", "options": ["No", "Yes"], "next_stages": [3, 103]},
-            3: {"phase_name": "Phase 1: Qualification - The 'What'", "header": "Risk Assessment", "explanation": "This is a safety check to determine if the entity carries a significant reputational risk that could harm the masterbrand.", "question": "Does it carry a significant, above-average reputational risk?", "options": ["No", "Yes"], "next_stages": [4, 104]},
-            4: {"phase_name": "Phase 1: Qualification - The 'What'", "header": "Structural Sorter", "explanation": "This step sorts entities based on their ownership, as special cases like Joint Ventures and Acquisitions have unique strategic needs.", "question": "What is its ownership structure?", "options": ["A wholly-owned BASF business", "A Joint Venture", "A newly acquired company"], "next_stages": [5, 105, 4.1]},
-            4.1: {"phase_name": "Phase 1: Qualification - The 'What'", "header": "Acquisition Evaluation", "explanation": "For acquired brands, we must assess their existing reputation to decide whether to leverage their brand equity or retire it.", "question": "Does the acquired brand have significant negative equity?", "options": ["No", "Yes"], "next_stages": [106, 107]}
+            3: {"phase_name": "Phase 1: Qualification - The 'What'", "header": "Risk & Opportunity Profile", "explanation": "This is a safety check to determine if the entity carries a significant reputational risk that could harm the masterbrand, or a unique opportunity to enhance it.", "question": "What is the reputational risk/opportunity profile?", "options": ["Standard Profile: Risk is manageable and aligned with BASF's core business.", "High Opportunity: Carries unique potential to enhance BASF's reputation in a new/strategic area.", "High Risk: Carries significant reputational risk that could negatively impact the masterbrand."], "next_stages": [4, 4, 104]},
+            4: {"phase_name": "Phase 1: Qualification - The 'What'", "header": "Structural Sorter", "explanation": "This step sorts entities based on their ownership, as special cases like JVs, Partners, and Acquisitions have unique strategic needs.", "question": "What is its ownership structure?", "options": ["A wholly-owned BASF business", "A Joint Venture (where BASF has an equity stake)", "A third-party partner or distributor (with no BASF equity)", "A newly acquired company"], "next_stages": [5, 4.2, 108, 4.1]},
+            4.1: {"phase_name": "Phase 1: Qualification - The 'What'", "header": "Acquisition Evaluation", "explanation": "For acquired brands, we must assess their existing reputation to decide whether to leverage their brand equity or retire it.", "question": "Does the acquired brand have significant negative equity?", "options": ["No", "Yes"], "next_stages": [106, 107]},
+            4.2: {"phase_name": "Phase 1: Qualification - The 'What'", "header": "Joint Venture Agreement Check", "explanation": "Some Joint Venture agreements contain specific branding clauses that must be followed.", "question": "Are there pre-existing brand guidelines in the JV/Alliance agreement?", "options": ["No, branding is flexible", "Yes, branding is defined in the agreement"], "next_stages": [4.3, 103]},
+            4.3: {"phase_name": "Phase 1: Qualification - The 'What'", "header": "Joint Venture Equity Check", "explanation": "BASF's equity stake is a key factor in determining the appropriate branding approach for a Joint Venture.", "question": "What is BASF's equity share in the Joint Venture?", "options": ["Majority (≥50%)", "Minority (<50%)"], "next_stages": [106, 109]}
         }
 
         if st.session_state.stage in stage_config:
@@ -187,6 +191,13 @@ def run_app():
             st.subheader(current_config["phase_name"])
             st.write(f"**{current_config['header']}**")
             st.caption(current_config['explanation'])
+
+            # --- CIRCUIT BREAKER ---
+            st.markdown("---")
+            data_provided = st.checkbox("I have provided the necessary data to make an informed decision at this stage.")
+            st.text_area("Link to supporting data (market research, risk register, VOC, legal docs, etc.)", key=f"data_link_{st.session_state.stage}", height=100)
+            st.markdown("---")
+
             demo_path_data = DEMO_DATA.get(st.session_state.demo_key, {})
             stage_key = f"stage{st.session_state.stage}"
             recommended_index = demo_path_data.get(stage_key, {}).get('index')
@@ -197,9 +208,13 @@ def run_app():
                 return formatted
             s_choice = st.radio(current_config["question"], format_options(current_config["options"], recommended_index), index=recommended_index, key=f"s{st.session_state.stage}_radio", label_visibility="collapsed")
             if recommended_index is not None: st.info(f"**Demo Guidance:** {demo_path_data[stage_key]['rationale']}")
-            if st.button("Proceed", type="primary"):
+            
+            if st.button("Proceed", type="primary", disabled=not data_provided):
                 selected_index = current_config["options"].index(s_choice.strip('*'))
                 set_stage(current_config["next_stages"][selected_index])
+            elif not data_provided:
+                st.warning("Please confirm you have linked to supporting data before proceeding.")
+
 
         elif st.session_state.stage == 5:
             st.header(f"Evaluating: *{st.session_state.entity_name}*")
@@ -214,9 +229,9 @@ def run_app():
             col1, col2 = st.columns(2)
             with col1:
                 st.info("**Part A: Strategic Contribution Score**")
-                a1 = st.checkbox('Is it part of a designated "Core" business segment?', value=rec_checks_A[0])
+                a1 = st.checkbox('Does it operate within an established BASF core business segment?', value=rec_checks_A[0])
                 a2 = st.checkbox('Is it a cornerstone brand for the "Winning Ways" strategy?', value=rec_checks_A[1])
-                a3 = st.checkbox('Is it part of a designated "Standalone" growth pillar?', value=rec_checks_A[2])
+                a3 = st.checkbox('Is it a strategic pillar designed to win in a distinct market or business model?', value=rec_checks_A[2])
                 a4 = st.checkbox('Does it directly deliver on a key corporate initiative?', value=rec_checks_A[3])
                 a5 = st.checkbox('Does it strongly support the corporate purpose?', value=rec_checks_A[4])
                 st.session_state.scores['A'] = sum([a1, a2, a3, a4, a5])
@@ -238,7 +253,7 @@ def run_app():
             result_key_map = {
                 101: 'internal_naming', 102: 'comms_initiative', 103: 'legal_directive',
                 104: 'independent_risk', 105: 'strategically_aligned', 106: 'strategically_aligned',
-                107: 'retire_rebrand'
+                107: 'retire_rebrand', 108: 'follow_partner_guidelines', 109: 'independent_minority'
             }
             outcome_key = None
             if st.session_state.stage == 6:
