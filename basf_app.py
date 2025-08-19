@@ -206,7 +206,7 @@ def run_app():
                 formatted = options.copy()
                 formatted[index] = f"**{formatted[index]}**"
                 return formatted
-            s_choice = st.radio(current_config["question"], format_options(current_config["options"], recommended_index), index=recommended_index, key=f"s{st.session_state.stage}_radio", label_visibility="collapsed")
+            s_choice = st.radio(current_config["question"], format_options(current_config["options"], recommended_index), index=recommended_index, key=f"s{st.session_state.stage}_radio")
             if recommended_index is not None: st.info(f"**Demo Guidance:** {demo_path_data[stage_key]['rationale']}")
             
             if st.button("Proceed", type="primary", disabled=not data_provided):
