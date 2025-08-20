@@ -45,11 +45,12 @@ DEMO_DATA = {
     "oldcheminc": {'stage1': {'index': 0, 'rationale': "This is a commercial business we have acquired."}, 'stage2': {'index': 0, 'rationale': "We assume the M&A deal has no unusual branding constraints."}, 'stage3': {'index': 0, 'rationale': "The business itself is not high-risk."}, 'stage4': {'index': 3, 'rationale': "This is a newly acquired company."}, 'stage4.1': {'index': 1, 'rationale': "Yes. The acquired brand has a known negative reputation that would be a liability for BASF to inherit."}}
 }
 
+# --- UPDATED RESULT DATA ---
 RESULT_DATA = {
     'basf_led': {'recommendation': "BASF-Led", 'rationale': "The entity is a core expression of the BASF brand and benefits most from a direct connection.", 'activation_text': "This means we don't create a separate brand. The entity is branded simply as 'BASF [Entity Name]'. It lives on the main BASF website and is sold by the BASF sales team, reinforcing the power and innovation of the masterbrand.", 'examples': "Chemicals, Care 360°"},
     'basf_endorsed': {'recommendation': "BASF-Endorsed", 'rationale': "The entity is strategically vital but requires its own distinct brand to win in its specific market.", 'activation_text': "This means the entity has its own distinct brand and identity. The endorsement, such as 'powered by BASF science,' is used strategically to provide the ultimate reason to believe—giving the brand both the unique story it needs and the scientific credibility customers trust.", 'examples': "Agriculture, Coatings, Xarvio"},
     'basf_associated': {'recommendation': "BASF-Associated", 'rationale': "The entity is exploring a new space and needs brand independence. A lighter, strategic association provides credibility without high commitment.", 'activation_text': "This means the entity has its own independent brand. The connection to BASF is lighter and more strategic, often used in communications rather than on packaging. This provides credibility without tying the venture too closely to the masterbrand's core identity.", 'examples': "NewBiz"},
-    'flag_review': {'recommendation': "Flag for Strategic Review", 'rationale': "The entity is not core to strategy and does not need its own brand to compete.", 'activation_text': "This is not a branding recommendation but a business flag. The next step is a formal business review to determine its future in the portfolio.", 'examples': "PolyWeld 800"},
+    'flag_review': {'recommendation': "Flag for Strategic Review", 'rationale': "The entity has a low strategic contribution and a low market distinction score.", 'activation_text': "This is not a branding recommendation but a business flag. It triggers a formal business review to determine the entity's future within the portfolio.", 'examples': "PolyWeld 800"},
     'internal_naming': {'recommendation': "Descriptor / Internal Naming", 'rationale': "This is an internal-facing tool, not a public brand. The Compass's work is complete.", 'activation_text': "This entity does not require a public-facing brand. It should be named and governed according to BASF's existing guidelines for internal logos. Please consult the 'Checklist for Brand Champions' and the 'Decision Tree for the use of internal logos' to proceed.", 'examples': "Insight 360"},
     'comms_initiative': {'recommendation': "Descriptor / Internal Naming", 'rationale': "This is a temporary communication initiative, not a permanent brand. The Compass's work is complete.", 'activation_text': "This entity does not require a public-facing brand. It should be named according to BASF's internal naming conventions for projects, tools, or initiatives.", 'examples': "Anniversaries"},
     'legal_directive': {'recommendation': "Follow Legal Directive", 'rationale': "The branding for this entity is pre-determined by a binding legal or contractual agreement which must be followed. The Compass's work is complete.", 'activation_text': "The branding for this entity is dictated by a binding legal or contractual agreement. The primary action is to consult the specific legal documents (e.g., the Joint Venture agreement) and implement the branding exactly as specified.", 'examples': "BASF SONATRACH PropanChem"},
@@ -60,14 +61,13 @@ RESULT_DATA = {
     'independent_minority': {'recommendation': "Independent (Minority-owned JV)", 'rationale': "As a minority stakeholder, BASF cannot enforce its brand identity. The JV must operate with its own distinct brand to ensure legal and market clarity.", 'activation_text': "This entity requires its own independent brand identity. BASF's involvement should be communicated strategically as an endorsement or partnership, guided by the terms of the Joint Venture agreement, rather than through direct branding.", 'examples': "Minority-stake Joint Ventures"}
 }
 
-# --- REVISED FLOWCHART DOT STRING ---
+# --- FINAL FLOWCHART DOT STRING ---
 flowchart_dot_string = """
-digraph "Brand Compass" {
+digraph "BrandCompass" {
     graph [rankdir=TB, splines=ortho, bgcolor="transparent", fontname="sans-serif"];
-    node [shape=box, style="rounded,filled", fontname="sans-serif", fontsize=10, width=2.5];
+    node [shape=box, style="rounded,filled", fontname="sans-serif", fontsize=10, width=2.8];
     edge [fontname="sans-serif", fontsize=9];
 
-    // --- CLUSTERS FOR PHASES ---
     subgraph cluster_phase1 {
         label = "Phase 1: Qualification - The 'What'";
         bgcolor = "#E6F2FF"; fontcolor = "#002B55"; fontsize = 12; style = "filled,rounded";
@@ -78,60 +78,54 @@ digraph "Brand Compass" {
         q4_1 [label="Acquisition Evaluation:\nNegative brand equity?", shape=diamond, color="#002B55", fillcolor="#FFFFFF"];
         q4_2 [label="JV Equity Check:\nWhat is BASF's equity share?", shape=diamond, color="#002B55", fillcolor="#FFFFFF"];
     }
+
     subgraph cluster_phase2 {
         label = "Phase 2: Classification - The 'Where'";
         bgcolor = "#FFE6CC"; fontcolor = "#663300"; fontsize = 12; style = "filled,rounded";
         engine [label="The Strategic Core:\nScorecard Evaluation", shape=box, color="#994D00", fillcolor="#FFFFFF", width=3];
     }
+
     subgraph cluster_phase3 {
         label = "Phase 3: Activation - The 'How'";
         bgcolor = "#D6F5D6"; fontcolor = "#003300"; fontsize = 12; style = "filled,rounded";
         res_led [label="BASF-Led\n\l- Use BASF identity\l- Build strong equity to BASF\l", fillcolor="#FFFFFF", color="#004D00", align=left];
         res_endorsed [label="BASF-Endorsed\n\l- May have their own identity\l- Verbal or visual endorsement\l- Consistently visible\l", fillcolor="#FFFFFF", color="#004D00", align=left];
         res_associated [label="BASF-Associated\n\l- Independent identity\l- Endorsement is strategic\l  (i.e. communications, detached)\l", fillcolor="#FFFFFF", color="#004D00", align=left];
-        res_flag [label="Flag for Review", fillcolor="#FFFFFF", color="#004D00", align=left];
+        res_flag [label="Flag for Review\n\l- Low strategic and distinction score\l- Triggers a business review\l", fillcolor="#FFFFFF", color="#004D00", align=left];
     }
 
-    // --- RESULT NODES (TERMINAL) ---
-    res_internal [label="Result:\nDescriptor / Internal Naming", shape=box, color="#666666", fillcolor="#F0F0F0"];
+    res_internal [label="Result:\nInternal Naming", shape=box, color="#666666", fillcolor="#F0F0F0"];
     res_legal [label="Result:\nFollow Legal Directive", shape=box, color="#666666", fillcolor="#F0F0F0"];
     res_risk [label="Result:\nIndependent (for risk insulation)", shape=box, color="#666666", fillcolor="#F0F0F0"];
-    res_retire [label="Result:\nIndependent (Retire & Rebrand)", shape=box, color="#666666", fillcolor="#F0F0F0"];
     res_partner [label="Result:\nFollow Partner Guidelines", shape=box, color="#666666", fillcolor="#F0F0F0"];
+    res_retire [label="Result:\nIndependent (Retire & Rebrand)", shape=box, color="#666666", fillcolor="#F0F0F0"];
     res_aligned [label="Result:\nStrategically Aligned", shape=box, color="#666666", fillcolor="#F0F0F0"];
+    res_independent_jv [label="Result:\nIndependent (Minority-owned JV)", shape=box, color="#666666", fillcolor="#F0F0F0"];
     
-    // --- START NODE ---
     start [label="Start:\nEntity Evaluation", shape=box, fillcolor="#FFFFFF", color="#333333"];
     
-    // --- LOGICAL FLOW ---
     start -> q1;
-    q1 -> q2 [xlabel="External Customers"];
-    q1 -> res_internal [xlabel="  Internal / Comms"];
-    q2 -> q3 [xlabel="No"];
-    q2 -> res_legal [xlabel="Yes"];
-    q3 -> q4 [xlabel="Standard / High Opportunity "];
-    q3 -> res_risk [xlabel="High Risk"];
-    
-    q4 -> engine [xlabel="Wholly-Owned"];
-    q4 -> q4_1 [xlabel="Acquisition"];
-    q4 -> q4_2 [xlabel="Joint Venture "];
-    q4 -> res_partner [xlabel=" Partner/Distributor"];
-    
-    q4_1 -> res_aligned [xlabel="No"];
-    q4_1 -> res_retire [xlabel="Yes"];
-    
-    q4_2 -> res_aligned [xlabel="Majority (>=50%)"];
-    q4_2 -> res_aligned [xlabel="Minority (<50%)"];
+    q1 -> q2 [xlabel=" External Customers"];
+    q1 -> res_internal [xlabel=" Internal / Comms "];
+    q2 -> q3 [xlabel=" No "];
+    q2 -> res_legal [xlabel=" Yes "];
+    q3 -> q4 [xlabel=" Standard / High Opportunity "];
+    q3 -> res_risk [xlabel=" High Risk "];
+    q4 -> engine [xlabel=" Wholly-Owned"];
+    q4 -> q4_1 [xlabel=" Acquisition "];
+    q4 -> q4_2 [xlabel=" Joint Venture "];
+    q4 -> res_partner [xlabel=" Partner/Distributor "];
+    q4_1 -> res_retire [xlabel=" Yes "];
+    q4_1 -> res_aligned [xlabel=" No "];
+    q4_2 -> res_aligned [xlabel=" Majority (>=50%) "];
+    q4_2 -> res_independent_jv [xlabel=" Minority (<50%) "];
 
+    engine -> res_led [style=dashed];
+    engine -> res_endorsed [style=dashed];
+    engine -> res_associated [style=dashed];
+    engine -> res_flag [style=dashed];
 
-    // --- ENGINE TO ACTIVATION ---
-    engine -> res_led [style=dashed, fontcolor="#555555"];
-    engine -> res_endorsed [style=dashed, fontcolor="#555555"];
-    engine -> res_associated [style=dashed, fontcolor="#555555"];
-    engine -> res_flag [style=dashed, fontcolor="#555555"];
-
-    // --- LAYOUT HELPERS ---
-    { rank=same; res_led; res_endorsed; res_associated; res_flag; }
+    {rank=same; res_led; res_endorsed; res_associated; res_flag;}
 }
 """
 
