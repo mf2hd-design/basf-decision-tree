@@ -62,13 +62,12 @@ RESULT_DATA = {
     'independent_minority': {'recommendation': "Independent (Minority-owned JV)", 'rationale': "As a minority stakeholder, BASF cannot enforce its brand identity. The JV must operate with its own distinct brand to ensure legal and market clarity.", 'activation_text': "This entity requires its own independent brand identity. BASF's involvement should be communicated strategically as an endorsement or partnership, guided by the terms of the Joint Venture agreement, rather than through direct branding.", 'examples': "Minority-stake Joint Ventures"}
 }
 
-# --- INTERACTIVE IMAGE VIEWER FUNCTION (CORRECTED) ---
+# --- INTERACTIVE IMAGE VIEWER FUNCTION ---
 def display_interactive_image(image_path: str):
     """
     Creates a clickable thumbnail that opens a full-featured, interactive image viewer
     with zoom and pan capabilities, using the Viewer.js library.
     """
-    # Read the image file and encode it in Base64
     try:
         image_bytes = Path(image_path).read_bytes()
         encoded_image = base64.b64encode(image_bytes).decode()
@@ -77,37 +76,20 @@ def display_interactive_image(image_path: str):
         st.error(f"Image file not found at '{image_path}'. Make sure it's in the same directory as the script.")
         return
 
-    # Self-contained HTML component with Viewer.js
-    # NOTE: The 'integrity' and 'crossorigin' attributes have been removed to prevent blocking.
     html_code = f'''
-    <!-- 1. Include the Viewer.js CSS -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/viewerjs/1.11.3/viewer.min.css" />
-
-    <!-- 2. The image that will be the trigger -->
     <div id="image-container">
       <img id="flowchart-image" src="{image_html_src}" alt="Brand Compass Flowchart" style="max-width: 100%; cursor: zoom-in;">
     </div>
     <p style="text-align:center; color:grey;">Click image to open interactive viewer</p>
-
-    <!-- 3. Include the Viewer.js JavaScript -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/viewerjs/1.11.3/viewer.min.js"></script>
-    
-    <!-- 4. Initialize Viewer.js -->
     <script>
       const viewer = new Viewer(document.getElementById('flowchart-image'), {{
-        inline: false, // Don't show the viewer directly
+        inline: false,
         toolbar: {{
-            zoomIn: 1,
-            zoomOut: 1,
-            oneToOne: 1,
-            reset: 1,
-            prev: 0, 
+            zoomIn: 1, zoomOut: 1, oneToOne: 1, reset: 1, prev: 0, 
             play: {{ show: 0 }},
-            next: 0, 
-            rotateLeft: 1,
-            rotateRight: 1,
-            flipHorizontal: 1,
-            flipVertical: 1,
+            next: 0, rotateLeft: 1, rotateRight: 1, flipHorizontal: 1, flipVertical: 1,
         }},
       }});
     </script>
@@ -177,6 +159,14 @@ def run_app():
 
         st.markdown("---")
         st.subheader("Stress-Test Scenarios")
+        
+        # --- DESCRIPTIONS FOR STRESS TESTS ---
+        st.markdown("""
+        *   **PolyWeld 800:** A legacy product that is no longer core to strategy. This tests how the Compass handles brands with low strategic contribution.
+        *   **ExtractMax:** A product used in a controversial industry. This tests the protocol for insulating the masterbrand from reputational risk.
+        *   **OldChem Inc.:** An acquired company with a negative reputation. This tests the approach to acquisitions with brand baggage.
+        """)
+
         stress_demos = ["PolyWeld 800", "ExtractMax", "OldChem Inc."]
         cols = st.columns(3)
         for i, brand_key in enumerate(stress_demos):
