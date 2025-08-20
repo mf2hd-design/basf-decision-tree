@@ -62,7 +62,7 @@ RESULT_DATA = {
     'independent_minority': {'recommendation': "Independent (Minority-owned JV)", 'rationale': "As a minority stakeholder, BASF cannot enforce its brand identity. The JV must operate with its own distinct brand to ensure legal and market clarity.", 'activation_text': "This entity requires its own independent brand identity. BASF's involvement should be communicated strategically as an endorsement or partnership, guided by the terms of the Joint Venture agreement, rather than through direct branding.", 'examples': "Minority-stake Joint Ventures"}
 }
 
-# --- INTERACTIVE IMAGE VIEWER FUNCTION ---
+# --- INTERACTIVE IMAGE VIEWER FUNCTION (CORRECTED) ---
 def display_interactive_image(image_path: str):
     """
     Creates a clickable thumbnail that opens a full-featured, interactive image viewer
@@ -78,9 +78,10 @@ def display_interactive_image(image_path: str):
         return
 
     # Self-contained HTML component with Viewer.js
+    # NOTE: The 'integrity' and 'crossorigin' attributes have been removed to prevent blocking.
     html_code = f'''
     <!-- 1. Include the Viewer.js CSS -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/viewerjs/1.11.3/viewer.min.css" integrity="sha512-AL9fCpEA1i5hIeSyo2HiUC5sgR2A2vfcN7SoC5feTA/C2tN_u2gpI7KgL3+Vdo/2J3G1l/sB8B0XBt1O5B55MA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/viewerjs/1.11.3/viewer.min.css" />
 
     <!-- 2. The image that will be the trigger -->
     <div id="image-container">
@@ -89,7 +90,7 @@ def display_interactive_image(image_path: str):
     <p style="text-align:center; color:grey;">Click image to open interactive viewer</p>
 
     <!-- 3. Include the Viewer.js JavaScript -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/viewerjs/1.11.3/viewer.min.js" integrity="sha512-f8kZwYACKF8unHuN7CIeSSn+ajuhIeIAiDAiQ1iQW55u2Iqf2k2v9C5_LzG5n/e24yVPo4E8FybBGvjP5h9ZSQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/viewerjs/1.11.3/viewer.min.js"></script>
     
     <!-- 4. Initialize Viewer.js -->
     <script>
@@ -100,19 +101,14 @@ def display_interactive_image(image_path: str):
             zoomOut: 1,
             oneToOne: 1,
             reset: 1,
-            prev: 0, // No prev button
-            play: {{
-                show: 0, // No play button
-                size: 'large',
-            }},
-            next: 0, // No next button
+            prev: 0, 
+            play: {{ show: 0 }},
+            next: 0, 
             rotateLeft: 1,
             rotateRight: 1,
             flipHorizontal: 1,
             flipVertical: 1,
         }},
-        // You can add more options here
-        // See https://github.com/fengyuanchen/viewerjs for all options
       }});
     </script>
     '''
@@ -188,7 +184,7 @@ def run_app():
                 if st.button(brand_key, key=brand_key.lower().replace(' ', ''), use_container_width=True): start_evaluation(brand_key)
 
         with st.expander("View the Brand Compass Flowchart"):
-            display_interactive_image("flowchart.png") # <-- NEW, INTERACTIVE FUNCTION
+            display_interactive_image("flowchart.png") 
     
     else:
         stage_config = {
