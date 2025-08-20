@@ -62,151 +62,61 @@ RESULT_DATA = {
     'independent_minority': {'recommendation': "Independent (Minority-owned JV)", 'rationale': "As a minority stakeholder, BASF cannot enforce its brand identity. The JV must operate with its own distinct brand to ensure legal and market clarity.", 'activation_text': "This entity requires its own independent brand identity. BASF's involvement should be communicated strategically as an endorsement or partnership, guided by the terms of the Joint Venture agreement, rather than through direct branding.", 'examples': "Minority-stake Joint Ventures"}
 }
 
-# --- LIGHTBOX IMAGE FUNCTION ---
-def display_image_lightbox(image_path: str):
+# --- INTERACTIVE IMAGE VIEWER FUNCTION ---
+def display_interactive_image(image_path: str):
     """
-    Creates a clickable thumbnail that opens a full-size image in a lightbox.
+    Creates a clickable thumbnail that opens a full-featured, interactive image viewer
+    with zoom and pan capabilities, using the Viewer.js library.
     """
     # Read the image file and encode it in Base64
     try:
         image_bytes = Path(image_path).read_bytes()
         encoded_image = base64.b64encode(image_bytes).decode()
-        image_html = f"data:image/png;base64,{encoded_image}"
+        image_html_src = f"data:image/png;base64,{encoded_image}"
     except FileNotFoundError:
         st.error(f"Image file not found at '{image_path}'. Make sure it's in the same directory as the script.")
         return
 
-    # The HTML, CSS, and JavaScript for the lightbox
-    # This is a self-contained component
-    lightbox_html = f'''
-    <style>
-        /* Style the clickable thumbnail */
-        .thumbnail-img {{
-            border-radius: 5px;
-            cursor: pointer;
-            transition: 0.3s;
-            display: block;
-            margin-left: auto;
-            margin-right: auto;
-            max-width: 50%; /* Adjust thumbnail size */
-        }}
-        .thumbnail-img:hover {{opacity: 0.7;}}
+    # Self-contained HTML component with Viewer.js
+    html_code = f'''
+    <!-- 1. Include the Viewer.js CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/viewerjs/1.11.3/viewer.min.css" integrity="sha512-AL9fCpEA1i5hIeSyo2HiUC5sgR2A2vfcN7SoC5feTA/C2tN_u2gpI7KgL3+Vdo/2J3G1l/sB8B0XBt1O5B55MA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
-        /* The Modal (background) */
-        .modal {{
-            display: none; 
-            position: fixed; 
-            z-index: 1000; 
-            padding-top: 60px; 
-            left: 0;
-            top: 0;
-            width: 100%; 
-            height: 100%; 
-            overflow: auto; 
-            background-color: rgb(0,0,0); 
-            background-color: rgba(0,0,0,0.9);
-        }}
-
-        /* Modal Content (the image) */
-        .modal-content {{
-            margin: auto;
-            display: block;
-            width: 80%;
-            max-width: 1200px;
-        }}
-
-        /* Caption of Modal Image */
-        #caption {{
-            margin: auto;
-            display: block;
-            width: 80%;
-            max-width: 700px;
-            text-align: center;
-            color: #ccc;
-            padding: 10px 0;
-            height: 150px;
-        }}
-
-        /* Add Animation */
-        .modal-content, #caption {{  
-            -webkit-animation-name: zoom;
-            -webkit-animation-duration: 0.6s;
-            animation-name: zoom;
-            animation-duration: 0.6s;
-        }}
-
-        @-webkit-keyframes zoom {{
-            from {{-webkit-transform:scale(0)}} 
-            to {{-webkit-transform:scale(1)}}
-        }}
-
-        @keyframes zoom {{
-            from {{transform:scale(0)}} 
-            to {{transform:scale(1)}}
-        }}
-
-        /* The Close Button */
-        .close {{
-            position: absolute;
-            top: 15px;
-            right: 35px;
-            color: #f1f1f1;
-            font-size: 40px;
-            font-weight: bold;
-            transition: 0.3s;
-        }}
-
-        .close:hover,
-        .close:focus {{
-            color: #bbb;
-            text-decoration: none;
-            cursor: pointer;
-        }}
-    </style>
-
-    <!-- The Thumbnail -->
-    <img id="myImg" class="thumbnail-img" src="{image_html}" alt="Brand Compass Flowchart">
-    <p style="text-align:center; color:grey;">Click image to enlarge</p>
-
-    <!-- The Modal -->
-    <div id="myModal" class="modal">
-        <span class="close">&times;</span>
-        <img class="modal-content" id="img01">
-        <div id="caption">Brand Compass Flowchart</div>
+    <!-- 2. The image that will be the trigger -->
+    <div id="image-container">
+      <img id="flowchart-image" src="{image_html_src}" alt="Brand Compass Flowchart" style="max-width: 100%; cursor: zoom-in;">
     </div>
+    <p style="text-align:center; color:grey;">Click image to open interactive viewer</p>
 
+    <!-- 3. Include the Viewer.js JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/viewerjs/1.11.3/viewer.min.js" integrity="sha512-f8kZwYACKF8unHuN7CIeSSn+ajuhIeIAiDAiQ1iQW55u2Iqf2k2v9C5_LzG5n/e24yVPo4E8FybBGvjP5h9ZSQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    
+    <!-- 4. Initialize Viewer.js -->
     <script>
-        // Get the modal
-        var modal = document.getElementById("myModal");
-
-        // Get the image and insert it inside the modal - use its "alt" text as a caption
-        var img = document.getElementById("myImg");
-        var modalImg = document.getElementById("img01");
-        var captionText = document.getElementById("caption");
-        
-        img.onclick = function(){{
-            modal.style.display = "block";
-            modalImg.src = this.src;
-            captionText.innerHTML = this.alt;
-        }}
-
-        // Get the <span> element that closes the modal
-        var span = document.getElementsByClassName("close")[0];
-
-        // When the user clicks on <span> (x), close the modal
-        span.onclick = function() {{ 
-            modal.style.display = "none";
-        }}
-        
-        // Also close modal on click outside the image
-        modal.onclick = function(event) {{
-            if (event.target == modal) {{
-                modal.style.display = "none";
-            }}
-        }}
+      const viewer = new Viewer(document.getElementById('flowchart-image'), {{
+        inline: false, // Don't show the viewer directly
+        toolbar: {{
+            zoomIn: 1,
+            zoomOut: 1,
+            oneToOne: 1,
+            reset: 1,
+            prev: 0, // No prev button
+            play: {{
+                show: 0, // No play button
+                size: 'large',
+            }},
+            next: 0, // No next button
+            rotateLeft: 1,
+            rotateRight: 1,
+            flipHorizontal: 1,
+            flipVertical: 1,
+        }},
+        // You can add more options here
+        // See https://github.com/fengyuanchen/viewerjs for all options
+      }});
     </script>
     '''
-    st.components.v1.html(lightbox_html, height=400)
+    st.components.v1.html(html_code, height=400)
 
 
 # --- Main App Function ---
@@ -278,7 +188,7 @@ def run_app():
                 if st.button(brand_key, key=brand_key.lower().replace(' ', ''), use_container_width=True): start_evaluation(brand_key)
 
         with st.expander("View the Brand Compass Flowchart"):
-            display_image_lightbox("flowchart.png") # <-- NEW, SIMPLER FUNCTION
+            display_interactive_image("flowchart.png") # <-- NEW, INTERACTIVE FUNCTION
     
     else:
         stage_config = {
