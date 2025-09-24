@@ -35,14 +35,17 @@ DEMO_DATA = {
     "chemicals": {'purpose': 0, 'nature': 0, 'ownership': 1, 'acquisition': 1},
     "newco": {'purpose': 0, 'nature': 0, 'ownership': 1, 'acquisition': 0, 'negative_equity': 1},
     "basfsonatrachpropanchem": {'purpose': 0, 'nature': 0, 'ownership': 2, 'jv_equity': 0},
+    "newbiz": {'purpose': 0, 'nature': 0},
+    "care360": {'purpose': 0, 'nature': 0},
     # Non-Commercial Demos
-    "internal_initiative": {'purpose': 1, 'audience': 0},
+    "insight360": {'purpose': 1, 'audience': 0},
     "anniversaries": {'purpose': 1, 'audience': 1},
     # Product Demos
-    "glasurit": {'purpose': 0, 'nature': 1, 'governance': 1, 'ownership_prod': 0, 'dependencies': 1},
+    "glasurit": {'purpose': 0, 'nature': 1, 'governance': 1, 'ownership_prod': 0, 'dependencies': 1, 'resources_prod': 1},
     # Stress-Test Demos
     "extractmax": {'purpose': 0, 'nature': 0, 'ownership': 1, 'acquisition': 1, 'risk': 0},
     "oldcheminc": {'purpose': 0, 'nature': 0, 'ownership': 1, 'acquisition': 0, 'negative_equity': 0},
+    "polyweld800": {'purpose': 0, 'nature': 1}, # Now a product
     "noresourceproduct": {'purpose': 0, 'nature': 1, 'governance': 1, 'ownership_prod': 0, 'dependencies': 1, 'resources_prod': 0},
 }
 
@@ -104,15 +107,6 @@ def show_examples(content_key):
             - **Brand Licensing Agreements:** A partner is licensed to use a BASF ingredient. The contract will have strict rules about how the BASF brand can be mentioned (e.g., "contains ingredient X from BASF"), but legally prevents the partner from calling their product a "BASF product."
             """)
 
-def render_scorecard_question(q_id, q_text, evidence_text, rationale_text, weight, demo_value=False):
-    with st.expander(q_text):
-        st.info(f"**Evidence Guide:** {evidence_text}")
-        st.markdown(f"**Rationale:** {rationale_text}")
-    is_checked = st.checkbox("Select if applicable", key=q_id, value=demo_value)
-    if is_checked:
-        return weight
-    return 0
-
 # --- Main App ---
 def run_app():
     if 'stage' not in st.session_state: st.session_state.stage = 0
@@ -164,36 +158,26 @@ def run_app():
         st.markdown("---")
         st.subheader("Or, start with a guided demo:")
         
-        st.markdown("**Standard Demos (Corporate-Level)**")
-        standard_demos = ["Chemicals", "Chemetall", "ECMS", "Coatings", "NewCo", "BASF Sonatrach PropanChem"]
-        cols = st.columns(3)
+        st.markdown("**Standard Demos**")
+        standard_demos = ["Chemicals", "Chemetall", "ECMS", "Coatings", "NewCo", "BASF Sonatrach PropanChem", "NewBiz", "Care 360°", "Insight 360", "Anniversaries", "Glasurit"]
+        cols = st.columns(4)
         for i, brand_name in enumerate(standard_demos):
-            with cols[i % 3]:
+            with cols[i % 4]:
                 demo_key = brand_name.lower().replace(' ', '').replace('°','')
-                if st.button(brand_name, key=demo_key, use_container_width=True): start_evaluation(brand_name, demo_key=demo_key)
-
-        st.markdown("**Product-Level Demos**")
-        product_demos = ["Glasurit"]
-        cols = st.columns(3)
-        for i, brand_name in enumerate(product_demos):
-            with cols[i % 3]:
-                demo_key = brand_name.lower()
-                if st.button(brand_name, key=demo_key, use_container_width=True): start_evaluation(brand_name, demo_key=demo_key)
-
-        st.markdown("**Non-Commercial Demos**")
-        non_comm_demos = ["Internal Initiative", "Anniversaries"]
-        cols = st.columns(3)
-        for i, brand_name in enumerate(non_comm_demos):
-            with cols[i % 3]:
-                demo_key = brand_name.lower().replace(' ', '')
                 if st.button(brand_name, key=demo_key, use_container_width=True): start_evaluation(brand_name, demo_key=demo_key)
 
         st.markdown("---")
         st.subheader("Stress-Test Scenarios")
-        stress_demos = {"ExtractMax": "extractmax", "OldChem Inc.": "oldcheminc", "No-Resource Product": "noresourceproduct"}
-        cols = st.columns(3)
+        st.markdown("""
+        *   **PolyWeld 800:** A legacy product that is no longer core to strategy. This tests how the Compass handles brands with low strategic contribution.
+        *   **ExtractMax:** An entity operating in a controversial industry. This tests the protocol for insulating the masterbrand from reputational risk.
+        *   **OldChem Inc.:** An acquired company with a negative reputation. This tests the approach to acquisitions with brand baggage.
+        *   **No-Resource Product:** A product team without the budget to support a distinct brand. This tests the resource viability gate.
+        """)
+        stress_demos = {"PolyWeld 800": "polyweld800", "ExtractMax": "extractmax", "OldChem Inc.": "oldcheminc", "No-Resource Product": "noresourceproduct"}
+        cols = st.columns(4)
         for name, key in stress_demos.items():
-            if st.button(name, key=key, use_container_width=True): start_evaluation(name, demo_key=key)
+             if st.button(name, key=key, use_container_width=True): start_evaluation(name, demo_key=key)
         
         with st.expander("View the Brand Compass Flowchart"):
             display_interactive_image("flowchart.png")
@@ -285,7 +269,7 @@ def run_app():
 
         elif st.session_state.stage == 5:
             st.subheader("Scorecard for Corporate Entities")
-            st.warning("Scorecard functionality is under construction.")
+            st.warning("Scorecard functionality is under construction. The final version will use a weighted scoring model to provide a clear recommendation.")
             if st.button("Calculate Recommendation (DEMO)"): display_result('endorsed')
 
     # --- PRODUCT PATH ---
@@ -321,7 +305,7 @@ def run_app():
 
         elif st.session_state.stage == 205:
             st.subheader("Scorecard for Products, Services, or Solutions")
-            st.warning("Scorecard functionality is under construction.")
+            st.warning("Scorecard functionality is under construction. The final version will use a weighted scoring model with an evidence-based framework to provide a clear recommendation.")
             if st.button("Calculate Recommendation (DEMO)"): display_result('product_endorsed')
 
 if check_password():
