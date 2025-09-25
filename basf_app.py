@@ -93,25 +93,6 @@ WEIGHTS = {
 }
 HIGH_THRESHOLD = 6
 
-# --- CORRECTED PDF VIEWER FUNCTION ---
-def display_pdf_viewer(pdf_path: str):
-    """
-    Displays an interactive PDF viewer using a robust iframe method.
-    The PDF is embedded using a base64 string for maximum compatibility.
-    """
-    try:
-        with open(pdf_path, "rb") as f:
-            base64_pdf = base64.b64encode(f.read()).decode('utf-8')
-        
-        # Use an iframe for better browser compatibility and security
-        pdf_display_html = f'<iframe src="data:application/pdf;base64,{base64_pdf}" width="100%" height="800px" style="border: none;"></iframe>'
-        
-        # Use st.markdown to render the iframe
-        st.markdown(pdf_display_html, unsafe_allow_html=True)
-
-    except FileNotFoundError:
-        st.error(f"File not found: '{pdf_path}'. Please ensure 'document.pdf' is in the same directory as the script and restart the app.")
-
 
 # --- Main App Function ---
 def run_app():
@@ -191,10 +172,22 @@ def run_app():
             with cols[i]:
                 if st.button(name, key=key, use_container_width=True): start_evaluation(name, is_demo=True, demo_key=key)
 
-        # --- EXPANDER WITH CORRECTED PDF VIEWER ---
+        # --- EXPANDER WITH ROBUST PDF DOWNLOAD BUTTON ---
         with st.expander("View the Brand Compass Decision Tree PDF"):
-            # IMPORTANT: Make sure you have a file named 'document.pdf' in the same directory
-            display_pdf_viewer("document.pdf")
+            try:
+                with open("document.pdf", "rb") as pdf_file:
+                    PDFbyte = pdf_file.read()
+
+                st.download_button(
+                    label="Open PDF in New Tab",
+                    data=PDFbyte,
+                    file_name="BASF_Decision_Tree.pdf",
+                    mime="application/pdf",
+                    use_container_width=True
+                )
+            except FileNotFoundError:
+                st.error("File not found: 'document.pdf'. Please ensure the PDF is in the same directory as the script and restart the app.")
+
 
     elif st.session_state.stage == 0.5:
         # --- NEW STRATEGIC ROUTER (V3) ---
