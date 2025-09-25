@@ -354,11 +354,7 @@ def run_app():
                     for key, q_text in questions_A.items():
                         if st.checkbox(q_text, value=rec_A.get(key, False), key=key): 
                             score_A += WEIGHTS['corporate_A'][key]
-                        # --- ADDED EXPLANATORY CAPTION FOR QUESTION E ---
-                        if key == 'a5':
-                            st.caption("This question clarifies the entity's *operational model*, not its strategic importance. A 'No' is common for standalone ventures designed for agility, while a 'Yes' is typical for established businesses that leverage shared resources. Both are valid strategic choices.")
-
-                    st.session_state.scores['A'] = score_A
+                        st.session_state.scores['A'] = score_A
                     st.write(f"**Score A: {score_A} / 11**")
                 with col2:
                     st.info("**Part B: Market Distinction**")
