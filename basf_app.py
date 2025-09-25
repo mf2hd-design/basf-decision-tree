@@ -84,10 +84,10 @@ RESULT_DATA = {
 }
 
 
-# --- WEIGHTING SYSTEM (V3 Updated) ---
+# --- WEIGHTING SYSTEM (CORRECTED) ---
 WEIGHTS = {
     'corporate_A': {'a1': 3, 'a2': 3, 'a3': 2, 'a4': 2, 'a5': 1},
-    'corporate_B': {'b1': 3, 'b2': 2, 'b3': 2, 'b4': 2, 'b5': 1}, # Updated per V3 scorecard
+    'corporate_B': {'b1': 3, 'b2': 3, 'b3': 2, 'b4': 2, 'b5': 1}, # Corrected: b2 is now 3 points
     'product_A': {'pa1': 3, 'pa2': 3, 'pa3': 2, 'pa4': 2, 'pa5': 1},
     'product_B': {'pb1': 3, 'pb2': 3, 'pb3': 2, 'pb4': 2, 'pb5': 1}
 }
@@ -202,7 +202,7 @@ def run_app():
         *   **Commercial:** Choose this if the entity is **market-facing and has its own Profit & Loss (P&L)**. It directly sells products or services to customers.
             *   *Examples: A business unit, a subsidiary company, a product line.*
         
-        *   **Non-commercial:** Choose this for **any other activity, even if it supports commercial goals.** These are typically do not have their own P&L.
+        *   **Non-commercial:** Choose this for **any other activity, even if it supports commercial goals.** These are typically cost centers that do not have their own P&L.
             *   *Examples: Marketing campaigns, events, trade fairs, internal initiatives, R&D projects, think tanks.*
         """)
         
@@ -351,7 +351,7 @@ def run_app():
                     for key, q_text in questions_B.items():
                         if st.checkbox(q_text, value=rec_B.get(key, False), key=key): score_B += WEIGHTS['corporate_B'][key]
                     st.session_state.scores['B'] = score_B
-                    st.write(f"**Score B: {score_B} / 10**")
+                    st.write(f"**Score B: {score_B} / 11**") # Corrected: Total is now 11
                 if demo_data.get('rationale'): st.info(f"**Demo Guidance:** {demo_data['rationale']}")
                 if st.button("Calculate Recommendation"): set_stage(6)
 
