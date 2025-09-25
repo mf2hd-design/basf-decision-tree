@@ -202,7 +202,7 @@ def run_app():
         *   **Commercial:** Choose this if the entity is **market-facing and has its own Profit & Loss (P&L)**. It directly sells products or services to customers.
             *   *Examples: A business unit, a subsidiary company, a product line.*
         
-        *   **Non-commercial:** Choose this for **any other activity, even if it supports commercial goals.** These are typically cost centers that do not have their own P&L.
+        *   **Non-commercial:** Choose this for **any other activity, even if it supports commercial goals.** These are typically do not have their own P&L.
             *   *Examples: Marketing campaigns, events, trade fairs, internal initiatives, R&D projects, think tanks.*
         """)
         
