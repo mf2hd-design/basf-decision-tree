@@ -166,11 +166,36 @@ def run_app():
 
         st.markdown("---")
         st.subheader("Stress-Test Scenarios")
-        stress_demos = {"PolyWeld 800 Business": "polyweld800business", "ExtractMax": "extractmax", "OldChem Inc.": "oldcheminc", "No-Resource Product": "noresourceproduct", "JV Product": "jvproduct"}
+        
+        # --- STRESS TEST DEMOS WITH EXPLANATIONS ---
+        stress_demos = {
+            "PolyWeld 800 Business": {
+                "key": "polyweld800business",
+                "caption": "Tests a legacy business with low strategic contribution, leading to a 'Flag for Review' outcome."
+            },
+            "ExtractMax": {
+                "key": "extractmax",
+                "caption": "Tests the reputational risk circuit breaker for a profitable but controversial entity."
+            },
+            "OldChem Inc.": {
+                "key": "oldcheminc",
+                "caption": "Tests the acquisition path for a company with negative brand equity."
+            },
+            "No-Resource Product": {
+                "key": "noresourceproduct",
+                "caption": "Tests the product path for an entity that lacks a dedicated multi-year brand budget."
+            },
+            "JV Product": {
+                "key": "jvproduct",
+                "caption": "Tests the product path for an item belonging to a Joint Venture."
+            }
+        }
         cols = st.columns(len(stress_demos))
-        for i, (name, key) in enumerate(stress_demos.items()):
+        for i, (name, data) in enumerate(stress_demos.items()):
             with cols[i]:
-                if st.button(name, key=key, use_container_width=True): start_evaluation(name, is_demo=True, demo_key=key)
+                if st.button(name, key=data["key"], use_container_width=True):
+                    start_evaluation(name, is_demo=True, demo_key=data["key"])
+                st.caption(data["caption"])
 
         # --- EXPANDER WITH ROBUST PDF DOWNLOAD BUTTON ---
         with st.expander("View the Brand Compass Decision Tree PDF"):
@@ -354,7 +379,11 @@ def run_app():
                     for key, q_text in questions_A.items():
                         if st.checkbox(q_text, value=rec_A.get(key, False), key=key): 
                             score_A += WEIGHTS['corporate_A'][key]
-                        st.session_state.scores['A'] = score_A
+                        # --- ADDED EXPLANATORY CAPTION FOR QUESTION E ---
+                        if key == 'a5':
+                            st.caption("This question clarifies the entity's *operational model*, not its strategic importance. A 'No' is common for standalone ventures designed for agility, while a 'Yes' is typical for established businesses that leverage shared resources. Both are valid strategic choices.")
+
+                    st.session_state.scores['A'] = score_A
                     st.write(f"**Score A: {score_A} / 11**")
                 with col2:
                     st.info("**Part B: Market Distinction**")
