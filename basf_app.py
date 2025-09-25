@@ -336,14 +336,28 @@ def run_app():
                 demo_data = DEMO_DATA.get(st.session_state.demo_key, {}).get('stage5', {})
                 rec_A = demo_data.get('score_A_checks', {})
                 rec_B = demo_data.get('score_B_checks', {})
-                questions_A = { 'a1': 'Corporate Business Strategy: Is it a cornerstone entity for our corporate strategy and ambition?', 'a2': 'Does it directly deliver on a key corporate initiative or impact an important KPI?', 'a3': 'Future Value: Is it a strategically designed to win in a distinct market, new segment or business model?', 'a4': 'Brand Character: Does it strongly support or demonstrate our desired brand positioning?', 'a5': 'Connection to Core: Does it operate within an established business segment linked to BASF\'s core capabilities?' }
+                
+                # --- REWORDED QUESTION E ---
+                questions_A = { 
+                    'a1': 'Corporate Business Strategy: Is it a cornerstone entity for our corporate strategy and ambition?', 
+                    'a2': 'Does it directly deliver on a key corporate initiative or impact an important KPI?', 
+                    'a3': 'Future Value: Is it a strategically designed to win in a distinct market, new segment or business model?', 
+                    'a4': 'Brand Character: Does it strongly support or demonstrate our desired brand positioning?', 
+                    'a5': "Operational Synergy: Does its business model rely on deep operational integration with BASF's core capabilities (e.g., shared expertise, platforms, or practices)?" 
+                }
                 questions_B = { 'b1': 'BASF reputation: Is there a known negative perception of the BASF brand for the audience this entity targets?', 'b2': 'Category: Does this entity operate in a market defined by distinct expectations and conventions that the BASF brand may not be well suited for?', 'b3': 'Competitors: Does this entity compete primarily with specialised "pure-players" with go-to-market approaches tailored to the category?', 'b4': 'Customers: Does this entity need to appeal directly to end consumers who need to be engaged through highly specific consumer codes?', 'b5': 'Value Proposition: Does this entity have a unique way of working, relative to other BASF entities, that needs to be highlighted as part of its unique' }
+                
                 score_A, score_B = 0, 0
                 col1, col2 = st.columns(2)
                 with col1:
                     st.info("**Part A: Strategic Contribution**")
                     for key, q_text in questions_A.items():
-                        if st.checkbox(q_text, value=rec_A.get(key, False), key=key): score_A += WEIGHTS['corporate_A'][key]
+                        if st.checkbox(q_text, value=rec_A.get(key, False), key=key): 
+                            score_A += WEIGHTS['corporate_A'][key]
+                        # --- ADDED EXPLANATORY CAPTION FOR QUESTION E ---
+                        if key == 'a5':
+                            st.caption("This question clarifies the entity's *operational model*, not its strategic importance. A 'No' is common for standalone ventures designed for agility, while a 'Yes' is typical for established businesses that leverage shared resources. Both are valid strategic choices.")
+
                     st.session_state.scores['A'] = score_A
                     st.write(f"**Score A: {score_A} / 11**")
                 with col2:
