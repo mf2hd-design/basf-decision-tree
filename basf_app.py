@@ -93,22 +93,24 @@ WEIGHTS = {
 }
 HIGH_THRESHOLD = 6
 
-# --- NEW PDF VIEWER FUNCTION ---
+# --- CORRECTED PDF VIEWER FUNCTION ---
 def display_pdf_viewer(pdf_path: str):
     """
-    Displays an interactive PDF viewer in the Streamlit app.
-    The PDF is embedded using a base64 string to ensure it works across browsers
-    and environments without requiring the file to be publicly hosted.
+    Displays an interactive PDF viewer using a robust iframe method.
+    The PDF is embedded using a base64 string for maximum compatibility.
     """
     try:
         with open(pdf_path, "rb") as f:
             base64_pdf = base64.b64encode(f.read()).decode('utf-8')
         
-        pdf_display = f'<embed src="data:application/pdf;base64,{base64_pdf}" width="100%" height="800" type="application/pdf">'
+        # Use an iframe for better browser compatibility and security
+        pdf_display_html = f'<iframe src="data:application/pdf;base64,{base64_pdf}" width="100%" height="800px" style="border: none;"></iframe>'
         
-        st.markdown(pdf_display, unsafe_allow_html=True)
+        # Use st.markdown to render the iframe
+        st.markdown(pdf_display_html, unsafe_allow_html=True)
+
     except FileNotFoundError:
-        st.error(f"PDF file not found at '{pdf_path}'. Make sure it's named correctly and in the same directory as the script.")
+        st.error(f"File not found: '{pdf_path}'. Please ensure 'document.pdf' is in the same directory as the script and restart the app.")
 
 
 # --- Main App Function ---
@@ -189,7 +191,7 @@ def run_app():
             with cols[i]:
                 if st.button(name, key=key, use_container_width=True): start_evaluation(name, is_demo=True, demo_key=key)
 
-        # --- UPDATED EXPANDER WITH PDF VIEWER ---
+        # --- EXPANDER WITH CORRECTED PDF VIEWER ---
         with st.expander("View the Brand Compass Decision Tree PDF"):
             # IMPORTANT: Make sure you have a file named 'document.pdf' in the same directory
             display_pdf_viewer("document.pdf")
