@@ -172,19 +172,16 @@ def run_app():
             with cols[i]:
                 if st.button(name, key=key, use_container_width=True): start_evaluation(name, is_demo=True, demo_key=key)
 
-        # --- EXPANDER WITH ROBUST PDF DOWNLOAD BUTTON ---
+        # --- EXPANDER WITH CORRECTED PDF LINK ---
         with st.expander("View the Brand Compass Decision Tree PDF"):
             try:
                 with open("document.pdf", "rb") as pdf_file:
-                    PDFbyte = pdf_file.read()
+                    base64_pdf = base64.b64encode(pdf_file.read()).decode('utf-8')
+                
+                # Create a link that opens the PDF in a new tab
+                pdf_display_html = f'<a href="data:application/pdf;base64,{base64_pdf}" target="_blank" rel="noopener noreferrer">Click to open PDF in a new tab</a>'
+                st.markdown(pdf_display_html, unsafe_allow_html=True)
 
-                st.download_button(
-                    label="Open PDF in New Tab",
-                    data=PDFbyte,
-                    file_name="BASF_Decision_Tree.pdf",
-                    mime="application/pdf",
-                    use_container_width=True
-                )
             except FileNotFoundError:
                 st.error("File not found: 'document.pdf'. Please ensure the PDF is in the same directory as the script and restart the app.")
 
