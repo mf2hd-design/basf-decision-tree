@@ -172,32 +172,46 @@ def run_app():
             with cols[i]:
                 if st.button(name, key=key, use_container_width=True): start_evaluation(name, is_demo=True, demo_key=key)
 
-        # --- EXPANDER WITH CORRECTED PDF LINK ---
+        # --- EXPANDER WITH ROBUST PDF DOWNLOAD BUTTON ---
         with st.expander("View the Brand Compass Decision Tree PDF"):
             try:
                 with open("document.pdf", "rb") as pdf_file:
-                    base64_pdf = base64.b64encode(pdf_file.read()).decode('utf-8')
-                
-                # Create a link that opens the PDF in a new tab
-                pdf_display_html = f'<a href="data:application/pdf;base64,{base64_pdf}" target="_blank" rel="noopener noreferrer">Click to open PDF in a new tab</a>'
-                st.markdown(pdf_display_html, unsafe_allow_html=True)
+                    PDFbyte = pdf_file.read()
 
+                st.download_button(
+                    label="Download the Decision Tree PDF",
+                    data=PDFbyte,
+                    file_name="BASF_Decision_Tree.pdf",
+                    mime="application/pdf",
+                    use_container_width=True
+                )
+                st.caption("Click to download the full PDF. Most browsers will open it in a new tab for viewing.")
             except FileNotFoundError:
                 st.error("File not found: 'document.pdf'. Please ensure the PDF is in the same directory as the script and restart the app.")
 
 
     elif st.session_state.stage == 0.5:
-        # --- NEW STRATEGIC ROUTER (V3) ---
+        # --- STRATEGIC ROUTER WITH IMPROVED EXPLANATIONS ---
         st.header(f"Evaluating: *{st.session_state.entity_name}*")
         st.subheader("Strategic Router")
-        st.write("**What is the purpose of the entity being evaluated?**")
-        st.caption("This initial question separates commercial, market-facing entities from internal or temporary ones. Non-commercial entities default to a 'BASF-Led' outcome.")
+        st.markdown("""
+        **What is the purpose of the entity being evaluated?**
+
+        This is the most important first step. It separates market-facing businesses from internal or marketing activities.
+        
+        *   **Commercial:** Choose this if the entity is **market-facing and has its own Profit & Loss (P&L)**. It directly sells products or services to customers.
+            *   *Examples: A business unit, a subsidiary company, a product line.*
+        
+        *   **Non-commercial:** Choose this for **any other activity, even if it supports commercial goals.** These are typically cost centers that do not have their own P&L.
+            *   *Examples: Marketing campaigns, events, trade fairs, internal initiatives, R&D projects, think tanks.*
+        """)
         
         path_options = ["Commercial", "Non-commercial"]
         demo_data = DEMO_DATA.get(st.session_state.demo_key, {}).get('stage0.5', {})
         rec_index = demo_data.get('index')
         
-        path_choice = st.radio("Select the entity's purpose:", path_options, index=rec_index, key="purpose_router", label_visibility="collapsed")
+        st.markdown("---")
+        path_choice = st.radio("Select the entity's purpose:", path_options, index=rec_index, key="purpose_router")
         
         if demo_data.get('rationale'): st.info(f"**Demo Guidance:** {demo_data['rationale']}")
 
