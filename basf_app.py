@@ -93,35 +93,22 @@ WEIGHTS = {
 }
 HIGH_THRESHOLD = 6
 
-# --- INTERACTIVE IMAGE VIEWER FUNCTION (Unchanged) ---
-def display_interactive_image(image_path: str):
+# --- NEW PDF VIEWER FUNCTION ---
+def display_pdf_viewer(pdf_path: str):
+    """
+    Displays an interactive PDF viewer in the Streamlit app.
+    The PDF is embedded using a base64 string to ensure it works across browsers
+    and environments without requiring the file to be publicly hosted.
+    """
     try:
-        image_bytes = Path(image_path).read_bytes()
-        encoded_image = base64.b64encode(image_bytes).decode()
-        image_html_src = f"data:image/png;base64,{encoded_image}"
+        with open(pdf_path, "rb") as f:
+            base64_pdf = base64.b64encode(f.read()).decode('utf-8')
+        
+        pdf_display = f'<embed src="data:application/pdf;base64,{base64_pdf}" width="100%" height="800" type="application/pdf">'
+        
+        st.markdown(pdf_display, unsafe_allow_html=True)
     except FileNotFoundError:
-        st.error(f"Image file not found at '{image_path}'. Make sure it's in the same directory as the script.")
-        return
-
-    html_code = f'''
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/viewerjs/1.11.3/viewer.min.css" />
-    <div id="image-container">
-      <img id="flowchart-image" src="{image_html_src}" alt="Brand Compass Flowchart" style="max-width: 100%; cursor: zoom-in;">
-    </div>
-    <p style="text-align:center; color:grey;">Click image to open interactive viewer</p>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/viewerjs/1.11.3/viewer.min.js"></script>
-    <script>
-      const viewer = new Viewer(document.getElementById('flowchart-image'), {{
-        inline: false,
-        toolbar: {{
-            zoomIn: 1, zoomOut: 1, oneToOne: 1, reset: 1, prev: 0, 
-            play: {{ show: 0 }},
-            next: 0, rotateLeft: 1, rotateRight: 1, flipHorizontal: 1, flipVertical: 1,
-        }},
-      }});
-    </script>
-    '''
-    st.components.v1.html(html_code, height=400)
+        st.error(f"PDF file not found at '{pdf_path}'. Make sure it's named correctly and in the same directory as the script.")
 
 
 # --- Main App Function ---
@@ -168,7 +155,7 @@ def run_app():
     
     st.title("🧭 The BASF Brand Compass")
     if st.session_state.stage == 0:
-        # --- HOME PAGE (Unchanged) ---
+        # --- HOME PAGE ---
         st.markdown("An interactive tool to provide clear, strategic direction for the BASF brand architecture.")
         st.subheader("Evaluate a New Entity")
         entity_name_input = st.text_input("Enter name:", key="entity_name_input", label_visibility="collapsed")
@@ -202,8 +189,10 @@ def run_app():
             with cols[i]:
                 if st.button(name, key=key, use_container_width=True): start_evaluation(name, is_demo=True, demo_key=key)
 
-        with st.expander("View the Brand Compass Flowchart"):
-            display_interactive_image("flowchart.png") 
+        # --- UPDATED EXPANDER WITH PDF VIEWER ---
+        with st.expander("View the Brand Compass Decision Tree PDF"):
+            # IMPORTANT: Make sure you have a file named 'document.pdf' in the same directory
+            display_pdf_viewer("document.pdf")
 
     elif st.session_state.stage == 0.5:
         # --- NEW STRATEGIC ROUTER (V3) ---
