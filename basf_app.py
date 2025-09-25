@@ -147,10 +147,17 @@ def run_app():
         st.session_state.stage = stage_num
         st.rerun()
 
-    def reset_app():
-        for key in list(st.session_state.keys()):
-            if key != 'password_correct': del st.session_state[key]
-        st.rerun()
+    # --- CORRECTED RESET FUNCTION ---
+    def reset_app_callback():
+        """
+        Clears all session state variables except for the password flag
+        and explicitly sets the stage to 0. Designed to be used as a
+        button callback.
+        """
+        keys_to_delete = [key for key in st.session_state.keys() if key != 'password_correct']
+        for key in keys_to_delete:
+            del st.session_state[key]
+        st.session_state.stage = 0
     
     def display_result(result_key):
         result = RESULT_DATA.get(result_key, {'recommendation': 'Error', 'rationale': 'Result key not found.', 'activation_text': '', 'examples': ''})
@@ -166,7 +173,8 @@ def run_app():
         if result.get('examples'):
             st.markdown(f"**Similar Examples:** *{result['examples']}*")
         st.markdown("---")
-        if st.button("Evaluate Another Entity"): reset_app()
+        # Use the corrected callback function here
+        st.button("Evaluate Another Entity", on_click=reset_app_callback)
     
     st.title("🧭 The BASF Brand Compass")
     if st.session_state.stage == 0:
