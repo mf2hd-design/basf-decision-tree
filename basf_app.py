@@ -15,7 +15,7 @@ def check_password():
     def password_entered():
         # This password is for demonstration purposes.
         # In a real-world scenario, use st.secrets for secure password management.
-        if st.session_state.get("password") == "2025FFxBASFxFF":
+        if st.session_state.get("password") == "FFxBASF2025":
             st.session_state["password_correct"] = True
         else:
             st.session_state["password_correct"] = False
@@ -271,13 +271,13 @@ def run_app():
     else:
         # --- ALL OTHER STAGES ---
         if st.session_state.path_type == 'corporate':
-            # --- CORPORATE PATH (V3 RESTRUCTURED WITH EXPLANATIONS) ---
+            # --- CORPORATE PATH (V3 RESTRUCTURED WITH SIMPLIFIED LANGUAGE) ---
             st.header(f"Evaluating: *{st.session_state.entity_name}* (Corporate Path)")
             
             if st.session_state.stage == 1:
                 st.subheader("Circuit Breaker 1: Ownership")
                 st.write("**What is the ownership structure?**")
-                st.caption("This step sorts the entity by its legal and ownership relationship to BASF, which is the primary determinant for many branding rules.")
+                st.caption("This step checks the legal relationship to BASF, which decides many branding rules.")
                 options = ["Partner / Distributor", "Wholly Owned", "Joint Venture"]
                 demo_data = DEMO_DATA.get(st.session_state.demo_key, {}).get('stage1', {})
                 choice = st.radio("Select ownership structure:", options, index=demo_data.get('index'), label_visibility="collapsed")
@@ -289,7 +289,7 @@ def run_app():
             elif st.session_state.stage == 1.1:
                 st.subheader("Circuit Breaker 1: Ownership")
                 st.write("**Is it an acquisition?**")
-                st.caption("Acquired companies have specific branding considerations, such as the equity of the brand being acquired.")
+                st.caption("Answering 'Yes' helps determine how to handle the brand name of the company that was purchased.")
                 options = ["Yes", "No"]
                 demo_data = DEMO_DATA.get(st.session_state.demo_key, {}).get('stage1.1', {})
                 choice = st.radio("Select if it is an acquisition:", options, index=demo_data.get('index'), label_visibility="collapsed")
@@ -299,11 +299,11 @@ def run_app():
             
             elif st.session_state.stage == 1.2:
                 st.subheader("Circuit Breaker 1: Ownership")
-                st.write("**Does the acquired brand have significant negative equity?**")
-                st.caption("If an acquired brand has a poor reputation, it's a liability. A 'Yes' answer triggers a recommendation to retire the old brand and transition it to a BASF brand to protect our reputation.")
+                st.write("**Does the acquired brand have a bad reputation?**")
+                st.caption("If a brand has a known negative history, we must retire it to protect BASF's reputation.")
                 options = ["Yes", "No"]
                 demo_data = DEMO_DATA.get(st.session_state.demo_key, {}).get('stage1.2', {})
-                choice = st.radio("Select if it has negative equity:", options, index=demo_data.get('index'), label_visibility="collapsed")
+                choice = st.radio("Select if it has a bad reputation:", options, index=demo_data.get('index'), label_visibility="collapsed")
                 if demo_data.get('rationale'): st.info(f"**Demo Guidance:** {demo_data['rationale']}")
                 if st.button("Proceed"):
                     if choice == "Yes": display_result('retire_rebrand')
@@ -311,19 +311,19 @@ def run_app():
 
             elif st.session_state.stage == 1.3:
                 st.subheader("Circuit Breaker 1: Ownership")
-                st.write("**What is BASF's equity share in the Joint Venture?**")
-                st.caption("If BASF is a minority stakeholder (<50%), we cannot enforce our branding. The JV must operate as an independent brand for legal and market clarity.")
-                options = ["Majority (+50%)", "Minority (-50%)"]
+                st.write("**What is BASF's ownership share in the Joint Venture?**")
+                st.caption("If BASF owns less than 50%, we cannot control its branding. The JV must legally have its own independent brand.")
+                options = ["Majority (50% or more)", "Minority (less than 50%)"]
                 demo_data = DEMO_DATA.get(st.session_state.demo_key, {}).get('stage1.3', {})
-                choice = st.radio("Select equity share:", options, index=demo_data.get('index'), label_visibility="collapsed")
+                choice = st.radio("Select ownership share:", options, index=demo_data.get('index'), label_visibility="collapsed")
                 if st.button("Proceed"):
                     if choice == options[1]: display_result('independent_minority')
                     else: set_stage(2)
 
             elif st.session_state.stage == 2:
                 st.subheader("Circuit Breaker 2: Risk Profile")
-                st.write("**Does it have the potential to create negative reputation impact for BASF?**")
-                st.caption("This question acts as a 'reputational firewall.' If an entity operates in a controversial industry or uses unproven technology, a 'Yes' answer forces an 'Independent' status to protect the masterbrand from associated risks.")
+                st.write("**Could it harm BASF's reputation?**")
+                st.caption("If the entity is in a controversial industry or uses risky technology, it must be independent to protect the BASF masterbrand.")
                 options = ["Yes", "No"]
                 demo_data = DEMO_DATA.get(st.session_state.demo_key, {}).get('stage2', {})
                 choice = st.radio("Select if there is a potential for negative impact:", options, index=demo_data.get('index'), label_visibility="collapsed")
@@ -334,11 +334,11 @@ def run_app():
 
             elif st.session_state.stage == 3:
                 st.subheader("Circuit Breaker 3: Legal Directives")
-                st.write("**Are there any pre-existing legal or contractual requirements that dictate the go-to-market strategy or brand identity?**")
-                st.caption("Legal agreements, such as Joint Venture terms or brand licensing contracts, are non-negotiable. If a legal directive for branding already exists, it must be followed, and this tool's evaluation is complete.")
+                st.write("**Does a legal contract already decide the brand?**")
+                st.caption("For example, a joint venture agreement or brand license. If 'Yes', you must follow the contract. This tool's work is done.")
                 options = ["Yes", "No"]
                 demo_data = DEMO_DATA.get(st.session_state.demo_key, {}).get('stage3', {})
-                choice = st.radio("Select if legal directives exist:", options, index=demo_data.get('index'), label_visibility="collapsed")
+                choice = st.radio("Select if a contract decides the brand:", options, index=demo_data.get('index'), label_visibility="collapsed")
                 if demo_data.get('rationale'): st.info(f"**Demo Guidance:** {demo_data['rationale']}")
                 if st.button("Proceed"):
                     if choice == "Yes": display_result('legal_directive')
@@ -346,8 +346,8 @@ def run_app():
 
             elif st.session_state.stage == 4:
                 st.subheader("Circuit Breaker 4: Resources")
-                st.write("**Will it have dedicated and approved resources to support multi-year identity and marketing efforts?**")
-                st.caption("A distinct brand cannot succeed without long-term investment. This question confirms that the necessary budget and team are committed. A 'No' answer flags the entity for a business review, as launching an unsupported brand is not a viable strategy.")
+                st.write("**Does it have dedicated funding and a team for marketing?**")
+                st.caption("A separate brand needs a multi-year budget to succeed. If there are no resources, it must be flagged for a business review.")
                 options = ["No", "Yes"]
                 demo_data = DEMO_DATA.get(st.session_state.demo_key, {}).get('stage4', {})
                 choice = st.radio("Select if resources are dedicated:", options, index=demo_data.get('index'), label_visibility="collapsed")
@@ -357,20 +357,25 @@ def run_app():
 
             elif st.session_state.stage == 5:
                 st.subheader("Strategic Scorecard")
-                st.caption("The entity has passed all circuit breakers. Now, score it based on its strategic value to BASF and its need for a distinct identity in the market. The combination of these two scores will determine the final recommendation.")
+                st.caption("The entity has passed all checks. Now, score its value to BASF and its need for a separate brand in the market.")
                 demo_data = DEMO_DATA.get(st.session_state.demo_key, {}).get('stage5', {})
                 rec_A = demo_data.get('score_A_checks', {})
                 rec_B = demo_data.get('score_B_checks', {})
                 
-                # --- REWORDED QUESTION E ---
                 questions_A = { 
-                    'a1': 'Corporate Business Strategy: Is it a cornerstone entity for our corporate strategy and ambition?', 
-                    'a2': 'Does it directly deliver on a key corporate initiative or impact an important KPI?', 
-                    'a3': 'Future Value: Is it a strategically designed to win in a distinct market, new segment or business model?', 
-                    'a4': 'Brand Character: Does it strongly support or demonstrate our desired brand positioning?', 
-                    'a5': "Operational Synergy: Does its business model rely on deep operational integration with BASF's core capabilities (e.g., shared expertise, platforms, or practices)?" 
+                    'a1': 'Is this a top priority for BASF\'s main business strategy?', 
+                    'a2': 'Does it help achieve a major company goal or performance target (KPI)?', 
+                    'a3': 'Is it designed to help BASF win in a new market, segment, or business model?', 
+                    'a4': 'Does it strongly support or show our desired brand positioning?', 
+                    'a5': "Does its business model rely on deep operational integration with BASF's core capabilities (e.g., shared expertise, platforms, or practices)?" 
                 }
-                questions_B = { 'b1': 'BASF reputation: Is there a known negative perception of the BASF brand for the audience this entity targets?', 'b2': 'Category: Does this entity operate in a market defined by distinct expectations and conventions that the BASF brand may not be well suited for?', 'b3': 'Competitors: Does this entity compete primarily with specialised "pure-players" with go-to-market approaches tailored to the category?', 'b4': 'Customers: Does this entity need to appeal directly to end consumers who need to be engaged through highly specific consumer codes?', 'b5': 'Value Proposition: Does this entity have a unique way of working, relative to other BASF entities, that needs to be highlighted as part of its unique' }
+                questions_B = { 
+                    'b1': 'Is there a known negative view of the BASF brand for this specific audience?', 
+                    'b2': 'Does this market have special customer habits or rules that are different from BASF\'s usual markets?', 
+                    'b3': 'Does it compete mainly with specialized, "pure-player" companies?', 
+                    'b4': 'Does it need to sell directly to consumers using specific marketing language and styles?', 
+                    'b5': 'Does it have a unique way of working that needs to be highlighted as part of its brand?' 
+                }
                 
                 score_A, score_B = 0, 0
                 col1, col2 = st.columns(2)
@@ -379,9 +384,8 @@ def run_app():
                     for key, q_text in questions_A.items():
                         if st.checkbox(q_text, value=rec_A.get(key, False), key=key): 
                             score_A += WEIGHTS['corporate_A'][key]
-                        # --- ADDED EXPLANATORY CAPTION FOR QUESTION E ---
                         if key == 'a5':
-                            st.caption("This question clarifies the entity's *operational model*, not its strategic importance. A 'No' is common for standalone ventures designed for agility, while a 'Yes' is typical for established businesses that leverage shared resources. Both are valid strategic choices.")
+                            st.caption("This clarifies the *operational model*, not its importance. A 'No' is common for agile, standalone ventures. A 'Yes' is typical for businesses that use shared resources. Both are valid strategies.")
 
                     st.session_state.scores['A'] = score_A
                     st.write(f"**Score A: {score_A} / 11**")
@@ -390,7 +394,7 @@ def run_app():
                     for key, q_text in questions_B.items():
                         if st.checkbox(q_text, value=rec_B.get(key, False), key=key): score_B += WEIGHTS['corporate_B'][key]
                     st.session_state.scores['B'] = score_B
-                    st.write(f"**Score B: {score_B} / 11**") # Corrected: Total is now 11
+                    st.write(f"**Score B: {score_B} / 11**")
                 if demo_data.get('rationale'): st.info(f"**Demo Guidance:** {demo_data['rationale']}")
                 if st.button("Calculate Recommendation"): set_stage(6)
 
@@ -408,13 +412,13 @@ def run_app():
                 display_result(outcome_key)
 
         elif st.session_state.path_type == 'product':
-            # --- PRODUCT PATH (V3 RESTRUCTURED WITH EXPLANATIONS) ---
+            # --- PRODUCT PATH (V3 RESTRUCTURED WITH SIMPLIFIED LANGUAGE) ---
             st.header(f"Evaluating: *{st.session_state.entity_name}* (Product Path)")
 
             if st.session_state.stage == 201:
                 st.subheader("Circuit Breaker 1: Governance")
-                st.write("**Will it be deployed and managed by an Independent business that currently does not use the BASF brand?**")
-                st.caption("This is an initial 'off-ramp' to filter out entities that are already outside the BASF brand ecosystem (e.g., a product from a subsidiary like Wintershall Dea). If 'Yes,' the entity is not governed by this tool and should follow its own branding guidelines.")
+                st.write("**Is it managed by an independent business that does not use the BASF brand?**")
+                st.caption("This filters out things from outside the BASF brand system (e.g., a product from a subsidiary like Wintershall Dea). If 'Yes', this tool does not apply.")
                 options = ["Yes", "No"]
                 demo_data = DEMO_DATA.get(st.session_state.demo_key, {}).get('stage201', {})
                 choice = st.radio("Select if managed by an independent business:", options, index=demo_data.get('index'), label_visibility="collapsed")
@@ -425,7 +429,7 @@ def run_app():
             elif st.session_state.stage == 202:
                 st.subheader("Circuit Breaker 2: Ownership")
                 st.write("**What is the ownership structure?**")
-                st.caption("This step sorts the product by its parent entity's legal structure, which determines the applicable branding rules.")
+                st.caption("This step checks the product's parent company to decide which branding rules to apply.")
                 options = ["Partner / Distributor", "Wholly Owned", "Joint Venture"]
                 demo_data = DEMO_DATA.get(st.session_state.demo_key, {}).get('stage202', {})
                 choice = st.radio("Select ownership structure:", options, index=demo_data.get('index'), label_visibility="collapsed")
@@ -438,7 +442,7 @@ def run_app():
             elif st.session_state.stage == 202.1:
                 st.subheader("Circuit Breaker 2: Ownership")
                 st.write("**Is it an acquisition?**")
-                st.caption("Acquired products have specific branding considerations, such as the equity of the brand being acquired.")
+                st.caption("Answering 'Yes' helps determine how to handle the brand name of the product that was purchased.")
                 options = ["Yes", "No"]
                 demo_data = DEMO_DATA.get(st.session_state.demo_key, {}).get('stage202.1', {})
                 choice = st.radio("Select if it is an acquisition:", options, index=demo_data.get('index'), label_visibility="collapsed")
@@ -448,27 +452,27 @@ def run_app():
 
             elif st.session_state.stage == 202.2:
                 st.subheader("Circuit Breaker 2: Ownership")
-                st.write("Products belonging to a Joint Venture must follow the branding of the parent JV entity.")
-                st.caption("To determine the correct branding for this product, please evaluate its parent Joint Venture company using the Corporate Path first.")
+                st.write("Products from a Joint Venture must follow the parent company's brand.")
+                st.caption("To find the correct brand for this product, please evaluate the parent Joint Venture company using the Corporate Path first.")
                 if demo_data.get('rationale'): st.info(f"**Demo Guidance:** {demo_data['rationale']}")
                 if st.button("Show Recommendation"):
                     display_result('evaluate_parent_entity')
 
             elif st.session_state.stage == 202.3:
                 st.subheader("Circuit Breaker 2: Ownership")
-                st.write("**Does the acquired brand have significant negative equity?**")
-                st.caption("If an acquired brand has a poor reputation, it's a liability. A 'Yes' answer triggers a recommendation to retire the old brand and transition it to a BASF brand to protect our reputation.")
+                st.write("**Does the acquired brand have a bad reputation?**")
+                st.caption("If a brand has a known negative history, we must retire it to protect BASF's reputation.")
                 options = ["Yes", "No"]
                 demo_data = DEMO_DATA.get(st.session_state.demo_key, {}).get('stage202.3', {})
-                choice = st.radio("Select if it has negative equity:", options, index=demo_data.get('index'), label_visibility="collapsed")
+                choice = st.radio("Select if it has a bad reputation:", options, index=demo_data.get('index'), label_visibility="collapsed")
                 if st.button("Proceed"):
                     if choice == "Yes": display_result('retire_rebrand')
                     else: set_stage(203)
 
             elif st.session_state.stage == 203:
                 st.subheader("Circuit Breaker 3: Risk Profile")
-                st.write("**Does it have the potential to create negative reputation impact for BASF?**")
-                st.caption("This question acts as a 'reputational firewall.' If a product is used in a controversial industry, a 'Yes' answer forces an 'Independent' status to protect the masterbrand from associated risks.")
+                st.write("**Could it harm BASF's reputation?**")
+                st.caption("If the product is used in a controversial industry, it must be independent to protect the BASF masterbrand.")
                 options = ["Yes", "No"]
                 demo_data = DEMO_DATA.get(st.session_state.demo_key, {}).get('stage203', {})
                 choice = st.radio("Select if there is a potential for negative impact:", options, index=demo_data.get('index'), label_visibility="collapsed")
@@ -478,19 +482,19 @@ def run_app():
 
             elif st.session_state.stage == 204:
                 st.subheader("Circuit Breaker 4: Legal Directives")
-                st.write("**Are there any pre-existing legal or contractual requirements that dictate the go-to-market strategy or brand identity?**")
-                st.caption("Legal agreements, such as brand licensing contracts, are non-negotiable. If a legal directive for branding already exists, it must be followed, and this tool's evaluation is complete.")
+                st.write("**Does a legal contract already decide the brand?**")
+                st.caption("For example, a brand license agreement. If 'Yes', you must follow the contract. This tool's work is done.")
                 options = ["Yes", "No"]
                 demo_data = DEMO_DATA.get(st.session_state.demo_key, {}).get('stage204', {})
-                choice = st.radio("Select if legal directives exist:", options, index=demo_data.get('index'), label_visibility="collapsed")
+                choice = st.radio("Select if a contract decides the brand:", options, index=demo_data.get('index'), label_visibility="collapsed")
                 if st.button("Proceed"):
                     if choice == "Yes": display_result('legal_directive')
                     else: set_stage(205)
 
             elif st.session_state.stage == 205:
                 st.subheader("Circuit Breaker 5: Resources")
-                st.write("**Will it have dedicated and approved resources to support multi-year identity and marketing efforts?**")
-                st.caption("A distinct brand cannot succeed without long-term investment. This question confirms that the necessary budget and team are committed. A 'No' answer triggers a flag for a business review to either secure funding or default to a BASF-Led approach.")
+                st.write("**Does it have dedicated funding and a team for marketing?**")
+                st.caption("A separate brand needs a multi-year budget to succeed. If there are no resources, it must be flagged for a business review.")
                 options = ["No", "Yes"]
                 demo_data = DEMO_DATA.get(st.session_state.demo_key, {}).get('stage205', {})
                 choice = st.radio("Select if resources are dedicated:", options, index=demo_data.get('index'), label_visibility="collapsed")
@@ -501,13 +505,13 @@ def run_app():
 
             elif st.session_state.stage == 206:
                 st.subheader("High-Rigor Product Scorecard")
-                st.caption("The product has passed all circuit breakers. Now, score it based on its strategic value and its need for market distinction. For this path, all claims for market distinction must be supported by evidence.")
+                st.caption("The product has passed all checks. Now, score its value to BASF and its need for a separate brand. All claims for market distinction must be supported by evidence.")
                 demo_data = DEMO_DATA.get(st.session_state.demo_key, {}).get('stage206', {})
                 rec_A = demo_data.get('score_A_checks', {})
                 rec_B = demo_data.get('score_B_checks', {})
                 rec_data = demo_data.get('data_mandate', "")
-                questions_A = { 'pa1': 'Corporate Strategy Contribution: Is this product, service or solution a cornerstone of a strategic BASF business initiative?', 'pa2': 'Equity Building: Does this offer create a significant positive "halo effect" or reputation impact for the BASF umbrella brand?', 'pa3': 'Market Opportunity: Does this offer provide access to a new, strategically important customer segment and/or market?', 'pa4': 'Commercial Potential: Does this offer have proven high revenue and/or margin potential?', 'pa5': 'Future Value: Does this offer represent a breakthrough technology or innovation?' }
-                questions_B = { 'pb1': 'Portfolio Clarity: Does this offer need a distinct identity to prevent portfolio confusion/cannibalisation?', 'pb2': 'Customers: Does this entity need to appeal directly to end consumers who need to be engaged through highly specific consumer codes?', 'pb3': 'Competitors: Does this offer compete against other specialised "pure-player" or consumer brands where \'BASF\' is a disadvantage?', 'pb4': 'Marketing: Does this offer require a unique, agile, or specialised go-to-market approach (e.g., e-commerce, different sales)?', 'pb5': 'BASF reputation: Does data prove this offer needs differentiation from the BASF masterbrand to win?' }
+                questions_A = { 'pa1': 'Is this a top priority for a major business division\'s strategy?', 'pa2': 'Does this create a positive "halo effect" for the main BASF brand?', 'pa3': 'Does this provide access to a new and important customer group or market?', 'pa4': 'Does it have proven high sales and/or profit margin?', 'pa5': 'Does it represent a breakthrough technology or innovation?' }
+                questions_B = { 'pb1': 'Does data prove it needs its own brand to avoid confusing customers or competing with other BASF products ("cannibalisation")?', 'pb2': 'Does data prove it needs to appeal directly to consumers using specific marketing language and styles?', 'pb3': 'Does data prove it competes against specialized "pure-player" or consumer brands where "BASF" is a disadvantage?', 'pb4': 'Does it require a unique or specialized way of selling (e.g., e-commerce)?', 'pb5': 'Does data prove the BASF brand name is a negative factor for the target customer?' }
                 score_A, score_B = 0, 0
                 col1, col2 = st.columns(2)
                 with col1:
