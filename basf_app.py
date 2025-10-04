@@ -15,7 +15,7 @@ def check_password():
     def password_entered():
         # This password is for demonstration purposes.
         # In a real-world scenario, use st.secrets for secure password management.
-        if st.session_state.get("password") == "FFxBASF2025":
+        if st.session_state.get("password") == "2025FFxBASFxFF":
             st.session_state["password_correct"] = True
         else:
             st.session_state["password_correct"] = False
