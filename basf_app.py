@@ -9,12 +9,10 @@ st.set_page_config(
     layout="centered"
 )
 
-# --- Password Protection Logic (Robust Version) ---
+# --- Password Protection Logic ---
 def check_password():
     """Returns `True` if the user is logged in."""
     def password_entered():
-        # This password is for demonstration purposes.
-        # In a real-world scenario, use st.secrets for secure password management.
         if st.session_state.get("password") == "2025FFxBASFxFF":
             st.session_state["password_correct"] = True
         else:
@@ -31,63 +29,62 @@ def check_password():
         st.error("😕 Password incorrect")
     return False
 
-# --- Data Libraries (Fully Restored & Updated for V3 Logic with Complete Demo Paths) ---
+# --- Data Libraries (Full Library Restored) ---
 DEMO_DATA = {
-    # --- Corporate Path Demos (Paths to Scorecard are now complete) ---
-    "chemicals": {'path': 'corporate', 'stage0.5': {'index': 0}, 'stage0.6': {'index': 0}, 'stage1': {'index': 1}, 'stage1.1': {'index': 1}, 'stage2': {'index': 1}, 'stage3': {'index': 1}, 'stage4': {'index': 1}, 'stage5': {'score_A_checks': {'a1': True, 'a2': True, 'a4': True, 'a5': True}, 'score_B_checks': {}, 'rationale': "As the core engine of BASF, its contribution is maximum. Its entire value comes from being BASF, so its need for market distinction is minimal."}},
-    "chemovator": {'path': 'corporate', 'stage0.5': {'index': 0}, 'stage0.6': {'index': 0}, 'stage1': {'index': 1}, 'stage1.1': {'index': 1}, 'stage2': {'index': 1}, 'stage3': {'index': 1}, 'stage4': {'index': 1}, 'stage5': {'score_A_checks': {'a1': True, 'a2': True, 'a3': True}, 'score_B_checks': {'b2': True, 'b3': True}, 'rationale': "As a key pillar of BASF's innovation strategy, its contribution is high. Its entire purpose requires a distinct identity to attract new talent and foster an agile culture, so its distinction need is also high."}},
-    "newbiz": {'path': 'corporate', 'stage0.5': {'index': 0}, 'stage0.6': {'index': 0}, 'stage1': {'index': 1}, 'stage1.1': {'index': 1}, 'stage2': {'index': 1}, 'stage3': {'index': 1}, 'stage4': {'index': 1}, 'stage5': {'score_A_checks': {'a3': True}, 'score_B_checks': {'b2': True, 'b3': True, 'b4': True}, 'rationale': "As an exploratory venture, its contribution is not yet core to strategy but it has a very high need for market distinction to succeed in a new field."}},
-    "coatings": {'path': 'corporate', 'stage0.5': {'index': 0}, 'stage0.6': {'index': 0}, 'stage1': {'index': 1}, 'stage1.1': {'index': 1}, 'stage2': {'index': 1}, 'stage3': {'index': 1}, 'stage4': {'index': 1}, 'stage5': {'score_A_checks': {'a1': True, 'a3': True, 'a5': True}, 'score_B_checks': {'b3': True, 'b4': True}, 'rationale': "As a key growth pillar competing with pure-players, it is strategically vital but needs its own brand to win."}},
-    "ecms": {'path': 'corporate', 'stage0.5': {'index': 0}, 'stage0.6': {'index': 0}, 'stage1': {'index': 1}, 'stage1.1': {'index': 1}, 'stage2': {'index': 1}, 'stage3': {'index': 1}, 'stage4': {'index': 1}, 'stage5': {'score_A_checks': {'a2': True, 'a3': True, 'a4': True}, 'score_B_checks': {'b3': True, 'b4': True}, 'rationale': "As a sustainability-focused growth pillar, it's highly strategic but needs a distinct identity for its specialized market."}},
-    "care360": {'path': 'corporate', 'stage0.5': {'index': 0}, 'stage0.6': {'index': 0}, 'stage1': {'index': 1}, 'stage1.1': {'index': 1}, 'stage2': {'index': 1}, 'stage3': {'index': 1}, 'stage4': {'index': 1}, 'stage5': {'score_A_checks': {'a2': True, 'a4': True}, 'score_B_checks': {}, 'rationale': "As a solutions platform, its entire purpose is to showcase the power of the masterbrand. It needs to be the embodiment of BASF, not distinct from it."}},
+    # --- Corporate Path Demos ---
+    "chemicals": {'path': 'corporate', 'stage0.5': {'index': 0}, 'stage0.6': {'index': 0}, 'stage1': {'index': 1}, 'stage1.1': {'index': 1}, 'stage2': {'index': 1}, 'stage3': {'index': 1}, 'stage4': {'index': 1}, 'stage5': {'score_A_checks': {'a1': True, 'a2': True, 'a4': True, 'a5': True}, 'score_B_checks': {}, 'rationale': "As the core engine of BASF, its contribution is maximum. Its entire value comes from being BASF."}},
+    "chemovator": {'path': 'corporate', 'stage0.5': {'index': 0}, 'stage0.6': {'index': 0}, 'stage1': {'index': 1}, 'stage1.1': {'index': 1}, 'stage2': {'index': 1}, 'stage3': {'index': 1}, 'stage4': {'index': 1}, 'stage5': {'score_A_checks': {'a1': True, 'a2': True, 'a3': True}, 'score_B_checks': {'b2': True, 'b3': True}, 'rationale': "Innovation pillar requiring distinct identity for agility and talent attraction."}},
+    "newbiz": {'path': 'corporate', 'stage0.5': {'index': 0}, 'stage0.6': {'index': 0}, 'stage1': {'index': 1}, 'stage1.1': {'index': 1}, 'stage2': {'index': 1}, 'stage3': {'index': 1}, 'stage4': {'index': 1}, 'stage5': {'score_A_checks': {'a3': True}, 'score_B_checks': {'b2': True, 'b3': True, 'b4': True}, 'rationale': "Exploratory venture with high need for distinction in new fields."}},
+    "coatings": {'path': 'corporate', 'stage0.5': {'index': 0}, 'stage0.6': {'index': 0}, 'stage1': {'index': 1}, 'stage1.1': {'index': 1}, 'stage2': {'index': 1}, 'stage3': {'index': 1}, 'stage4': {'index': 1}, 'stage5': {'score_A_checks': {'a1': True, 'a3': True, 'a5': True}, 'score_B_checks': {'b3': True, 'b4': True}, 'rationale': "Growth pillar competing with pure-players."}},
+    "ecms": {'path': 'corporate', 'stage0.5': {'index': 0}, 'stage0.6': {'index': 0}, 'stage1': {'index': 1}, 'stage1.1': {'index': 1}, 'stage2': {'index': 1}, 'stage3': {'index': 1}, 'stage4': {'index': 1}, 'stage5': {'score_A_checks': {'a2': True, 'a3': True, 'a4': True}, 'score_B_checks': {'b3': True, 'b4': True}, 'rationale': "Sustainability-focused growth pillar needing distinct identity."}},
+    "care360": {'path': 'corporate', 'stage0.5': {'index': 0}, 'stage0.6': {'index': 0}, 'stage1': {'index': 1}, 'stage1.1': {'index': 1}, 'stage2': {'index': 1}, 'stage3': {'index': 1}, 'stage4': {'index': 1}, 'stage5': {'score_A_checks': {'a2': True, 'a4': True}, 'score_B_checks': {}, 'rationale': "Solutions platform embodying BASF."}},
     
-    # --- Corporate Path Off-Ramp Demos (Paths are now complete) ---
-    "newco": {'path': 'corporate', 'stage0.5': {'index': 0}, 'stage0.6': {'index': 0}, 'stage1': {'index': 1}, 'stage1.1': {'index': 0}, 'stage1.2': {'index': 1}, 'stage2': {'index': 1}, 'stage3': {'index': 1}, 'stage4': {'index': 1}, 'stage5': {'score_A_checks': {}, 'score_B_checks': {}, 'rationale': "This demo assumes a standard acquisition of a company with a valuable, positive brand equity. It should pass all circuit breakers and be evaluated on the scorecard."}},
-    "basfsonatrachpropanchem": {'path': 'corporate', 'stage0.5': {'index': 0}, 'stage0.6': {'index': 0}, 'stage1': {'index': 2}, 'stage1.3': {'index': 0}, 'stage2': {'index': 1}, 'stage3': {'index': 0, 'rationale': "As a Joint Venture, the branding is often defined in the legal agreement. This demo assumes a legal directive exists, triggering that off-ramp after passing the risk check."}},
-    "insight360": {'path': 'corporate', 'stage0.5': {'index': 1, 'rationale': "This is a tool for internal employees, so it's considered Non-commercial. The tool provides an immediate off-ramp to a BASF-Led outcome."}},
-    "anniversaries": {'path': 'corporate', 'stage0.5': {'index': 1, 'rationale': "This is a temporary campaign, not a permanent brand, so it's considered Non-commercial. The tool provides an immediate off-ramp to a BASF-Led outcome."}},
+    # --- Corporate Path Off-Ramps ---
+    "newco": {'path': 'corporate', 'stage0.5': {'index': 0}, 'stage0.6': {'index': 0}, 'stage1': {'index': 1}, 'stage1.1': {'index': 0}, 'stage1.2': {'index': 1}, 'stage2': {'index': 1}, 'stage3': {'index': 1}, 'stage4': {'index': 1}, 'stage5': {'score_A_checks': {}, 'score_B_checks': {}, 'rationale': "Acquisition with positive equity."}},
+    "basfsonatrachpropanchem": {'path': 'corporate', 'stage0.5': {'index': 0}, 'stage0.6': {'index': 0}, 'stage1': {'index': 2}, 'stage1.3': {'index': 0}, 'stage2': {'index': 1}, 'stage3': {'index': 0, 'rationale': "Joint Venture governed by legal agreement."}},
+    "insight360": {'path': 'corporate', 'stage0.5': {'index': 1, 'rationale': "Internal tool considered Non-commercial."}},
+    "anniversaries": {'path': 'corporate', 'stage0.5': {'index': 1, 'rationale': "Temporary campaign considered Non-commercial."}},
 
-    # --- Stress-Test Demos (Paths are now complete) ---
-    "polyweld800business": {'path': 'corporate', 'stage0.5': {'index': 0}, 'stage0.6': {'index': 0}, 'stage1': {'index': 1}, 'stage1.1': {'index': 1}, 'stage2': {'index': 1}, 'stage3': {'index': 1}, 'stage4': {'index': 1}, 'stage5': {'score_A_checks': {}, 'score_B_checks': {}, 'rationale': "This legacy business is no longer part of the 'Winning Ways' strategy and competes on price, not brand. Both its strategic contribution and market distinction needs are low."}},
-    "extractmax": {'path': 'corporate', 'stage0.5': {'index': 0}, 'stage0.6': {'index': 0}, 'stage1': {'index': 1}, 'stage1.1': {'index': 1}, 'stage2': {'index': 0, 'rationale': "Due to its use in a controversial industry, this product carries a significant reputational risk that could harm the masterbrand, triggering the risk-insulation off-ramp."}},
-    "oldcheminc": {'path': 'corporate', 'stage0.5': {'index': 0}, 'stage0.6': {'index': 0}, 'stage1': {'index': 1}, 'stage1.1': {'index': 0}, 'stage1.2': {'index': 0, 'rationale': "This demo assumes the acquired brand has a known negative reputation, which would be a liability for BASF to inherit, triggering a 'retire & rebrand' recommendation."}},
+    # --- Stress-Test Demos ---
+    "polyweld800business": {'path': 'corporate', 'stage0.5': {'index': 0}, 'stage0.6': {'index': 0}, 'stage1': {'index': 1}, 'stage1.1': {'index': 1}, 'stage2': {'index': 1}, 'stage3': {'index': 1}, 'stage4': {'index': 1}, 'stage5': {'score_A_checks': {}, 'score_B_checks': {}, 'rationale': "Legacy business with low strategic contribution."}},
+    "extractmax": {'path': 'corporate', 'stage0.5': {'index': 0}, 'stage0.6': {'index': 0}, 'stage1': {'index': 1}, 'stage1.1': {'index': 1}, 'stage2': {'index': 0, 'rationale': "Controversial industry triggering risk off-ramp."}},
+    "oldcheminc": {'path': 'corporate', 'stage0.5': {'index': 0}, 'stage0.6': {'index': 0}, 'stage1': {'index': 1}, 'stage1.1': {'index': 0}, 'stage1.2': {'index': 0, 'rationale': "Acquisition with negative reputation."}},
 
-    # --- Product Path Demos (Paths are now complete) ---
-    "glasurit": {'path': 'product', 'stage0.5': {'index': 0}, 'stage0.6': {'index': 1}, 'stage201': {'index': 1}, 'stage202': {'index': 1}, 'stage202.1': {'index': 1}, 'stage203': {'index': 1}, 'stage204': {'index': 1}, 'stage205': {'index': 1}, 'stage206': {'score_A_checks': {'pa1': True, 'pa2': True, 'pa3': True, 'pa4': True}, 'score_B_checks': {'pb1': True, 'pb2': True}, 'data_mandate': "Data shows Glasurit competes directly against other powerful consumer-facing refinish brands like Axalta/PPG and needs its own identity to speak to body shop owners and maintain its premium position.", 'rationale': "As a cornerstone of the Coatings division, its contribution is high. It competes in a distinct B2B2C market against strong brand players, giving it a high need for distinction."}},
-    "ultramid": {'path': 'product', 'stage0.5': {'index': 0}, 'stage0.6': {'index': 1}, 'stage201': {'index': 1}, 'stage202': {'index': 1}, 'stage202.1': {'index': 1}, 'stage203': {'index': 1}, 'stage204': {'index': 1}, 'stage205': {'index': 1}, 'stage206': {'score_A_checks': {'pa1': True, 'pa2': True, 'pa4': True, 'pa5': True}, 'score_B_checks': {}, 'data_mandate': "N/A - No distinction needed.", 'rationale': "As a workhorse ingredient brand, its contribution is high. Its value is derived from being a trusted BASF product, so its need for market distinction is low."}},
+    # --- Product Path Demos ---
+    "glasurit": {'path': 'product', 'stage0.5': {'index': 0}, 'stage0.6': {'index': 1}, 'stage201': {'index': 1}, 'stage202': {'index': 1}, 'stage202.1': {'index': 1}, 'stage203': {'index': 1}, 'stage204': {'index': 1}, 'stage205': {'index': 1}, 'stage206': {'score_A_checks': {'pa1': True, 'pa2': True, 'pa3': True, 'pa4': True}, 'score_B_checks': {'pb1': True, 'pb2': True}, 'data_mandate': "Competes against consumer-facing refinish brands.", 'rationale': "Cornerstone of Coatings division."}},
+    "ultramid": {'path': 'product', 'stage0.5': {'index': 0}, 'stage0.6': {'index': 1}, 'stage201': {'index': 1}, 'stage202': {'index': 1}, 'stage202.1': {'index': 1}, 'stage203': {'index': 1}, 'stage204': {'index': 1}, 'stage205': {'index': 1}, 'stage206': {'score_A_checks': {'pa1': True, 'pa2': True, 'pa4': True, 'pa5': True}, 'score_B_checks': {}, 'data_mandate': "N/A - No distinction needed.", 'rationale': "Workhorse ingredient brand."}},
     
-    # --- Product Path Stress-Tests (Paths are now complete) ---
-    "noresourceproduct": {'path': 'product', 'stage0.5': {'index': 0}, 'stage0.6': {'index': 1}, 'stage201': {'index': 1}, 'stage202': {'index': 1}, 'stage202.1': {'index': 1}, 'stage203': {'index': 1}, 'stage204': {'index': 1}, 'stage205': {'index': 0, 'rationale': "This demo shows what happens when a product team indicates they do not have the dedicated budget to support a distinct brand."}},
-    "jvproduct": {'path': 'product', 'stage0.5': {'index': 0}, 'stage0.6': {'index': 1}, 'stage201': {'index': 1}, 'stage202': {'index': 2, 'rationale': "This demo shows the outcome for a product that belongs to a non-wholly-owned entity like a Joint Venture. The product must follow the parent entity's branding."}}
+    # --- Product Path Stress-Tests ---
+    "noresourceproduct": {'path': 'product', 'stage0.5': {'index': 0}, 'stage0.6': {'index': 1}, 'stage201': {'index': 1}, 'stage202': {'index': 1}, 'stage202.1': {'index': 1}, 'stage203': {'index': 1}, 'stage204': {'index': 1}, 'stage205': {'index': 0, 'rationale': "Lacks dedicated budget."}},
+    "jvproduct": {'path': 'product', 'stage0.5': {'index': 0}, 'stage0.6': {'index': 1}, 'stage201': {'index': 1}, 'stage202': {'index': 2, 'rationale': "Product belongs to a JV."}}
 }
-
 
 RESULT_DATA = {
-    # Corporate Path Outcomes
-    'basf_led': {'recommendation': "BASF-Led", 'rationale': "This entity's primary purpose is to be a direct expression of the BASF masterbrand (the main BASF parent brand), is non-commercial, or lacks the resources for a distinct identity. Its value is maximized by being an integral part of BASF.", 'activation_text': "This means we don't create a separate brand. The entity is branded simply as 'BASF [Entity Name]'. It lives on the main BASF website and is sold by the BASF sales team, reinforcing the power and innovation of the masterbrand.", 'examples': "Chemicals Division, Internal Tools"},
-    'endorsed_level1': {'recommendation': "BASF-Endorsed (Level 1: Co-Branded Lockup)", 'rationale': "This entity is a strategically critical pillar but requires its own distinct identity to win. The recommendation is a tight, explicit endorsement to transfer maximum trust from the masterbrand.", 'activation_text': "This triggers the **Co-Branded Lockup** playbook. The entity will have its own distinct brand identity but must use a mandatory visual co-branding system with the BASF logo. This provides the highest level of explicit backing and is reserved for our most important strategic ventures.", 'examples': "Chemovator GmbH"},
-    'endorsed_level2': {'recommendation': "BASF-Endorsed (Level 2: Prominent Verbal Endorsement)", 'rationale': "This entity is an important, established brand that needs its own space but gains significant credibility and value from an explicit BASF link.", 'activation_text': "This triggers the **Prominent Verbal Endorsement** playbook. The brand operates with its own identity, supported by the classic 'powered by BASF' or 'A BASF Company' tagline. This provides a strong, clear connection that builds trust without a full visual lockup.", 'examples': "Coatings Division Brands"},
-    'endorsed_level3': {'recommendation': "BASF-Endorsed (Level 3: Distant Verbal Endorsement)", 'rationale': "This entity is an exploratory venture that needs maximum independence. A subtle, distant link provides a 'halo' of quality while insulating the masterbrand from risk. This is sometimes referred to as a 'Satellite Brand' model (e.g., Wintershall Dea).", 'activation_text': "This triggers the **Distant Endorsement** playbook. The brand operates with full independence. The connection to BASF is strategic and not part of the primary brand identity. It is typically mentioned in non-consumer-facing contexts like 'About Us' sections, corporate reports, or investor relations.", 'examples': "NewBiz (Hypothetical), Metivo"},
-    'flag_review': {'recommendation': "Flag for Strategic Review", 'rationale': "This entity's profile indicates a misalignment. This could be due to low strategic importance, a lack of resources for a needed brand, or other factors identified in the circuit breakers. This is a business issue, not just a branding problem.", 'activation_text': "This is not a branding recommendation but a business flag. The entity's situation warrants a formal business review to determine its future within the portfolio before any branding decisions are made.", 'examples': "PolyWeld 800 Business"},
-    # Product Path Outcomes
-    'product_led': {'recommendation': "BASF-Led (Product Level)", 'rationale': "This product's value is maximized by leveraging the full trust and equity of the BASF masterbrand. There is no data-backed business case for the cost and complexity of a distinct identity.", 'activation_text': "The recommendation is to use the standard **'BASF Productname®'** lockup. This approach ensures market clarity, reinforces BASF's quality promise, and provides the strongest return on investment. Please consult the BASF Brand Portal for the correct templates and usage rules.", 'examples': "Ultramid®"},
-    'product_endorsed': {'recommendation': "BASF-Endorsed (Product Level)", 'rationale': "This product is a cornerstone of a divisional strategy and has a proven, data-backed need for a distinct identity to win in its specific market.", 'activation_text': "This product has earned the right to a distinct brand identity. It must be supported by a mandatory, explicit endorsement (e.g., 'powered by BASF'). A full business case and brand plan must be submitted to the divisional leadership for approval before development.", 'examples': "Glasurit®"},
-    'insufficient_resources': {'recommendation': "Flag for Review (Insufficient Resources)", 'rationale': "Building and sustaining a distinct brand requires significant, long-term investment. Without dedicated resources, a new brand identity cannot succeed and may damage the BASF brand through inconsistent application.", 'activation_text': "The entity does not have the required resources to support a distinct brand. This triggers a **Flag for Review**. A business decision must be made: either secure the necessary multi-year funding or default to a 'BASF-Led' branding approach to leverage the masterbrand's resources.", 'examples': "Any product without a dedicated brand budget"},
-    'evaluate_parent_entity': {'recommendation': "Evaluate Parent Entity First", 'rationale': "A product's branding cannot be decided until its parent company's relationship to BASF is defined.", 'activation_text': "This product belongs to an entity that is not wholly-owned by BASF (e.g., a Joint Venture). Please use the **Corporate Path** in this tool to evaluate the parent corporate entity first. The branding of its products must follow the guidelines and endorsement level established for the parent company.", 'examples': "Products from a Joint Venture"},
+    # Corporate Path Outcomes (Updated Terminology)
+    'basf_led': {'recommendation': "BASF Branded", 'rationale': "This entity's primary purpose is to be a direct expression of the BASF masterbrand. Its value is maximized by being an integral part of BASF.", 'activation_text': "This means we don't create a separate brand. The entity is branded simply as 'BASF [Entity Name]'. It lives on the main BASF website and is sold by the BASF sales team, reinforcing the power and innovation of the masterbrand.", 'examples': "Chemicals Division, Internal Tools"},
+    'endorsed_level1': {'recommendation': "BASF-Endorsed (Level 1: Co-Branded Lockup)", 'rationale': "This entity is a strategically critical pillar but requires its own distinct identity to win. The recommendation is a tight, explicit endorsement.", 'activation_text': "This triggers the **Co-Branded Lockup** playbook. The entity will have its own distinct brand identity but must use a mandatory visual co-branding system with the BASF logo.", 'examples': "Chemovator GmbH"},
+    'endorsed_level2': {'recommendation': "BASF-Endorsed (Level 2: Prominent Verbal Endorsement)", 'rationale': "This entity is an important, established brand that needs its own space but gains significant credibility from an explicit BASF link.", 'activation_text': "This triggers the **Prominent Verbal Endorsement** playbook. The brand operates with its own identity, supported by the classic 'powered by BASF' or 'A BASF Company' tagline.", 'examples': "Coatings Division Brands"},
+    'endorsed_level3': {'recommendation': "BASF-Endorsed (Level 3: Distant Verbal Endorsement)", 'rationale': "This entity is an exploratory venture that needs maximum independence. A subtle, distant link provides a 'halo' of quality while insulating the masterbrand from risk.", 'activation_text': "This triggers the **Distant Endorsement** playbook. The brand operates with full independence. The connection to BASF is strategic and not part of the primary brand identity.", 'examples': "NewBiz (Hypothetical), Metivo"},
+    'flag_review': {'recommendation': "Flag for Strategic Review", 'rationale': "This entity's profile indicates a misalignment. This could be due to low strategic importance, a lack of resources, or other factors. This is a business issue, not just a branding problem.", 'activation_text': "This is not a branding recommendation but a business flag. The entity's situation warrants a formal business review to determine its future within the portfolio.", 'examples': "PolyWeld 800 Business"},
+    
+    # Product Path Outcomes (Updated Terminology)
+    'product_led': {'recommendation': "BASF Branded (Product Level)", 'rationale': "This product's value is maximized by leveraging the full trust and equity of the BASF masterbrand. There is no data-backed business case for a distinct identity.", 'activation_text': "The recommendation is to use the standard **'BASF Productname®'** lockup. This approach ensures market clarity, reinforces BASF's quality promise, and provides the strongest return on investment.", 'examples': "Ultramid®"},
+    'product_endorsed': {'recommendation': "BASF-Endorsed (Product Level)", 'rationale': "This product is a cornerstone of a divisional strategy and has a proven, data-backed need for a distinct identity to win.", 'activation_text': "This product has earned the right to a distinct brand identity. It must be supported by a mandatory, explicit endorsement (e.g., 'powered by BASF').", 'examples': "Glasurit®"},
+    'insufficient_resources': {'recommendation': "Flag for Review (Insufficient Resources)", 'rationale': "Building and sustaining a distinct brand requires significant, long-term investment. Without dedicated resources, a new brand identity cannot succeed.", 'activation_text': "The entity does not have the required resources to support a distinct brand. This triggers a **Flag for Review**.", 'examples': "Any product without a dedicated brand budget"},
+    'evaluate_parent_entity': {'recommendation': "Evaluate Parent Entity First", 'rationale': "A product's branding cannot be decided until its parent company's relationship to BASF is defined.", 'activation_text': "This product belongs to an entity that is not wholly-owned by BASF (e.g., a Joint Venture). Please use the **Corporate Path** to evaluate the parent corporate entity first.", 'examples': "Products from a Joint Venture"},
+    
     # General Outcomes
-    'not_governed_by_basf': {'recommendation': "Not Governed by BASF Brand", 'rationale': "The entity is deployed and managed by an independent business that does not currently use the BASF brand.", 'activation_text': "This entity falls outside the governance of the BASF brand architecture. The recommendation is to treat it as 'Independent' or follow the specific branding guidelines of the business responsible for managing it. No further evaluation in this tool is needed.", 'examples': "A product created by an independent subsidiary like Wintershall Dea."},
-    'legal_directive': {'recommendation': "Follow Legal Directive", 'rationale': "A binding legal or contractual agreement decides the branding for this entity.", 'activation_text': "The branding for this entity is dictated by a binding legal or contractual agreement. The primary action is to consult the specific legal documents (e.g., the Joint Venture agreement) and implement the branding exactly as specified. This overrides all other strategic considerations.", 'examples': "BASF SONATRACH PropanChem"},
-    'independent_risk': {'recommendation': "Independent (for risk insulation)", 'rationale': "The entity has the potential to create significant negative reputation impact for BASF and must be strategically distanced from the masterbrand.", 'activation_text': "This means the entity must operate as a fully independent brand with no visible connection to BASF. This is a strategic decision to create a 'reputational firewall' and insulate the masterbrand from potential risk.\n\n**Maintaining the BASF Connection:** While this entity operates independently, it must adhere to BASF's non-negotiable core principles, including Safety & Compliance Standards, Code of Conduct, and Legal Transparency of Ownership.", 'examples': "ExtractMax"},
-    'follow_partner_guidelines': {'recommendation': "Follow Partner/Distributor Guidelines", 'rationale': "As a third-party partner/distributor with no BASF equity stake, branding is governed by specific legal and brand guidelines.", 'activation_text': "The primary action is to consult the official 'Distributor Branding Guidelines' and engage with the Brand Consultancy team to ensure full compliance before using any BASF branding. This ensures consistency and protects both brands.", 'examples': "Third-Party Distributors"},
-    'independent_minority': {'recommendation': "Independent (Minority-owned JV)", 'rationale': "As a minority stakeholder (<50% equity), BASF cannot enforce its brand identity. The JV must operate with its own distinct brand to ensure legal and market clarity.", 'activation_text': "This entity requires its own independent brand identity. BASF's involvement should be communicated strategically as an endorsement or partnership, guided by the terms of the Joint Venture agreement, rather than through direct branding.", 'examples': "Minority-stake Joint Ventures"},
-    'retire_rebrand': {'recommendation': "Independent (Retire & Rebrand)", 'rationale': "The acquired brand has significant negative equity, making its association a liability. The recommendation is to make it independent by retiring the name and transitioning customers to a new or existing BASF brand.", 'activation_text': "This means the acquired brand identity will be retired. A formal plan must be created to migrate customers and assets to a new or existing BASF brand, thereby making the business independent of the problematic legacy name.\n\n**Maintaining the BASF Connection:** While this entity operates independently, it must adhere to BASF's non-negotiable core principles, including Safety & Compliance Standards, Code of Conduct, and Legal Transparency of Ownership.", 'examples': "OldChem Inc."}
+    'not_governed_by_basf': {'recommendation': "Not Governed by BASF Brand", 'rationale': "The entity is deployed and managed by an independent business that does not currently use the BASF brand.", 'activation_text': "This entity falls outside the governance of the BASF brand architecture. The recommendation is to treat it as 'Independent'.", 'examples': "Wintershall Dea subsidiary"},
+    'legal_directive': {'recommendation': "Follow Legal Directive", 'rationale': "A binding legal or contractual agreement decides the branding for this entity.", 'activation_text': "The primary action is to consult the specific legal documents (e.g., the Joint Venture agreement) and implement the branding exactly as specified.", 'examples': "BASF SONATRACH PropanChem"},
+    'independent_risk': {'recommendation': "Independent (Risk Insulation)", 'rationale': "The entity has the potential to create significant negative reputation impact or channel conflict.", 'activation_text': "This means the entity must operate as a fully independent brand with no visible connection to BASF. This is a strategic decision to create a 'reputational firewall'.", 'examples': "ExtractMax"},
+    'follow_partner_guidelines': {'recommendation': "Follow Partner/Distributor Guidelines", 'rationale': "As a third-party partner/distributor with no BASF equity stake, branding is governed by specific legal and brand guidelines.", 'activation_text': "The primary action is to consult the official 'Distributor Branding Guidelines'.", 'examples': "Third-Party Distributors"},
+    'independent_minority': {'recommendation': "Independent (Minority-owned JV)", 'rationale': "As a minority stakeholder (<50% equity), BASF cannot enforce its brand identity.", 'activation_text': "This entity requires its own independent brand identity. BASF's involvement should be communicated strategically as an endorsement or partnership.", 'examples': "Minority-stake Joint Ventures"},
+    'retire_rebrand': {'recommendation': "Independent (Retire & Rebrand)", 'rationale': "The acquired brand has negative equity/reputation, making its association a liability.", 'activation_text': "This means the acquired brand identity will be retired. A formal plan must be created to migrate customers and assets to a new or existing BASF brand.", 'examples': "OldChem Inc."}
 }
 
-
-# --- WEIGHTING SYSTEM (CORRECTED) ---
 WEIGHTS = {
     'corporate_A': {'a1': 3, 'a2': 3, 'a3': 2, 'a4': 2, 'a5': 1},
-    'corporate_B': {'b1': 3, 'b2': 3, 'b3': 2, 'b4': 2, 'b5': 1}, # Corrected: b2 is now 3 points
+    'corporate_B': {'b1': 3, 'b2': 3, 'b3': 2, 'b4': 2, 'b5': 1},
     'product_A': {'pa1': 3, 'pa2': 3, 'pa3': 2, 'pa4': 2, 'pa5': 1},
     'product_B': {'pb1': 3, 'pb2': 3, 'pb3': 2, 'pb4': 2, 'pb5': 1}
 }
@@ -167,15 +164,15 @@ def run_app():
         st.markdown("---")
         st.subheader("Stress-Test Scenarios")
         
-        # --- STRESS TEST DEMOS WITH EXPLANATIONS ---
+        # --- STRESS TEST DEMOS ---
         stress_demos = {
             "PolyWeld 800 Business": {
                 "key": "polyweld800business",
-                "caption": "Tests a legacy business with low strategic contribution, leading to a 'Flag for Review' outcome."
+                "caption": "Tests a legacy business with low strategic contribution."
             },
             "ExtractMax": {
                 "key": "extractmax",
-                "caption": "Tests the reputational risk circuit breaker for a profitable but controversial entity."
+                "caption": "Tests the reputational risk Fast Track for a controversial entity."
             },
             "OldChem Inc.": {
                 "key": "oldcheminc",
@@ -183,7 +180,7 @@ def run_app():
             },
             "No-Resource Product": {
                 "key": "noresourceproduct",
-                "caption": "Tests the product path for an entity that lacks a dedicated multi-year brand budget."
+                "caption": "Tests the product path for an entity that lacks a dedicated budget."
             },
             "JV Product": {
                 "key": "jvproduct",
@@ -197,7 +194,7 @@ def run_app():
                     start_evaluation(name, is_demo=True, demo_key=data["key"])
                 st.caption(data["caption"])
 
-        # --- EXPANDER WITH ROBUST PDF DOWNLOAD BUTTON ---
+        # --- EXPANDER WITH PDF DOWNLOAD BUTTON ---
         with st.expander("View the Brand Compass Decision Tree PDF"):
             try:
                 with open("document.pdf", "rb") as pdf_file:
@@ -210,32 +207,29 @@ def run_app():
                     mime="application/pdf",
                     use_container_width=True
                 )
-                st.caption("Click to download the full PDF. Most browsers will open it in a new tab for viewing.")
+                st.caption("Click to download the full PDF.")
             except FileNotFoundError:
-                st.error("File not found: 'document.pdf'. Please ensure the PDF is in the same directory as the script and restart the app.")
+                st.error("File not found: 'document.pdf'.")
 
 
     elif st.session_state.stage == 0.5:
-        # --- STRATEGIC ROUTER WITH IMPROVED EXPLANATIONS ---
+        # --- STRATEGIC ROUTER (V3) ---
         st.header(f"Evaluating: *{st.session_state.entity_name}*")
         st.subheader("Strategic Router")
         st.markdown("""
         **What is the purpose of the entity being evaluated?**
 
-        This first step separates market-facing businesses from internal or marketing activities.
-        
-        *   **Commercial:** Choose this if the entity is **market-facing and has its own Profit & Loss (P&L)**. It directly sells products or services to customers.
+        *   **Commercial:** Choose this if the entity is **market-facing and has its own Profit & Loss (P&L)**.
             *   *Examples: A business unit, a subsidiary company, a product line.*
         
-        *   **Non-commercial:** Choose this for **any other activity, even if it supports commercial goals.** These are typically cost centers that do not have their own P&L.
-            *   *Examples: Marketing campaigns, events, trade fairs, internal initiatives, R&D projects, think tanks.*
+        *   **Non-commercial:** Choose this for **any other activity, even if it supports commercial goals.**
+            *   *Examples: Marketing campaigns, events, trade fairs, internal initiatives, R&D projects.*
         """)
         
         path_options = ["Commercial", "Non-commercial"]
         demo_data = DEMO_DATA.get(st.session_state.demo_key, {}).get('stage0.5', {})
         rec_index = demo_data.get('index')
         
-        st.markdown("---")
         path_choice = st.radio("Select the entity's purpose:", path_options, index=rec_index, key="purpose_router")
         
         if demo_data.get('rationale'): st.info(f"**Demo Guidance:** {demo_data['rationale']}")
@@ -247,11 +241,10 @@ def run_app():
                 set_stage(0.6)
 
     elif st.session_state.stage == 0.6:
-        # --- NEW NATURE OF ENTITY ROUTER (V3) ---
+        # --- ENTITY TYPE ROUTER ---
         st.header(f"Evaluating: *{st.session_state.entity_name}*")
         st.subheader("Strategic Router")
         st.write("**What is the nature of the entity?**")
-        st.caption("This routes the entity to the correct evaluation path. Corporate entities (like companies or business units) have different strategic considerations than Products, Services, or Solutions.")
         
         path_options = ["Corporate Entity (e.g., a company, JV, business unit)", "Product, Service, or Solution"]
         
@@ -269,15 +262,13 @@ def run_app():
                 set_stage(201) # Start of Product Path
     
     else:
-        # --- ALL OTHER STAGES ---
+        # --- CORPORATE PATH ---
         if st.session_state.path_type == 'corporate':
-            # --- CORPORATE PATH (V3 RESTRUCTURED WITH SIMPLIFIED LANGUAGE) ---
             st.header(f"Evaluating: *{st.session_state.entity_name}* (Corporate Path)")
             
             if st.session_state.stage == 1:
-                st.subheader("Circuit Breaker 1: Ownership", help="A 'Circuit Breaker' is an early stop in the evaluation. It checks for a hard rule that provides an immediate answer.")
+                st.subheader("Fast Track 1: Ownership")
                 st.write("**What is the ownership structure?**")
-                st.caption("This step checks the legal relationship to BASF, which decides many branding rules.")
                 options = ["Partner / Distributor", "Wholly Owned", "Joint Venture"]
                 demo_data = DEMO_DATA.get(st.session_state.demo_key, {}).get('stage1', {})
                 choice = st.radio("Select ownership structure:", options, index=demo_data.get('index'), label_visibility="collapsed")
@@ -287,9 +278,8 @@ def run_app():
                     else: set_stage(1.3)
             
             elif st.session_state.stage == 1.1:
-                st.subheader("Circuit Breaker 1: Ownership", help="A 'Circuit Breaker' is an early stop in the evaluation. It checks for a hard rule that provides an immediate answer.")
+                st.subheader("Fast Track 1: Ownership")
                 st.write("**Is it an acquisition?**")
-                st.caption("If you choose ‘Yes’, we decide how to name the acquired company.")
                 options = ["Yes", "No"]
                 demo_data = DEMO_DATA.get(st.session_state.demo_key, {}).get('stage1.1', {})
                 choice = st.radio("Select if it is an acquisition:", options, index=demo_data.get('index'), label_visibility="collapsed")
@@ -298,21 +288,19 @@ def run_app():
                     else: set_stage(2)
             
             elif st.session_state.stage == 1.2:
-                st.subheader("Circuit Breaker 1: Ownership", help="A 'Circuit Breaker' is an early stop in the evaluation. It checks for a hard rule that provides an immediate answer.")
-                st.write("**Does the acquired brand have a bad reputation?**")
-                st.caption("If a brand has a known negative history, we must retire it to protect BASF's reputation.")
+                st.subheader("Fast Track 1: Ownership")
+                st.write("**Does the acquired brand have Negative Brand Equity?**")
+                st.caption("E.g., known bad reputation, scandal, or safety failures.")
                 options = ["Yes", "No"]
                 demo_data = DEMO_DATA.get(st.session_state.demo_key, {}).get('stage1.2', {})
-                choice = st.radio("Select if it has a bad reputation:", options, index=demo_data.get('index'), label_visibility="collapsed")
-                if demo_data.get('rationale'): st.info(f"**Demo Guidance:** {demo_data['rationale']}")
+                choice = st.radio("Select if it has negative equity:", options, index=demo_data.get('index'), label_visibility="collapsed")
                 if st.button("Proceed"):
                     if choice == "Yes": display_result('retire_rebrand')
                     else: set_stage(2)
 
             elif st.session_state.stage == 1.3:
-                st.subheader("Circuit Breaker 1: Ownership", help="A 'Circuit Breaker' is an early stop in the evaluation. It checks for a hard rule that provides an immediate answer.")
+                st.subheader("Fast Track 1: Ownership")
                 st.write("**What is BASF's ownership share in the Joint Venture?**")
-                st.caption("If BASF owns less than 50%, we cannot control its branding. The JV must legally have its own independent brand.")
                 options = ["Majority (50% or more)", "Minority (less than 50%)"]
                 demo_data = DEMO_DATA.get(st.session_state.demo_key, {}).get('stage1.3', {})
                 choice = st.radio("Select ownership share:", options, index=demo_data.get('index'), label_visibility="collapsed")
@@ -321,33 +309,31 @@ def run_app():
                     else: set_stage(2)
 
             elif st.session_state.stage == 2:
-                st.subheader("Circuit Breaker 2: Risk Profile", help="A 'Circuit Breaker' is an early stop in the evaluation. It checks for a hard rule that provides an immediate answer.")
+                st.subheader("Fast Track 2: Risk Profile")
                 st.write("**Could it harm BASF's reputation?**")
-                st.caption("If the entity is in a controversial industry or uses risky technology, it must be independent to protect the BASF masterbrand.")
+                st.caption("Examples: Controversial industry, channel conflict with key customers, or high-risk technology.")
                 options = ["Yes", "No"]
                 demo_data = DEMO_DATA.get(st.session_state.demo_key, {}).get('stage2', {})
                 choice = st.radio("Select if there is a potential for negative impact:", options, index=demo_data.get('index'), label_visibility="collapsed")
-                if demo_data.get('rationale'): st.info(f"**Demo Guidance:** {demo_data['rationale']}")
                 if st.button("Proceed"):
                     if choice == "Yes": display_result('independent_risk')
                     else: set_stage(3)
 
             elif st.session_state.stage == 3:
-                st.subheader("Circuit Breaker 3: Legal Directives", help="A 'Circuit Breaker' is an early stop in the evaluation. It checks for a hard rule that provides an immediate answer.")
+                st.subheader("Fast Track 3: Legal Directives")
                 st.write("**Does a legal contract already decide the brand?**")
-                st.caption("For example, a joint venture agreement or brand license. If 'Yes', you must follow the contract. This tool's work is done.")
+                st.caption("E.g., Joint Venture agreement or licensing deal.")
                 options = ["Yes", "No"]
                 demo_data = DEMO_DATA.get(st.session_state.demo_key, {}).get('stage3', {})
                 choice = st.radio("Select if a contract decides the brand:", options, index=demo_data.get('index'), label_visibility="collapsed")
-                if demo_data.get('rationale'): st.info(f"**Demo Guidance:** {demo_data['rationale']}")
                 if st.button("Proceed"):
                     if choice == "Yes": display_result('legal_directive')
                     else: set_stage(4)
 
             elif st.session_state.stage == 4:
-                st.subheader("Circuit Breaker 4: Resources", help="A 'Circuit Breaker' is an early stop in the evaluation. It checks for a hard rule that provides an immediate answer.")
-                st.write("**Does it have dedicated funding and a team for marketing?**")
-                st.caption("A separate brand needs a multi-year budget. If resources are missing, we flag it for a business review.")
+                st.subheader("Fast Track 4: Resources")
+                st.write("**Does it have dedicated Brand Management resources?**")
+                st.caption("This means budget/team for design, research, and long-term brand building, not just product marketing.")
                 options = ["No", "Yes"]
                 demo_data = DEMO_DATA.get(st.session_state.demo_key, {}).get('stage4', {})
                 choice = st.radio("Select if resources are dedicated:", options, index=demo_data.get('index'), label_visibility="collapsed")
@@ -357,24 +343,24 @@ def run_app():
 
             elif st.session_state.stage == 5:
                 st.subheader("Strategic Scorecard")
-                st.caption("The entity has passed all checks. Now, score its value to BASF and its need for a separate brand in the market.")
+                st.caption("The entity has passed all Fast Tracks. Now, score its value to BASF and its need for a separate brand.")
                 demo_data = DEMO_DATA.get(st.session_state.demo_key, {}).get('stage5', {})
                 rec_A = demo_data.get('score_A_checks', {})
                 rec_B = demo_data.get('score_B_checks', {})
                 
                 questions_A = { 
-                    'a1': 'Is this a top priority for BASF\'s main business strategy?', 
-                    'a2': 'Does it help achieve a major company goal or performance target (KPI)?', 
-                    'a3': 'Is it designed to help BASF win in a new market, segment, or business model?', 
-                    'a4': 'Does it strongly support or show our desired brand positioning?', 
-                    'a5': "Does its business model rely on deep operational integration with BASF's core capabilities (e.g., shared expertise, platforms, or practices)?" 
+                    'a1': 'Linked to a top priority of BASF\'s business strategy?', 
+                    'a2': 'Helps achieve a major company goal or performance target (KPI)?', 
+                    'a3': 'Wins in a new market, segment, or business model?', 
+                    'a4': 'Strongly supports or demonstrates our desired brand character/positioning?', 
+                    'a5': "Relies on deep operational integration with BASF's core capabilities?" 
                 }
                 questions_B = { 
-                    'b1': 'Is there a known negative view of the BASF brand for this specific audience?', 
-                    'b2': 'Does this market have special customer habits or rules that are different from BASF\'s usual markets?', 
-                    'b3': 'Does it compete mainly with specialized, "pure-player" companies?', 
-                    'b4': 'Does it need to sell directly to consumers using specific marketing language and styles?', 
-                    'b5': 'Does it have a unique way of working that needs to be highlighted as part of its brand?' 
+                    'b1': 'Known negative view of the BASF brand for this specific audience?', 
+                    'b2': 'Market has norms/expectations misaligned with BASF conventional practices?', 
+                    'b3': 'Competes primarily against specialised "pure-players"?', 
+                    'b4': 'Direct-to-consumer sales requiring specific consumer marketing language?', 
+                    'b5': 'Distinct way of working forming a unique value proposition?' 
                 }
                 
                 score_A, score_B = 0, 0
@@ -385,7 +371,7 @@ def run_app():
                         if st.checkbox(q_text, value=rec_A.get(key, False), key=key): 
                             score_A += WEIGHTS['corporate_A'][key]
                         if key == 'a5':
-                            st.caption("This clarifies the *operational model*, not its importance. A 'No' is common for agile, standalone ventures. A 'Yes' is typical for businesses that use shared resources. Both are valid strategies.")
+                            st.caption("A 'No' is common for agile, standalone ventures. A 'Yes' is typical for businesses that use shared resources.")
 
                     st.session_state.scores['A'] = score_A
                     st.write(f"**Score A: {score_A} / 11**")
@@ -395,7 +381,7 @@ def run_app():
                         if st.checkbox(q_text, value=rec_B.get(key, False), key=key): score_B += WEIGHTS['corporate_B'][key]
                     st.session_state.scores['B'] = score_B
                     st.write(f"**Score B: {score_B} / 11**")
-                if demo_data.get('rationale'): st.info(f"**Demo Guidance:** {demo_data['rationale']}")
+                
                 if st.button("Calculate Recommendation"): set_stage(6)
 
             elif st.session_state.stage == 6:
@@ -411,14 +397,13 @@ def run_app():
                     outcome_key = 'endorsed_level2'
                 display_result(outcome_key)
 
+        # --- PRODUCT PATH ---
         elif st.session_state.path_type == 'product':
-            # --- PRODUCT PATH (V3 RESTRUCTURED WITH SIMPLIFIED LANGUAGE) ---
             st.header(f"Evaluating: *{st.session_state.entity_name}* (Product Path)")
 
             if st.session_state.stage == 201:
-                st.subheader("Circuit Breaker 1: Governance", help="Governance checks who controls the entity's deployment and management.")
-                st.write("**Does an independent business manage it without the BASF brand?**")
-                st.caption("This filters out things from outside the BASF brand system (e.g., a product from a subsidiary like Wintershall Dea). If 'Yes', this tool does not apply.")
+                st.subheader("Fast Track 1: Governance")
+                st.write("**Is it managed by an independent business outside the BASF brand?**")
                 options = ["Yes", "No"]
                 demo_data = DEMO_DATA.get(st.session_state.demo_key, {}).get('stage201', {})
                 choice = st.radio("Select an answer:", options, index=demo_data.get('index'), label_visibility="collapsed")
@@ -427,22 +412,18 @@ def run_app():
                     else: set_stage(202)
 
             elif st.session_state.stage == 202:
-                st.subheader("Circuit Breaker 2: Ownership", help="A 'Circuit Breaker' is an early stop in the evaluation. It checks for a hard rule that provides an immediate answer.")
-                st.write("**What is the ownership structure?**")
-                st.caption("This step checks the product's parent company to decide which branding rules to apply.")
+                st.subheader("Fast Track 2: Ownership")
                 options = ["Partner / Distributor", "Wholly Owned", "Joint Venture"]
                 demo_data = DEMO_DATA.get(st.session_state.demo_key, {}).get('stage202', {})
                 choice = st.radio("Select ownership structure:", options, index=demo_data.get('index'), label_visibility="collapsed")
-                if demo_data.get('rationale'): st.info(f"**Demo Guidance:** {demo_data['rationale']}")
                 if st.button("Proceed"):
                     if choice == options[0]: display_result('follow_partner_guidelines')
                     elif choice == options[1]: set_stage(202.1)
                     else: set_stage(202.2)
 
             elif st.session_state.stage == 202.1:
-                st.subheader("Circuit Breaker 2: Ownership", help="A 'Circuit Breaker' is an early stop in the evaluation. It checks for a hard rule that provides an immediate answer.")
+                st.subheader("Fast Track 2: Ownership")
                 st.write("**Is it an acquisition?**")
-                st.caption("If you choose ‘Yes’, we decide how to name the acquired product.")
                 options = ["Yes", "No"]
                 demo_data = DEMO_DATA.get(st.session_state.demo_key, {}).get('stage202.1', {})
                 choice = st.radio("Select if it is an acquisition:", options, index=demo_data.get('index'), label_visibility="collapsed")
@@ -451,28 +432,25 @@ def run_app():
                     else: set_stage(203)
 
             elif st.session_state.stage == 202.2:
-                st.subheader("Circuit Breaker 2: Ownership", help="A 'Circuit Breaker' is an early stop in the evaluation. It checks for a hard rule that provides an immediate answer.")
+                st.subheader("Fast Track 2: Ownership")
                 st.write("Products from a Joint Venture must follow the parent company's brand.")
-                st.caption("To find the correct brand for this product, please evaluate the parent Joint Venture company using the Corporate Path first.")
-                if demo_data.get('rationale'): st.info(f"**Demo Guidance:** {demo_data['rationale']}")
                 if st.button("Show Recommendation"):
                     display_result('evaluate_parent_entity')
 
             elif st.session_state.stage == 202.3:
-                st.subheader("Circuit Breaker 2: Ownership", help="A 'Circuit Breaker' is an early stop in the evaluation. It checks for a hard rule that provides an immediate answer.")
-                st.write("**Does the acquired brand have a bad reputation?**")
-                st.caption("If a brand has a known negative history, we must retire it to protect BASF's reputation.")
+                st.subheader("Fast Track 2: Ownership")
+                st.write("**Does the acquired brand have Negative Brand Equity?**")
                 options = ["Yes", "No"]
                 demo_data = DEMO_DATA.get(st.session_state.demo_key, {}).get('stage202.3', {})
-                choice = st.radio("Select if it has a bad reputation:", options, index=demo_data.get('index'), label_visibility="collapsed")
+                choice = st.radio("Select if it has negative equity:", options, index=demo_data.get('index'), label_visibility="collapsed")
                 if st.button("Proceed"):
                     if choice == "Yes": display_result('retire_rebrand')
                     else: set_stage(203)
 
             elif st.session_state.stage == 203:
-                st.subheader("Circuit Breaker 3: Risk Profile", help="A 'Circuit Breaker' is an early stop in the evaluation. It checks for a hard rule that provides an immediate answer.")
+                st.subheader("Fast Track 3: Risk Profile")
                 st.write("**Could it harm BASF's reputation?**")
-                st.caption("If the product is used in a controversial industry, it must be independent to protect the BASF masterbrand.")
+                st.caption("E.g., Controversial industry, channel conflict, or high-risk technology.")
                 options = ["Yes", "No"]
                 demo_data = DEMO_DATA.get(st.session_state.demo_key, {}).get('stage203', {})
                 choice = st.radio("Select if there is a potential for negative impact:", options, index=demo_data.get('index'), label_visibility="collapsed")
@@ -481,9 +459,8 @@ def run_app():
                     else: set_stage(204)
 
             elif st.session_state.stage == 204:
-                st.subheader("Circuit Breaker 4: Legal Directives", help="A 'Circuit Breaker' is an early stop in the evaluation. It checks for a hard rule that provides an immediate answer.")
+                st.subheader("Fast Track 4: Legal Directives")
                 st.write("**Does a legal contract already decide the brand?**")
-                st.caption("For example, a brand license agreement. If 'Yes', you must follow the contract. This tool's work is done.")
                 options = ["Yes", "No"]
                 demo_data = DEMO_DATA.get(st.session_state.demo_key, {}).get('stage204', {})
                 choice = st.radio("Select if a contract decides the brand:", options, index=demo_data.get('index'), label_visibility="collapsed")
@@ -492,26 +469,36 @@ def run_app():
                     else: set_stage(205)
 
             elif st.session_state.stage == 205:
-                st.subheader("Circuit Breaker 5: Resources", help="A 'Circuit Breaker' is an early stop in the evaluation. It checks for a hard rule that provides an immediate answer.")
-                st.write("**Does it have dedicated funding and a team for marketing?**")
-                st.caption("A separate brand needs a multi-year budget. If resources are missing, we flag it for a business review.")
+                st.subheader("Fast Track 5: Resources")
+                st.write("**Does it have dedicated Brand Management resources?**")
+                st.caption("Multi-year budget for design, research, and management.")
                 options = ["No", "Yes"]
                 demo_data = DEMO_DATA.get(st.session_state.demo_key, {}).get('stage205', {})
                 choice = st.radio("Select if resources are dedicated:", options, index=demo_data.get('index'), label_visibility="collapsed")
-                if demo_data.get('rationale'): st.info(f"**Demo Guidance:** {demo_data['rationale']}")
                 if st.button("Proceed"):
                     if choice == "No": display_result('insufficient_resources')
                     else: set_stage(206)
 
             elif st.session_state.stage == 206:
-                st.subheader("High-Rigor Product Scorecard")
-                st.caption("The product has passed all checks. Now, score its value to BASF and its need for a separate brand. All claims for market distinction must be supported by evidence.")
+                st.subheader("Product Scorecard")
                 demo_data = DEMO_DATA.get(st.session_state.demo_key, {}).get('stage206', {})
                 rec_A = demo_data.get('score_A_checks', {})
                 rec_B = demo_data.get('score_B_checks', {})
                 rec_data = demo_data.get('data_mandate', "")
-                questions_A = { 'pa1': 'Is this a top priority for a major business division\'s strategy?', 'pa2': 'Does this create a positive "halo effect" for the main BASF brand?', 'pa3': 'Does this provide access to a new and important customer group or market?', 'pa4': 'Does it have proven high sales and/or profit margin?', 'pa5': 'Does it represent a breakthrough technology or innovation?' }
-                questions_B = { 'pb1': 'Does data prove it needs its own brand to avoid confusing customers or competing with other BASF products ("cannibalisation")?', 'pb2': 'Does data prove it needs to appeal directly to consumers using specific marketing language and styles?', 'pb3': 'Does data prove it competes against specialized "pure-player" or consumer brands where "BASF" is a disadvantage?', 'pb4': 'Does it require a unique or specialized way of selling (e.g., e-commerce)?', 'pb5': 'Does data prove the BASF brand name is a negative factor for the target customer?' }
+                questions_A = { 
+                    'pa1': 'Top priority for a major business division\'s strategy?', 
+                    'pa2': 'Creates positive "halo effect" for the main BASF brand?', 
+                    'pa3': 'Accesses new, important customer group or market?', 
+                    'pa4': 'Proven high value creation (revenue/margin)?', 
+                    'pa5': 'Represents breakthrough technology or innovation?' 
+                }
+                questions_B = { 
+                    'pb1': 'Does data prove it needs its own brand to avoid confusing customers/cannibalisation?', 
+                    'pb2': 'Does data prove it needs to appeal directly to consumers (B2C)?', 
+                    'pb3': 'Does data prove it competes against specialised "pure-player" brands?', 
+                    'pb4': 'Does it require a unique selling method (e.g., e-commerce)?', 
+                    'pb5': 'Does data prove the BASF name is a negative factor for the target customer?' 
+                }
                 score_A, score_B = 0, 0
                 col1, col2 = st.columns(2)
                 with col1:
@@ -532,10 +519,11 @@ def run_app():
                             st.warning("Provide evidence to receive points.", icon="⚠️")
                     st.session_state.scores['B'] = score_B
                     st.write(f"**Score B: {score_B} / 11**")
-                if demo_data.get('rationale'): st.info(f"**Demo Guidance:** {demo_data['rationale']}")
+                
                 if st.button("Calculate Recommendation"): set_stage(207)
 
             elif st.session_state.stage == 207:
+                score_a, score_b = st.session_state.scores['A'], st.session_state.scores['B']
                 score_a_high = st.session_state.scores['A'] >= HIGH_THRESHOLD
                 score_b_high = st.session_state.scores['B'] >= HIGH_THRESHOLD
                 outcome_key = ''
@@ -544,6 +532,6 @@ def run_app():
                 else: outcome_key = 'product_led'
                 display_result(outcome_key)
 
-# --- App Execution with Password Check ---
+# --- App Execution ---
 if check_password():
     run_app()
