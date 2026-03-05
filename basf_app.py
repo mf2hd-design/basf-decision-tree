@@ -42,8 +42,8 @@ DEMO_DATA = {
     # --- Corporate Path Off-Ramps ---
     "newco": {'path': 'corporate', 'stage0.5': {'index': 0}, 'stage0.6': {'index': 0}, 'stage1': {'index': 1}, 'stage1.1': {'index': 0}, 'stage1.2': {'index': 1}, 'stage2': {'index': 1}, 'stage3': {'index': 1}, 'stage4': {'index': 1}, 'stage5': {'score_A_checks': {}, 'score_B_checks': {}, 'rationale': "Acquisition with positive equity."}},
     "basfsonatrachpropanchem": {'path': 'corporate', 'stage0.5': {'index': 0}, 'stage0.6': {'index': 0}, 'stage1': {'index': 2}, 'stage1.3': {'index': 0}, 'stage2': {'index': 1}, 'stage3': {'index': 0, 'rationale': "Joint Venture governed by legal agreement."}},
-    "insight360": {'path': 'corporate', 'stage0.5': {'index': 1, 'rationale': "Internal tool considered Non-commercial."}},
-    "anniversaries": {'path': 'corporate', 'stage0.5': {'index': 1, 'rationale': "Temporary campaign considered Non-commercial."}},
+    "insight360": {'path': 'corporate', 'stage0.5': {'index': 2, 'rationale': "Internal tool — not a commercial entity, not an initiative. Uses existing brand."}},
+    "anniversaries": {'path': 'corporate', 'stage0.5': {'index': 1, 'rationale': "Temporary campaign — routes through Initiative or Campaign path."}, 'stage0.7': {'index': 1}, 'stage0.71': {'index': 1}, 'stage0.72': {'index': 1}, 'stage0.73': {'index': 1}, 'stage0.74': {'index': 1}},
 
     # --- Stress-Test Demos ---
     "polyweld800business": {'path': 'corporate', 'stage0.5': {'index': 0}, 'stage0.6': {'index': 0}, 'stage1': {'index': 1}, 'stage1.1': {'index': 1}, 'stage2': {'index': 1}, 'stage3': {'index': 1}, 'stage4': {'index': 1}, 'stage5': {'score_A_checks': {}, 'score_B_checks': {}, 'rationale': "Legacy business with low strategic contribution."}},
@@ -51,11 +51,11 @@ DEMO_DATA = {
     "oldcheminc": {'path': 'corporate', 'stage0.5': {'index': 0}, 'stage0.6': {'index': 0}, 'stage1': {'index': 1}, 'stage1.1': {'index': 0}, 'stage1.2': {'index': 0, 'rationale': "Acquisition with negative reputation."}},
 
     # --- Product Path Demos ---
-    "glasurit": {'path': 'product', 'stage0.5': {'index': 0}, 'stage0.6': {'index': 1}, 'stage201': {'index': 1}, 'stage202': {'index': 1}, 'stage202.1': {'index': 1}, 'stage203': {'index': 1}, 'stage204': {'index': 1}, 'stage205': {'index': 1}, 'stage206': {'score_A_checks': {'pa1': True, 'pa2': True, 'pa3': True, 'pa4': True}, 'score_B_checks': {'pb1': True, 'pb2': True}, 'data_mandate': "Competes against consumer-facing refinish brands.", 'rationale': "Cornerstone of Coatings division."}},
-    "ultramid": {'path': 'product', 'stage0.5': {'index': 0}, 'stage0.6': {'index': 1}, 'stage201': {'index': 1}, 'stage202': {'index': 1}, 'stage202.1': {'index': 1}, 'stage203': {'index': 1}, 'stage204': {'index': 1}, 'stage205': {'index': 1}, 'stage206': {'score_A_checks': {'pa1': True, 'pa2': True, 'pa4': True, 'pa5': True}, 'score_B_checks': {}, 'data_mandate': "N/A - No distinction needed.", 'rationale': "Workhorse ingredient brand."}},
+    "glasurit": {'path': 'product', 'stage0.5': {'index': 0}, 'stage0.6': {'index': 1}, 'stage201': {'index': 1}, 'stage202': {'index': 1}, 'stage202.1': {'index': 1}, 'stage202.4': {'index': 1}, 'stage203': {'index': 1}, 'stage204': {'index': 1}, 'stage205': {'index': 1}, 'stage206': {'score_A_checks': {'pa1': True, 'pa2': True, 'pa3': True, 'pa4': True}, 'score_B_checks': {'pb1': True, 'pb2': True}, 'data_mandate': "Competes against consumer-facing refinish brands.", 'rationale': "Cornerstone of Coatings division."}},
+    "ultramid": {'path': 'product', 'stage0.5': {'index': 0}, 'stage0.6': {'index': 1}, 'stage201': {'index': 1}, 'stage202': {'index': 1}, 'stage202.1': {'index': 1}, 'stage202.4': {'index': 1}, 'stage203': {'index': 1}, 'stage204': {'index': 1}, 'stage205': {'index': 1}, 'stage206': {'score_A_checks': {'pa1': True, 'pa2': True, 'pa4': True, 'pa5': True}, 'score_B_checks': {}, 'data_mandate': "N/A - No distinction needed.", 'rationale': "Workhorse ingredient brand."}},
 
     # --- Product Path Stress-Tests ---
-    "noresourceproduct": {'path': 'product', 'stage0.5': {'index': 0}, 'stage0.6': {'index': 1}, 'stage201': {'index': 1}, 'stage202': {'index': 1}, 'stage202.1': {'index': 1}, 'stage203': {'index': 1}, 'stage204': {'index': 1}, 'stage205': {'index': 0, 'rationale': "Lacks dedicated budget."}},
+    "noresourceproduct": {'path': 'product', 'stage0.5': {'index': 0}, 'stage0.6': {'index': 1}, 'stage201': {'index': 1}, 'stage202': {'index': 1}, 'stage202.1': {'index': 1}, 'stage202.4': {'index': 1}, 'stage203': {'index': 1}, 'stage204': {'index': 1}, 'stage205': {'index': 0, 'rationale': "Lacks dedicated budget."}},
     "jvproduct": {'path': 'product', 'stage0.5': {'index': 0}, 'stage0.6': {'index': 1}, 'stage201': {'index': 1}, 'stage202': {'index': 2, 'rationale': "Product belongs to a JV."}}
 }
 
@@ -162,6 +162,28 @@ RESULT_DATA = {
         'rationale': "The acquired brand has negative equity/reputation, making its association a liability.",
         'activation_text': "This means the acquired brand identity will be retired. A formal plan must be created to migrate customers and assets to a new or existing BASF brand.",
         'examples': "OldChem Inc."
+    },
+
+    # Dependencies Fast Track Outcome
+    'no_brand_needed': {
+        'recommendation': "No Brand Needed",
+        'rationale': "This product, service or solution goes to market as part of a larger existing offer. It does not require its own brand.",
+        'activation_text': "Treat this as an extension, feature, or complement within the existing offer. Apply the parent brand's visual identity consistently across all touchpoints.",
+        'examples': "Add-on components, service enhancements, features within an existing product line"
+    },
+
+    # Initiative / Campaign Path Outcomes
+    'initiative_use_existing': {
+        'recommendation': "Use Existing Brand & Identity",
+        'rationale': "This initiative or campaign does not meet the criteria for a standalone logo. It should use the existing brand and visual identity of the entity it belongs to.",
+        'activation_text': "Apply the visual identity of the parent entity consistently across all communications.\n\nIf you believe the initiative may qualify for a logo based on its scale, duration, or audience, consult your Brand Champion with supporting evidence.",
+        'examples': "Standard marketing campaigns, trade fair presences, short-term internal projects"
+    },
+    'initiative_logo_eligible': {
+        'recommendation': "May Qualify for a Standalone Logo",
+        'rationale': "This initiative has the strategic importance, scope, resources, and external representation to potentially justify a standalone logo.",
+        'activation_text': "A standalone logo is not automatic. Approach your Brand Champion with a communication plan that sets out:\n\n- The touchpoints you will create over time\n- How long the logo will be used\n- How the initial investment will pay off during the initiative's lifecycle\n\n**Note:** The specific eligibility criteria for this path are being confirmed with BASF. Treat this outcome as a prompt to start the Brand Champion conversation, not a final approval.",
+        'examples': "Major multi-year external programmes, large-scale internal transformation initiatives"
     }
 }
 
@@ -185,15 +207,23 @@ CORPORATE_PROGRESS = {
     5: (5, 5, "Scorecard"),
 }
 PRODUCT_PROGRESS = {
-    201: (1, 6, "Fast Track 1: Governance"),
-    202: (2, 6, "Fast Track 2: Ownership"),
-    202.1: (2, 6, "Fast Track 2: Ownership"),
-    202.2: (2, 6, "Fast Track 2: Ownership"),
-    202.3: (2, 6, "Fast Track 2: Ownership"),
-    203: (3, 6, "Fast Track 3: Risk Profile"),
-    204: (4, 6, "Fast Track 4: Legal Directives"),
-    205: (5, 6, "Fast Track 5: Resources"),
-    206: (6, 6, "Scorecard"),
+    201: (1, 7, "Fast Track 1: Governance"),
+    202: (2, 7, "Fast Track 2: Ownership"),
+    202.1: (2, 7, "Fast Track 2: Ownership"),
+    202.2: (2, 7, "Fast Track 2: Ownership"),
+    202.3: (2, 7, "Fast Track 2: Ownership"),
+    202.4: (3, 7, "Fast Track 3: Dependencies"),
+    203: (4, 7, "Fast Track 4: Risk Profile"),
+    204: (5, 7, "Fast Track 5: Legal Directives"),
+    205: (6, 7, "Fast Track 6: Resources"),
+    206: (7, 7, "Scorecard"),
+}
+INITIATIVE_PROGRESS = {
+    0.7:  (1, 5, "Router: Internal or External"),
+    0.71: (2, 5, "Fast Track 1: Strategic Importance"),
+    0.72: (3, 5, "Fast Track 2: Duration & Scope"),
+    0.73: (4, 5, "Fast Track 3: Resources"),
+    0.74: (5, 5, "Fast Track 4: External Representation"),
 }
 
 
@@ -245,6 +275,8 @@ def run_app():
                 progress_map = CORPORATE_PROGRESS
             elif st.session_state.path_type == 'product':
                 progress_map = PRODUCT_PROGRESS
+            elif st.session_state.path_type == 'initiative':
+                progress_map = INITIATIVE_PROGRESS
             if progress_map and stage in progress_map:
                 step, total, label = progress_map[stage]
                 st.caption(f"Step {step} of {total} — {label}")
@@ -393,7 +425,7 @@ def run_app():
                 st.error("File not found: 'document.pdf'.")
 
     # ================================================================== #
-    # STAGE 0.5 — STRATEGIC ROUTER: Commercial vs Non-commercial
+    # STAGE 0.5 — STRATEGIC ROUTER: Commercial / Initiative / Non-commercial
     # ================================================================== #
     elif st.session_state.stage == 0.5:
         st.header(f"Evaluating: *{st.session_state.entity_name}*")
@@ -406,11 +438,14 @@ def run_app():
 - **Commercial:** The entity is market-facing and has its own Profit & Loss (P&L).
   *Examples: A business unit, a subsidiary company, a product line.*
 
-- **Non-commercial:** Any other activity, even if it supports commercial goals.
-  *Examples: Marketing campaigns, events, trade fairs, internal initiatives, R&D projects.*
+- **Initiative or Campaign:** A defined activity with a specific objective, audience, and timeframe — but no standalone P&L.
+  *Examples: Marketing campaigns, trade fairs, events, R&D programmes, anniversary initiatives.*
+
+- **Non-commercial:** An internal tool, process, or resource with no market-facing role.
+  *Examples: Internal platforms, HR systems, shared services.*
         """)
 
-        path_options = ["Commercial", "Non-commercial"]
+        path_options = ["Commercial", "Initiative or Campaign", "Non-commercial"]
         demo_data = DEMO_DATA.get(st.session_state.demo_key, {}).get('stage0.5', {})
         rec_index = demo_data.get('index')
 
@@ -420,7 +455,9 @@ def run_app():
 
         if st.button("Proceed"):
             if path_choice == path_options[1]:
-                # FIX 1: correct result for non-commercial entities
+                st.session_state.path_type = 'initiative'
+                set_stage(0.7)
+            elif path_choice == path_options[2]:
                 display_result('non_commercial')
             else:
                 set_stage(0.6)
@@ -449,6 +486,80 @@ def run_app():
             else:
                 st.session_state.path_type = 'product'
                 set_stage(201)
+
+
+    # ================================================================== #
+    # STAGE 0.7–0.74 — INITIATIVE / CAMPAIGN PATH
+    # ================================================================== #
+    elif st.session_state.path_type == 'initiative' and st.session_state.stage == 0.7:
+        st.header(f"Evaluating: *{st.session_state.entity_name}* (Initiative / Campaign)")
+        show_nav(0.7)
+        st.write("**Is this initiative primarily internal or external?**")
+        st.caption("Internal: audience is BASF employees. External: audience includes customers, partners, or the public.")
+        options = ["External", "Internal"]
+        demo_data = DEMO_DATA.get(st.session_state.demo_key, {}).get('stage0.7', {})
+        choice = st.radio("Select the audience:", options,
+                          index=demo_data.get('index', 0), label_visibility="collapsed")
+        if st.button("Proceed"):
+            st.session_state['initiative_type'] = choice.lower()
+            set_stage(0.71)
+
+    elif st.session_state.path_type == 'initiative' and st.session_state.stage == 0.71:
+        st.header(f"Evaluating: *{st.session_state.entity_name}* (Initiative / Campaign)")
+        show_nav(0.71)
+        st.write("**Is this initiative linked to a top strategic priority for the business unit it belongs to?**")
+        st.caption("E.g. It directly supports a funded corporate or divisional goal, KPI, or transformation programme.")
+        options = ["Yes", "No"]
+        demo_data = DEMO_DATA.get(st.session_state.demo_key, {}).get('stage0.71', {})
+        choice = st.radio("Select an answer:", options,
+                          index=demo_data.get('index', 1), label_visibility="collapsed")
+        if st.button("Proceed"):
+            if choice == "No": display_result('initiative_use_existing')
+            else: set_stage(0.72)
+
+    elif st.session_state.path_type == 'initiative' and st.session_state.stage == 0.72:
+        st.header(f"Evaluating: *{st.session_state.entity_name}* (Initiative / Campaign)")
+        show_nav(0.72)
+        st.write("**Will this initiative run long enough and at sufficient scale to build recognition for a logo?**")
+        st.caption("A logo only works if an audience sees it repeatedly. Short-term or narrow-reach initiatives cannot teach an audience what a logo means.")
+        options = ["Yes", "No"]
+        demo_data = DEMO_DATA.get(st.session_state.demo_key, {}).get('stage0.72', {})
+        choice = st.radio("Select an answer:", options,
+                          index=demo_data.get('index', 1), label_visibility="collapsed")
+        if st.button("Proceed"):
+            if choice == "No": display_result('initiative_use_existing')
+            else: set_stage(0.73)
+
+    elif st.session_state.path_type == 'initiative' and st.session_state.stage == 0.73:
+        st.header(f"Evaluating: *{st.session_state.entity_name}* (Initiative / Campaign)")
+        show_nav(0.73)
+        st.write("**Does this initiative have dedicated resources for logo creation and ongoing brand management?**")
+        st.caption("This means budget and ownership — not just design time borrowed from another team.")
+        options = ["Yes", "No"]
+        demo_data = DEMO_DATA.get(st.session_state.demo_key, {}).get('stage0.73', {})
+        choice = st.radio("Select an answer:", options,
+                          index=demo_data.get('index', 1), label_visibility="collapsed")
+        if st.button("Proceed"):
+            if choice == "No": display_result('initiative_use_existing')
+            else: set_stage(0.74)
+
+    elif st.session_state.path_type == 'initiative' and st.session_state.stage == 0.74:
+        st.header(f"Evaluating: *{st.session_state.entity_name}* (Initiative / Campaign)")
+        show_nav(0.74)
+        initiative_type = st.session_state.get('initiative_type', 'external')
+        if initiative_type == 'external':
+            st.write("**Will this initiative be represented externally by a dedicated team using this logo across multiple touchpoints?**")
+            st.caption("E.g. A dedicated stand at trade fairs, a campaign microsite, partner co-branding, or event signage across multiple engagements.")
+        else:
+            st.write("**Will this initiative reach more than 500 BASF employees across six or more distinct touchpoints?**")
+            st.caption("Below this threshold, a single communication measure — not a logo — is the more cost-effective approach.")
+        options = ["Yes", "No"]
+        demo_data = DEMO_DATA.get(st.session_state.demo_key, {}).get('stage0.74', {})
+        choice = st.radio("Select an answer:", options,
+                          index=demo_data.get('index', 1), label_visibility="collapsed")
+        if st.button("Proceed"):
+            if choice == "No": display_result('initiative_use_existing')
+            else: display_result('initiative_logo_eligible')
 
     else:
         # ============================================================== #
@@ -653,7 +764,7 @@ def run_app():
                                   index=demo_data.get('index'), label_visibility="collapsed")
                 if st.button("Proceed"):
                     if choice == "Yes": set_stage(202.3)
-                    else: set_stage(203)
+                    else: set_stage(202.4)
 
             elif st.session_state.stage == 202.2:
                 show_nav(202.2)
@@ -671,6 +782,18 @@ def run_app():
                                   index=demo_data.get('index'), label_visibility="collapsed")
                 if st.button("Proceed"):
                     if choice == "Yes": display_result('retire_rebrand')
+                    else: set_stage(202.4)
+
+            elif st.session_state.stage == 202.4:
+                show_nav(202.4)
+                st.write("**Will this product go to market as part of a larger offer or commercial proposition that already exists?**")
+                st.caption("E.g. It is an add-on or enabling component, part of a systems solution, or a service enhancement of an existing product line.")
+                options = ["Yes", "No"]
+                demo_data = DEMO_DATA.get(st.session_state.demo_key, {}).get('stage202.4', {})
+                choice = st.radio("Select an answer:", options,
+                                  index=demo_data.get('index', 1), label_visibility="collapsed")
+                if st.button("Proceed"):
+                    if choice == "Yes": display_result('no_brand_needed')
                     else: set_stage(203)
 
             elif st.session_state.stage == 203:
