@@ -224,7 +224,6 @@ def run_app():
     def go_back():
         if st.session_state.stage_history:
             st.session_state.stage = st.session_state.stage_history.pop()
-            st.rerun()
 
     def reset_app_callback():
         keys_to_delete = [key for key in st.session_state.keys() if key != 'password_correct']
