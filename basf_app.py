@@ -12,21 +12,21 @@ st.set_page_config(
 # --- Password Protection Logic ---
 def check_password():
     """Returns `True` if the user is logged in."""
-    def password_entered():
-        if st.session_state.get("password") == "2025FFxBASFxFF":
-            st.session_state["password_correct"] = True
-        else:
-            st.session_state["password_correct"] = False
-
     if st.session_state.get("password_correct", False):
         return True
 
     st.title("🧭 The BASF Brand Compass")
-    st.text_input(
-        "Password", type="password", on_change=password_entered, key="password"
-    )
-    if "password" in st.session_state and not st.session_state.get("password_correct", False):
-        st.error("😕 Password incorrect")
+    with st.form("password_form"):
+        password_input = st.text_input("Password", type="password")
+        submitted = st.form_submit_button("Submit")
+
+    if submitted:
+        if password_input == "2025FFxBASFxFF":
+            st.session_state["password_correct"] = True
+            st.rerun()
+        else:
+            st.error("😕 Password incorrect")
+
     return False
 
 # --- Data Libraries (Full Library Restored) ---
@@ -349,36 +349,51 @@ def run_app():
                 rec_B = demo_data.get('score_B_checks', {})
                 
                 questions_A = { 
-                    'a1': 'Linked to a top priority of BASF\'s business strategy?', 
-                    'a2': 'Helps achieve a major company goal or performance target (KPI)?', 
-                    'a3': 'Wins in a new market, segment, or business model?', 
-                    'a4': 'Strongly supports or demonstrates our desired brand character/positioning?', 
-                    'a5': "Relies on deep operational integration with BASF's core capabilities?" 
+                    'a1': 'A) Business Strategy: Is this entity linked to a top priority of BASF\'s business strategy?', 
+                    'a2': 'B) Key Initiative: Does this entity help achieve a major company goal or performance target (KPI)?', 
+                    'a3': 'C) Future Value: Does this entity help us win in a new market, segment, or business model?', 
+                    'a4': 'D) Brand Character: Does this entity strongly support or demonstrate our desired brand positioning?', 
+                    'a5': "E) Operational Synergy: Does this entity's business model rely on deep operational integration with BASF's core capabilities?" 
                 }
                 questions_B = { 
-                    'b1': 'Known negative view of the BASF brand for this specific audience?', 
-                    'b2': 'Market has norms/expectations misaligned with BASF conventional practices?', 
-                    'b3': 'Competes primarily against specialised "pure-players"?', 
-                    'b4': 'Direct-to-consumer sales requiring specific consumer marketing language?', 
-                    'b5': 'Distinct way of working forming a unique value proposition?' 
+                    'b1': 'A) Reputation: Is there a known negative perception of the BASF brand among this entity\'s audience or in the market it operates?', 
+                    'b2': 'B) Category: Does this entity operate in markets with norms or expectations that may not align with BASF\'s conventional practices?', 
+                    'b3': 'C) Competitors: Does this entity compete primarily against specialised players?', 
+                    'b4': 'D) Customers: Does this entity need to sell directly to end-customers using specific consumer marketing?', 
+                    'b5': 'E) Ways of Working: Does this entity have a distinct way of working, compared to BASF, that forms part of its unique value proposition?' 
                 }
                 
+                examples_A = {
+                    'a1': "E.g. It enhances our footprint in high-growth markets. It reinforces our leading cost position in key value chains. It improves reliability and product quality. It provides greater strategic and operational flexibility. It increases our ability to supply local markets. It enables our green transformation.",
+                    'a2': "E.g. It helps harness AI-driven productivity and innovation. It drives net-zero measures.",
+                    'a3': "E.g. It provides access to a previously untapped region or a new customer segment. It helps us target markets further along the supply chain. It allows us to form new strategic partnerships. It allows us to compete in an innovative, high-potential field.",
+                    'a4': "E.g. TBD based on final BASF brand positioning.",
+                    'a5': "E.g. It relies on BASF's expertise or R&D capabilities. It leverages proprietary data, formulations or patents. It uses BASF's testing and certification systems. It depends on access to BASF's production infrastructure. It uses BASF's sourcing or distribution networks, technology systems or human resources. It leverages BASF's strategic partnerships."
+                }
+                examples_B = {
+                    'b1': "E.g. For this audience/in this market BASF is perceived as 'slow-moving', 'operationally complex', having a large 'environmental footprint', 'exposed to market risk', too 'chemically focused', 'excessively diversified', etc.",
+                    'b2': "E.g. Markets that are highly regulated, digital-first, fast-moving or experimental, sustainability-focused. Markets where clients expect hyper-tailored solutions, co-creation, extreme price-flexibility, modular product offerings, outcome-based commercial models, etc.",
+                    'b3': "E.g. Competitors are narrowly focused on one specific area. They have category-specific value propositions and include category codes in their identity. They target narrowly defined audience segments through tailored messaging, category-specific channels and using a dedicated brand.",
+                    'b4': "E.g. It bypasses intermediaries and sells its offer directly to final buyers or through distributors. It relies on consumer-focused channels and messaging in order to reach and appeal to its audience.",
+                    'b5': "E.g. Uses rapid prototyping and iterative testing, offers highly tailored solutions, employs niche specialists. Has a flat hierarchy or cross-functional teams. Its operations are localised or decentralised. Offers a highly attentive, personalised approach to customer service."
+                }
+
                 score_A, score_B = 0, 0
                 col1, col2 = st.columns(2)
                 with col1:
                     st.info("**Part A: Strategic Contribution**")
                     for key, q_text in questions_A.items():
-                        if st.checkbox(q_text, value=rec_A.get(key, False), key=key): 
+                        if st.checkbox(q_text, value=rec_A.get(key, False), key=key):
                             score_A += WEIGHTS['corporate_A'][key]
-                        if key == 'a5':
-                            st.caption("A 'No' is common for agile, standalone ventures. A 'Yes' is typical for businesses that use shared resources.")
-
+                        st.caption(examples_A[key])
                     st.session_state.scores['A'] = score_A
                     st.write(f"**Score A: {score_A} / 11**")
                 with col2:
                     st.info("**Part B: Market Distinction**")
                     for key, q_text in questions_B.items():
-                        if st.checkbox(q_text, value=rec_B.get(key, False), key=key): score_B += WEIGHTS['corporate_B'][key]
+                        if st.checkbox(q_text, value=rec_B.get(key, False), key=key):
+                            score_B += WEIGHTS['corporate_B'][key]
+                        st.caption(examples_B[key])
                     st.session_state.scores['B'] = score_B
                     st.write(f"**Score B: {score_B} / 11**")
                 
@@ -486,18 +501,32 @@ def run_app():
                 rec_B = demo_data.get('score_B_checks', {})
                 rec_data = demo_data.get('data_mandate', "")
                 questions_A = { 
-                    'pa1': 'Top priority for a major business division\'s strategy?', 
-                    'pa2': 'Creates positive "halo effect" for the main BASF brand?', 
-                    'pa3': 'Accesses new, important customer group or market?', 
-                    'pa4': 'Proven high value creation (revenue/margin)?', 
-                    'pa5': 'Represents breakthrough technology or innovation?' 
+                    'pa1': 'A) Business Strategy: Is this product, service or solution linked to a top priority of BASF\'s business strategy?', 
+                    'pa2': 'B) Brand Building: Does this product, service or solution create a positive reputation impact for the BASF brand?', 
+                    'pa3': 'C) Market Opportunity: Does this product, service or solution help us win in a new market, segment, or business model?', 
+                    'pa4': 'D) Commercial Potential: Does this product, service or solution have proven high revenue or margin potential?', 
+                    'pa5': 'E) Future Value: Does this product, service or solution represent a breakthrough innovation?' 
                 }
                 questions_B = { 
-                    'pb1': 'Does data prove it needs its own brand to avoid confusing customers/cannibalisation?', 
-                    'pb2': 'Does data prove it needs to appeal directly to consumers (B2C)?', 
-                    'pb3': 'Does data prove it competes against specialised "pure-player" brands?', 
-                    'pb4': 'Does it require a unique selling method (e.g., e-commerce)?', 
-                    'pb5': 'Does data prove the BASF name is a negative factor for the target customer?' 
+                    'pb1': 'A) Portfolio Clarity: Does this product, service or solution need its own brand to avoid confusing customers or competing with other BASF products?', 
+                    'pb2': 'B) Customers: Does this product, service or solution need to sell directly to end-customers using specific consumer marketing?', 
+                    'pb3': 'C) Competitors: Does this product, service or solution compete primarily against specialised players?', 
+                    'pb4': 'D) Marketing: Does this product, service or solution require a unique, agile, or highly specialised go-to-market approach?', 
+                    'pb5': 'E) BASF Reputation: Is there any negative perception of the BASF brand among the target audience or in the market where this product, service, or solution will be deployed?' 
+                }
+                examples_pA = {
+                    'pa1': "E.g. It enhances our footprint in high-growth markets. It reinforces our leading cost position in key value chains. It improves reliability and product quality. It provides greater strategic and operational flexibility. It increases our ability to supply local markets. It enables our green transformation.",
+                    'pa2': "E.g. Improves our reputation in areas such as sustainability, innovation, customer understanding, quality, reliability, ethical practices, safety, technological leadership, and market expertise.",
+                    'pa3': "E.g. It provides access to a previously untapped region or a new customer segment. It helps us target markets further along the supply chain. It allows us to form new strategic partnerships. It allows us to compete in an innovative, high-potential field.",
+                    'pa4': "E.g. It allows us to service a new segment or client type. It's an innovative, proprietary or patented solution. A high-margin specialty product. Has premium pricing potential. It generates strong recurring revenues. Can unlock upsell or cross-sell opportunities. It's a niche solution with limited competition.",
+                    'pa5': "E.g. It represents a technological leap or game-changing customer solution. It is the result of a novel process or production technique. It creates a new market where none existed before. Offers radical improvement in cost-efficiency. It is a disruptive innovation that changes the expectations of the category. It's the first solution of its kind in the market."
+                }
+                examples_pB = {
+                    'pb1': "E.g. It targets the same segment, for the same need, with a different solution. It solves the same customer issue, but in a technically different way. It represents a new or significantly improved version of an existing product. It addresses a general problem but for a different customer segment or group.",
+                    'pb2': "E.g. It bypasses intermediaries and sells its offer directly to final buyers or through distributors. It relies on consumer-focused channels and messaging in order to reach and appeal to its audience.",
+                    'pb3': "E.g. Competitors are narrowly focused on one specific area. They have category-specific value propositions and include category codes in their identity. They target narrowly defined audience segments through tailored messaging, category-specific channels and using a dedicated brand.",
+                    'pb4': "E.g. Go to market involves rapid iteration or continuous feedback cycles; sales efforts are highly complex. The offer's value proposition is highly technical; distribution, sales, and communication happens through highly specialised channels.",
+                    'pb5': "E.g. For this audience/in this market BASF is perceived as 'slow-moving', 'operationally complex', having a large 'environmental footprint', 'exposed to market risk', too 'chemically focused', 'excessively diversified', etc."
                 }
                 score_A, score_B = 0, 0
                 col1, col2 = st.columns(2)
@@ -505,6 +534,7 @@ def run_app():
                     st.info("**Part A: Strategic Contribution**")
                     for key, q_text in questions_A.items():
                         if st.checkbox(q_text, value=rec_A.get(key, False), key=key): score_A += WEIGHTS['product_A'][key]
+                        st.caption(examples_pA[key])
                     st.session_state.scores['A'] = score_A
                     st.write(f"**Score A: {score_A} / 11**")
                 with col2:
@@ -512,6 +542,7 @@ def run_app():
                     st.caption("Points are only awarded if supporting data is provided.")
                     for key, q_text in questions_B.items():
                         is_checked = st.checkbox(q_text, value=rec_B.get(key, False), key=key)
+                        st.caption(examples_pB[key])
                         data_provided = st.text_area(f"Evidence/Data for Q above:", height=50, key=f"data_{key}", value=rec_data if rec_B.get(key) else "")
                         if is_checked and data_provided.strip():
                             score_B += WEIGHTS['product_B'][key]
