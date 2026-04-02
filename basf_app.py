@@ -235,25 +235,17 @@ def run_app():
     if 'scores' not in st.session_state: st.session_state.scores = {'A': 0, 'B': 0}
     if 'demo_key' not in st.session_state: st.session_state.demo_key = None
     if 'path_type' not in st.session_state: st.session_state.path_type = None
-    if 'stage_history' not in st.session_state: st.session_state.stage_history = []  # FIX 4
 
     def start_evaluation(entity_name, is_demo=False, demo_key=None):
         st.session_state.entity_name = entity_name
-        st.session_state.stage_history = []
         if is_demo and demo_key:
             st.session_state.demo_key = demo_key
             st.session_state.path_type = DEMO_DATA[demo_key].get('path', 'corporate')
         set_stage(0.5)
 
     def set_stage(stage_num):
-        # FIX 4: push current stage onto history stack before advancing
-        st.session_state.stage_history.append(st.session_state.stage)
         st.session_state.stage = stage_num
         st.rerun()
-
-    def go_back():
-        if st.session_state.stage_history:
-            st.session_state.stage = st.session_state.stage_history.pop()
 
     def reset_app_callback():
         keys_to_delete = [key for key in st.session_state.keys() if key != 'password_correct']
@@ -262,12 +254,8 @@ def run_app():
         st.session_state.stage = 0
 
     def show_nav(stage):
-        """Render back button and progress indicator for a given stage."""
-        col_back, col_progress = st.columns([1, 6])
-        with col_back:
-            # FIX 4: back button — only shown when there is history to return to
-            if st.session_state.stage_history:
-                st.button("← Back", on_click=go_back, key=f"back_{stage}")
+        """Render progress indicator for the current stage."""
+        col_progress = st.columns([1])[0]
         with col_progress:
             # FIX 5: progress indicator
             progress_map = None
@@ -287,24 +275,9 @@ def run_app():
             'activation_text': '', 'examples': ''
         })
 
-        # FIX 4: back button on result screen
-        if st.session_state.stage_history:
-            st.button("← Back", on_click=go_back, key="back_result")
 
         st.header("Result")
         st.write(f"**Entity Evaluated:** *{st.session_state.entity_name}*")
-
-        # FIX 2: show the scores that drove the recommendation
-        score_a = st.session_state.scores.get('A', 0)
-        score_b = st.session_state.scores.get('B', 0)
-        if score_a > 0 or score_b > 0:
-            c1, c2 = st.columns(2)
-            with c1:
-                st.metric("Strategic Contribution (A)", f"{score_a} / 11",
-                          help="Measures this entity's strategic importance to BASF.")
-            with c2:
-                st.metric("Market Distinction (B)", f"{score_b} / 11",
-                          help="Measures how much this entity needs its own brand identity to succeed.")
 
         st.markdown("---")
         st.subheader("Activation Guide")
@@ -429,8 +402,6 @@ def run_app():
     # ================================================================== #
     elif st.session_state.stage == 0.5:
         st.header(f"Evaluating: *{st.session_state.entity_name}*")
-        if st.session_state.stage_history:
-            st.button("← Back", on_click=go_back, key="back_0.5")
         st.subheader("Strategic Router")
         st.markdown("""
 **What is the purpose of the entity being evaluated?**
@@ -454,7 +425,8 @@ def run_app():
             st.info(f"**Demo Guidance:** {demo_data['rationale']}")
 
         if st.button("Proceed"):
-            if path_choice == path_options[1]:
+            if path_choice is None: st.error("Please select an answer before proceeding.")
+            elif path_choice == path_options[1]:
                 st.session_state.path_type = 'initiative'
                 set_stage(0.7)
             elif path_choice == path_options[2]:
@@ -467,8 +439,6 @@ def run_app():
     # ================================================================== #
     elif st.session_state.stage == 0.6:
         st.header(f"Evaluating: *{st.session_state.entity_name}*")
-        if st.session_state.stage_history:
-            st.button("← Back", on_click=go_back, key="back_0.6")
         st.subheader("Strategic Router")
         st.write("**What is the nature of the entity?**")
 
@@ -480,7 +450,8 @@ def run_app():
                                key="path_router", label_visibility="collapsed")
 
         if st.button("Proceed"):
-            if path_choice == path_options[0]:
+            if path_choice is None: st.error("Please select an answer before proceeding.")
+            elif path_choice == path_options[0]:
                 st.session_state.path_type = 'corporate'
                 set_stage(1)
             else:
@@ -501,8 +472,10 @@ def run_app():
         choice = st.radio("Select the audience:", options,
                           index=demo_data.get('index', 0), label_visibility="collapsed")
         if st.button("Proceed"):
-            st.session_state['initiative_type'] = choice.lower()
-            set_stage(0.71)
+            if choice is None: st.error("Please select an answer before proceeding.")
+            else:
+                st.session_state['initiative_type'] = choice.lower()
+                set_stage(0.71)
 
     elif st.session_state.path_type == 'initiative' and st.session_state.stage == 0.71:
         st.header(f"Evaluating: *{st.session_state.entity_name}* (Initiative / Campaign)")
@@ -514,7 +487,8 @@ def run_app():
         choice = st.radio("Select an answer:", options,
                           index=demo_data.get('index', 1), label_visibility="collapsed")
         if st.button("Proceed"):
-            if choice == "No": display_result('initiative_use_existing')
+            if choice is None: st.error("Please select an answer before proceeding.")
+            elif choice == "No": display_result('initiative_use_existing')
             else: set_stage(0.72)
 
     elif st.session_state.path_type == 'initiative' and st.session_state.stage == 0.72:
@@ -527,7 +501,8 @@ def run_app():
         choice = st.radio("Select an answer:", options,
                           index=demo_data.get('index', 1), label_visibility="collapsed")
         if st.button("Proceed"):
-            if choice == "No": display_result('initiative_use_existing')
+            if choice is None: st.error("Please select an answer before proceeding.")
+            elif choice == "No": display_result('initiative_use_existing')
             else: set_stage(0.73)
 
     elif st.session_state.path_type == 'initiative' and st.session_state.stage == 0.73:
@@ -540,7 +515,8 @@ def run_app():
         choice = st.radio("Select an answer:", options,
                           index=demo_data.get('index', 1), label_visibility="collapsed")
         if st.button("Proceed"):
-            if choice == "No": display_result('initiative_use_existing')
+            if choice is None: st.error("Please select an answer before proceeding.")
+            elif choice == "No": display_result('initiative_use_existing')
             else: set_stage(0.74)
 
     elif st.session_state.path_type == 'initiative' and st.session_state.stage == 0.74:
@@ -558,7 +534,8 @@ def run_app():
         choice = st.radio("Select an answer:", options,
                           index=demo_data.get('index', 1), label_visibility="collapsed")
         if st.button("Proceed"):
-            if choice == "No": display_result('initiative_use_existing')
+            if choice is None: st.error("Please select an answer before proceeding.")
+            elif choice == "No": display_result('initiative_use_existing')
             else: display_result('initiative_logo_eligible')
 
     else:
@@ -576,7 +553,8 @@ def run_app():
                 choice = st.radio("Select ownership structure:", options,
                                   index=demo_data.get('index'), label_visibility="collapsed")
                 if st.button("Proceed"):
-                    if choice == options[0]: display_result('follow_partner_guidelines')
+                    if choice is None: st.error("Please select an answer before proceeding.")
+                    elif choice == options[0]: display_result('follow_partner_guidelines')
                     elif choice == options[1]: set_stage(1.1)
                     else: set_stage(1.3)
 
@@ -588,7 +566,8 @@ def run_app():
                 choice = st.radio("Select if it is an acquisition:", options,
                                   index=demo_data.get('index'), label_visibility="collapsed")
                 if st.button("Proceed"):
-                    if choice == "Yes": set_stage(1.2)
+                    if choice is None: st.error("Please select an answer before proceeding.")
+                    elif choice == "Yes": set_stage(1.2)
                     else: set_stage(2)
 
             elif st.session_state.stage == 1.2:
@@ -600,7 +579,8 @@ def run_app():
                 choice = st.radio("Select if it has negative equity:", options,
                                   index=demo_data.get('index'), label_visibility="collapsed")
                 if st.button("Proceed"):
-                    if choice == "Yes": display_result('retire_rebrand')
+                    if choice is None: st.error("Please select an answer before proceeding.")
+                    elif choice == "Yes": display_result('retire_rebrand')
                     else: set_stage(2)
 
             elif st.session_state.stage == 1.3:
@@ -611,7 +591,8 @@ def run_app():
                 choice = st.radio("Select ownership share:", options,
                                   index=demo_data.get('index'), label_visibility="collapsed")
                 if st.button("Proceed"):
-                    if choice == options[1]: display_result('independent_minority')
+                    if choice is None: st.error("Please select an answer before proceeding.")
+                    elif choice == options[1]: display_result('independent_minority')
                     else: set_stage(2)
 
             elif st.session_state.stage == 2:
@@ -623,7 +604,8 @@ def run_app():
                 choice = st.radio("Select if there is a potential for negative impact:", options,
                                   index=demo_data.get('index'), label_visibility="collapsed")
                 if st.button("Proceed"):
-                    if choice == "Yes": display_result('independent_risk')
+                    if choice is None: st.error("Please select an answer before proceeding.")
+                    elif choice == "Yes": display_result('independent_risk')
                     else: set_stage(3)
 
             elif st.session_state.stage == 3:
@@ -635,7 +617,8 @@ def run_app():
                 choice = st.radio("Select if a contract decides the brand:", options,
                                   index=demo_data.get('index'), label_visibility="collapsed")
                 if st.button("Proceed"):
-                    if choice == "Yes": display_result('legal_directive')
+                    if choice is None: st.error("Please select an answer before proceeding.")
+                    elif choice == "Yes": display_result('legal_directive')
                     else: set_stage(4)
 
             elif st.session_state.stage == 4:
@@ -647,7 +630,8 @@ def run_app():
                 choice = st.radio("Select if resources are dedicated:", options,
                                   index=demo_data.get('index'), label_visibility="collapsed")
                 if st.button("Proceed"):
-                    if choice == "No": display_result('flag_review')
+                    if choice is None: st.error("Please select an answer before proceeding.")
+                    elif choice == "No": display_result('flag_review')
                     else: set_stage(5)
 
             elif st.session_state.stage == 5:
@@ -699,18 +683,28 @@ def run_app():
                         with st.expander("See examples"):
                             st.caption(examples_A[key])
                     st.session_state.scores['A'] = score_A
-                    st.write(f"**Score A: {score_A} / 11**")
                 with col2:
                     st.info("**Part B: Market Distinction**")
+                    st.caption("Evidence is required for each question you tick.")
+                    corp_b_incomplete = False
                     for key, q_text in questions_B.items():
-                        if st.checkbox(q_text, value=rec_B.get(key, False), key=key):
-                            score_B += WEIGHTS['corporate_B'][key]
+                        is_checked = st.checkbox(q_text, value=rec_B.get(key, False), key=key)
                         with st.expander("See examples"):
                             st.caption(examples_B[key])
+                        data_provided = st.text_area(
+                            "Evidence / Data:", height=50, key=f"data_{key}",
+                            value=""
+                        )
+                        if is_checked and data_provided.strip():
+                            score_B += WEIGHTS['corporate_B'][key]
+                        elif is_checked and not data_provided.strip():
+                            st.error("Evidence required to count this answer.", icon="🚫")
+                            corp_b_incomplete = True
                     st.session_state.scores['B'] = score_B
-                    st.write(f"**Score B: {score_B} / 11**")
 
-                if st.button("Calculate Recommendation"):
+                if corp_b_incomplete:
+                    st.warning("Complete all evidence fields before calculating.")
+                elif st.button("Calculate Recommendation"):
                     set_stage(6)
 
             elif st.session_state.stage == 6:
@@ -740,7 +734,8 @@ def run_app():
                 choice = st.radio("Select an answer:", options,
                                   index=demo_data.get('index'), label_visibility="collapsed")
                 if st.button("Proceed"):
-                    if choice == "Yes": display_result('not_governed_by_basf')
+                    if choice is None: st.error("Please select an answer before proceeding.")
+                    elif choice == "Yes": display_result('not_governed_by_basf')
                     else: set_stage(202)
 
             elif st.session_state.stage == 202:
@@ -751,7 +746,8 @@ def run_app():
                 choice = st.radio("Select ownership structure:", options,
                                   index=demo_data.get('index'), label_visibility="collapsed")
                 if st.button("Proceed"):
-                    if choice == options[0]: display_result('follow_partner_guidelines')
+                    if choice is None: st.error("Please select an answer before proceeding.")
+                    elif choice == options[0]: display_result('follow_partner_guidelines')
                     elif choice == options[1]: set_stage(202.1)
                     else: set_stage(202.2)
 
@@ -763,7 +759,8 @@ def run_app():
                 choice = st.radio("Select if it is an acquisition:", options,
                                   index=demo_data.get('index'), label_visibility="collapsed")
                 if st.button("Proceed"):
-                    if choice == "Yes": set_stage(202.3)
+                    if choice is None: st.error("Please select an answer before proceeding.")
+                    elif choice == "Yes": set_stage(202.3)
                     else: set_stage(202.4)
 
             elif st.session_state.stage == 202.2:
@@ -781,7 +778,8 @@ def run_app():
                 choice = st.radio("Select if it has negative equity:", options,
                                   index=demo_data.get('index'), label_visibility="collapsed")
                 if st.button("Proceed"):
-                    if choice == "Yes": display_result('retire_rebrand')
+                    if choice is None: st.error("Please select an answer before proceeding.")
+                    elif choice == "Yes": display_result('retire_rebrand')
                     else: set_stage(202.4)
 
             elif st.session_state.stage == 202.4:
@@ -793,7 +791,8 @@ def run_app():
                 choice = st.radio("Select an answer:", options,
                                   index=demo_data.get('index', 1), label_visibility="collapsed")
                 if st.button("Proceed"):
-                    if choice == "Yes": display_result('no_brand_needed')
+                    if choice is None: st.error("Please select an answer before proceeding.")
+                    elif choice == "Yes": display_result('no_brand_needed')
                     else: set_stage(203)
 
             elif st.session_state.stage == 203:
@@ -805,7 +804,8 @@ def run_app():
                 choice = st.radio("Select if there is a potential for negative impact:", options,
                                   index=demo_data.get('index'), label_visibility="collapsed")
                 if st.button("Proceed"):
-                    if choice == "Yes": display_result('independent_risk')
+                    if choice is None: st.error("Please select an answer before proceeding.")
+                    elif choice == "Yes": display_result('independent_risk')
                     else: set_stage(204)
 
             elif st.session_state.stage == 204:
@@ -817,7 +817,8 @@ def run_app():
                 choice = st.radio("Select if a contract decides the brand:", options,
                                   index=demo_data.get('index'), label_visibility="collapsed")
                 if st.button("Proceed"):
-                    if choice == "Yes": display_result('legal_directive')
+                    if choice is None: st.error("Please select an answer before proceeding.")
+                    elif choice == "Yes": display_result('legal_directive')
                     else: set_stage(205)
 
             elif st.session_state.stage == 205:
@@ -829,7 +830,8 @@ def run_app():
                 choice = st.radio("Select if resources are dedicated:", options,
                                   index=demo_data.get('index'), label_visibility="collapsed")
                 if st.button("Proceed"):
-                    if choice == "No": display_result('insufficient_resources')
+                    if choice is None: st.error("Please select an answer before proceeding.")
+                    elif choice == "No": display_result('insufficient_resources')
                     else: set_stage(206)
 
             elif st.session_state.stage == 206:
@@ -871,6 +873,7 @@ def run_app():
                 }
 
                 score_A, score_B = 0, 0
+                prod_b_incomplete = False
                 col1, col2 = st.columns(2)
                 with col1:
                     st.info("**Part A: Strategic Contribution**")
@@ -880,10 +883,9 @@ def run_app():
                         with st.expander("See examples"):
                             st.caption(examples_pA[key])
                     st.session_state.scores['A'] = score_A
-                    st.write(f"**Score A: {score_A} / 11**")
                 with col2:
                     st.info("**Part B: Market Distinction**")
-                    st.caption("Points are only awarded if supporting data is provided.")
+                    st.caption("Evidence is required for each question you tick.")
                     for key, q_text in questions_B.items():
                         is_checked = st.checkbox(q_text, value=rec_B.get(key, False), key=key)
                         with st.expander("See examples"):
@@ -895,11 +897,13 @@ def run_app():
                         if is_checked and data_provided.strip():
                             score_B += WEIGHTS['product_B'][key]
                         elif is_checked and not data_provided.strip():
-                            st.warning("Provide evidence to receive points.", icon="⚠️")
+                            st.error("Evidence required to count this answer.", icon="🚫")
+                            prod_b_incomplete = True
                     st.session_state.scores['B'] = score_B
-                    st.write(f"**Score B: {score_B} / 11**")
 
-                if st.button("Calculate Recommendation"):
+                if prod_b_incomplete:
+                    st.warning("Complete all evidence fields before calculating.")
+                elif st.button("Calculate Recommendation"):
                     set_stage(207)
 
             elif st.session_state.stage == 207:
